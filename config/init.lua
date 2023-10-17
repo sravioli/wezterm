@@ -1,32 +1,37 @@
-local present, wezterm = pcall(require, "wezterm")
-if not present then return end
+local wz = require "wezterm"
 
 ---@class Config
----@field options table
+---@field options table[] All the configuration options for wezterm
 local Config = {}
 
----Initialize Config
----@return Config
+---Initializes the wezterm configuration
+---@return Config opts The configuration options
 function Config:init()
-  local o = {}
-  self = setmetatable(o, { __index = Config })
+  local opts = {}
+  if wz.config_builder then opts = wz.config_builder() end
+
+  self = setmetatable(opts, { __index = Config })
   self.options = {}
-  return o
+  return opts
 end
 
----Append to `Config.options`
----@param new_options table new options to append
----@return Config
-function Config:append(new_options)
-  for k, v in pairs(new_options) do
-    if self.options[k] ~= nil then
-      wezterm.log_warn(
+---Adds a module to the wezterm configuration
+---@param spec table A table of wezterm configuration options
+---@return Config self The modified wezterm configuration table
+---@usage
+---- Example usage in wezterm.lua
+---local Config = require "config"
+---return Config:init():add(require "<module.name>")
+function Config:add(spec)
+  for key, value in pairs(spec) do
+    if self.options[key] ~= nil then
+      wz.log_warn(
         "Duplicate config option detected: ",
-        { old = self.options[k], new = new_options[k] }
+        { old = self.options[key], new = spec[key] }
       )
       goto continue
     end
-    self.options[k] = v
+    self.options[key] = value
     ::continue::
   end
   return self
