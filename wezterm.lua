@@ -1,13 +1,3 @@
-local Config = require "config"
+local Config = require "config.init"
 
--- require('events.right-status').setup()
--- require('events.tab-title').setup()
--- require('events.new-tab-button').setup()
-
-return Config:init().options
--- :append(require "config.fonts").options
--- :append(require('config.appearance'))
--- :append(require('config.bindings'))
--- :append(require('config.domains'))
--- :append(require('config.general'))
--- :append(require('config.launch')).options
+return Config:init():add(require "config.appearance").options
