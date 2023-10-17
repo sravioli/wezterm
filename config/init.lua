@@ -21,7 +21,7 @@ end
 ---@usage
 ---- Example usage in wezterm.lua
 ---local Config = require "config"
----return Config:init():add(require "<module.name>")
+---return Config:init():add(require "<module.name>").options
 function Config:add(spec)
   for key, value in pairs(spec) do
     if self.options[key] ~= nil then
