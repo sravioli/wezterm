@@ -213,7 +213,7 @@ config.font = wz.font {
     "cv25", ---changes .-
     "cv26", ---changes :-
     "cv28", ---changes {. .}
-    "cv30", ---changes |
+    -- "cv30", ---changes |
     "cv32", ---changes .=
     -- "ss02", ---changes >= and <=
     "ss03", ---changes &
