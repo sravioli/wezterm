@@ -1,6 +1,19 @@
 local wz = require "wezterm"
+local kanagawa = require "colorschemes.kanagawa"
 
 ---@class config Appearance configuration options for WezTerm
+---@field command_palette_bg_color string Specifies the background color used by
+---       `ActivateCommandPalette`. Defaults to `"#333333"`.
+---@field command_palette_fg_color string Specifies the text color used by
+---       `ActivateCommandPalette`. Defaults to `rgba(0.75, 0.75, 0.75, 1.0)`.
+---@field command_palette_font_size integer Specifies the size of the font used with
+---       `ActivateCommandPalette`. Defaults to `14`.
+---@field char_select_bg_color string Specifies the background color used by `CharSelect`.
+---       Defaults to `"#333333"`.
+---@field char_select_fg_color string Specifies the foreground color used by `CharSelect`.
+---       Defaults to `rgba(0.75, 0.75, 0.75, 1.0)`.
+---@field char_select_font_size string Specifies the size of the font used with
+---       `CharSelect`. Defaults to `14`
 local config = {}
 
 ---Control whether custom_block_glyphs are rendered using anti-aliasing or not.
@@ -128,6 +141,69 @@ config.force_reverse_video_cursor = true
 ---The default is `true`. Set to `false` to disable this behavior.
 config.hide_mouse_cursor_when_typing = true
 
+---Specifies the easing function to use when computing the color for text that has
+---the blinking attribute in the fading-in phase--when the text is fading from the
+---background color to the foreground color.
+---
+---@see config.visual_bell for more information about easing functions.
+---@see config.cursor_blink_rate to control the rate at which the cursor blinks.
+config.text_blink_ease_in = "EaseIn"
+
+---Specifies the easing function to use when computing the color for text that has
+---the blinking attribute in the fading-out phase--when the text is fading from the
+---foreground color to the background color.
+---
+---@see config.visual_bell
+config.text_blink_ease_out = "EaseOut"
+
+---Specifies the easing function to use when computing the color for text that has
+---the rapid blinking attribute in the fading-in phase--when the text is fading from
+---the background color to the foreground color.
+---
+---@see config.visual_bell
+config.text_blink_rapid_ease_in = "Linear"
+
+---Specifies the easing function to use when computing the color for text that has
+---the rapid blinking attribute in the fading-out phase--when the text is fading from
+---the foreground color to the background color.
+---
+---@see config.visual_bell
+config.text_blink_rapid_ease_out = "Linear"
+
+---Specifies how often blinking text (normal speed) transitions between visible and
+---invisible, expressed in milliseconds. Setting this to 0 disables slow text blinking.
+---Note that this value is approximate due to the way that the system event loop
+---schedulers manage timers; non-zero values will be at least the interval specified
+---with some degree of slop.
+---
+---```lua
+---config.text_blink_rate = 500
+---```
+---
+---*Since: Version 20220319-142410-0fcdea07*
+---Blinking is no longer a binary blink, but interpolates between invisible and visible
+---text using an easing function.
+---@see config.text_blink_ease_in
+---@see config.text_blink_ease_out
+config.text_blink_rate = 500
+
+---Specifies how often blinking text (rapid speed) transitions between visible and
+---invisible, expressed in milliseconds. Setting this to 0 disables rapid text blinking.
+---Note that this value is approximate due to the way that the system event loop
+---schedulers manage timers; non-zero values will be at least the interval specified
+---with some degree of slop.
+---
+---```lua
+---config.text_blink_rate_rapid = 250
+---```
+---
+---*Since: Version 20220319-142410-0fcdea07*
+---Blinking is no longer a binary blink, but interpolates between invisible and
+---visible text using an easing function.
+---@see config.text_blink_rapid_ease_in
+---@see config.text_blink_rapid_ease_out
+config.text_blink_rate_rapid = 250
+
 config.animation_fps = 60
 config.max_fps = 60
 config.front_end = "WebGpu"
@@ -136,6 +212,23 @@ config.webgpu_power_preference = "HighPerformance"
 config.color_schemes = require "colorschemes"
 config.color_scheme = "kanagawa"
 config.font = wz.font "FiraCode Nerd Font"
+
+---@see config.char_select_fg_color
+---@see config.char_select_bg_color
+---@see config.char_select_font_size
+---
+---@see config.command_palette_fg_color
+---@see config.command_palette_bg_color
+---@see config.command_palette_font_size
+for key, value in pairs {
+  bg_color = kanagawa.ansi[6],
+  fg_color = kanagawa.ansi[1],
+  font_size = 12,
+} do
+  for _, prefix in pairs { "command_palette_", "char_select_" } do
+    config[prefix .. key] = value
+  end
+end
 
 return config
 
