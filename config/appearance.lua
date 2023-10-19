@@ -197,6 +197,44 @@ config.text_blink_rate = 500
 ---@see config.text_blink_rapid_ease_out
 config.text_blink_rate_rapid = 250
 
+---// INACTIVE PANES //-------------------------------------------------------------
+
+---To make it easier to see which pane is active, the inactive panes are dimmed and
+---de-saturated slightly.
+---
+---You can specify your own transformation to the pane colors with a hue, saturation,
+---brightness (HSB) multiplier.
+---
+---In this example, inactive panes will be slightly de-saturated and dimmed; this is
+---the default configuration:
+---
+---```lua
+---config.inactive_pane_hsb = {
+---  saturation = 0.9,
+---  brightness = 0.8,
+---}
+---```
+---
+---The transform works by converting the RGB colors to HSV values and then multiplying
+---the HSV by the numbers specified in `inactive_pane_hsb`.
+---
+---Modifying the hue changes the hue of the color by rotating it through the color
+---wheel. It is not as useful as the other components, but is available "for free"
+---as part of the colorspace conversion.
+---
+---Modifying the saturation can add or reduce the amount of "colorfulness". Making the
+---value smaller can make it appear more washed out.
+---
+---Modifying the brightness can be used to dim or increase the perceived amount of light.
+---
+---The range of these values is 0.0 and up; they are used to multiply the existing
+---values, so the default of 1.0 preserves the existing component, whilst 0.5 will
+---reduce it by half, and 2.0 will double the value.
+config.inactive_pane_hsb = {
+  saturation = 0.6,
+  brightness = 0.45,
+}
+
 config.animation_fps = 60
 config.max_fps = 60
 
