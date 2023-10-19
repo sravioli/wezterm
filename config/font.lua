@@ -218,7 +218,7 @@ config.font = wz.font {
     -- "ss02", ---changes >= and <=
     "ss03", ---changes &
     "ss04", ---changes $
-    "ss06", ---changes \\
+    -- "ss06", ---changes \\
     "ss07", ---changes =~ and !~
     "ss09", ---changes >>=, <<=, ||= and |==
   },
