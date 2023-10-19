@@ -103,31 +103,6 @@ config.background = {
   },
 }
 
----When true (the default), PaletteIndex 0-7 are shifted to bright when the font
----intensity is bold.
----
----This brightening effect doesn't occur when the text is set to the default foreground
----color!
----
----This defaults to true for better compatibility with a wide range of mature software;
----for instance, a lot of software assumes that Black+Bold renders as a Dark Grey which
----is legible on a Black background, but if this option is set to false, it would render
----as Black on Black.
----
----This option can now have one of three values:
----
----* `"No"` - the bold attribute will not influence palette selection
----* `"BrightAndBold"` - the bold attribute will select a bright version of palette
----  indices 0-7 and preserve the bold attribute on the text, using both a bold font
----  and a brighter color
----* `"BrightOnly"` - the bold attribute will select a bright version of palette
----  indices 0-7 but the intensity will be treated as normal and a non-bold font will
----  be used for the text.
----
----You may use `true` or `false` for backwards compatibility. `true` is equivalent to
----`"BrightAndBold"` and `false` is equivalent to `"No"`.
-config.bold_brightens_ansi_colors = "No"
-
 ---Enable the scrollbar. This is currently disabled by default. It will occupy the
 ---right window padding space.
 ---
@@ -220,19 +195,6 @@ config.max_fps = 60
 
 config.color_schemes = require "colorschemes"
 config.color_scheme = "kanagawa"
-config.font = wz.font "FiraCode Nerd Font"
-
-config.front_end = "WebGpu"
-config.webgpu_power_preference = "HighPerformance"
-config.webgpu_preferred_adapter = {
-  backend = "Vulkan",
-  device = 8081,
-  device_type = "DiscreteGpu",
-  driver = "NVIDIA",
-  driver_info = "537.58",
-  name = "NVIDIA GeForce GTX 1650 with Max-Q Design",
-  vendor = 4318,
-}
 
 ---@see config.char_select_fg_color
 ---@see config.char_select_bg_color
@@ -252,24 +214,3 @@ for key, value in pairs {
 end
 
 return config
-
--- return {
---   color_schemes = colorschemes, -- load custom color schemes
---   color_scheme = "kanagawa", -- use kanagawa
---   force_reverse_video_cursor = true,
---
---   use_fancy_tab_bar = true,
---   enable_tab_bar = true,
---   hide_tab_bar_if_only_one_tab = true,
---   tab_bar_at_bottom = false,
---
---   font = wezterm.font "FiraCode Nerd Font",
---
---   enable_scroll_bar = true,
---
---   -- it's not working right now
---   -- window_background_opacity = 0,
---   -- win32_system_backdrop = "Mica",
---
---   window_decorations = "TITLE | RESIZE",
--- }
