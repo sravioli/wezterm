@@ -1,6 +1,6 @@
 return {
   foreground = "#dcd7ba",
-  background = "#1f1f28",
+  background = "#1f1f28", -- remove background when transparent
 
   cursor_bg = "#c8c093",
   cursor_fg = "#c8c093",
