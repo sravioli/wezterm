@@ -1,3 +1,4 @@
+---@class WezTerm
 local wz = require "wezterm"
 
 ---@class Config
@@ -18,10 +19,12 @@ end
 ---Adds a module to the wezterm configuration
 ---@param spec table A table of wezterm configuration options
 ---@return Config self The modified wezterm configuration table
----@usage
----- Example usage in wezterm.lua
+---
+---```lua
+----- Example usage in wezterm.lua
 ---local Config = require "config"
 ---return Config:init():add(require "<module.name>").options
+---```
 function Config:add(spec)
   for key, value in pairs(spec) do
     if self.options[key] ~= nil then
