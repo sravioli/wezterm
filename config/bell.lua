@@ -12,7 +12,6 @@ local config = {}
 ---  On Wayland systems, which have no system beep function, it does not produce a sound.
 ---* `"Disabled"` - don't make a sound
 ---
----See also visual_bell and bell event
 ---@see config.visual_bell
 config.audible_bell = "Disabled"
 
