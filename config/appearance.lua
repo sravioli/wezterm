@@ -16,11 +16,6 @@ local kanagawa = require "colorschemes.kanagawa"
 ---       `CharSelect`. Defaults to `14`
 local config = {}
 
----Control whether custom_block_glyphs are rendered using anti-aliasing or not.
----Anti-aliasing makes lines look smoother but may not look so nice at smaller font
----sizes.
-config.anti_alias_custom_block_glyphs = true
-
 ---The `background` config option allows you to compose a number of layers to produce
 ---the background content in the terminal.
 ---
