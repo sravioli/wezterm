@@ -1,0 +1,25 @@
+# A list of glob patterns describing branches on which semver bump are allowed
+branch_whitelist = ["main"]
+ignore_merge_commits = true
+pre_bump_hooks = []
+post_bump_hooks = [
+  # "markdownlint-cli2 --fix ./CHANGELOG.md",
+  "git push",
+  "git push origin {{version}}",
+]
+
+[commit_types]
+hotfix = { changelog_title = "Hotfixes" }
+release = { changelog_title = "Releases" }
+
+[changelog]
+path = "CHANGELOG.md"
+template = "remote"
+remote = "github.com"
+repository = "wezterm"
+owner = "sRavioli"
+authors = [{ username = "sRavioli", signature = "Simone Fidanza" }]
+
+# [bump_profiles]
+
+# [packages]
