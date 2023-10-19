@@ -91,12 +91,20 @@ config.anti_alias_custom_block_glyphs = true
 ---  * `"50%"` - specifies a size of `50%` of the viewport height
 ---  * `"2cell"` - specifies a size equivalent to `2` rows
 ---* `width` - controls the width of the image. Same details as `height` but applies to the x-direction.
--- config.background = {}
+config.background = {
+  {
+    source = { Color = "black" },
+    width = "100%",
+    height = "100%",
+    opacity = 0.45,
+  },
+}
 
----When true (the default), PaletteIndex 0-7 are shifted to bright when the font intensity
----is bold.
+---When true (the default), PaletteIndex 0-7 are shifted to bright when the font
+---intensity is bold.
 ---
----This brightening effect doesn't occur when the text is set to the default foreground color!
+---This brightening effect doesn't occur when the text is set to the default foreground
+---color!
 ---
 ---This defaults to true for better compatibility with a wide range of mature software;
 ---for instance, a lot of software assumes that Black+Bold renders as a Dark Grey which
@@ -115,13 +123,13 @@ config.anti_alias_custom_block_glyphs = true
 ---
 ---You may use `true` or `false` for backwards compatibility. `true` is equivalent to
 ---`"BrightAndBold"` and `false` is equivalent to `"No"`.
-config.bold_brightens_ansi_colors = true
+config.bold_brightens_ansi_colors = "No"
 
 ---Enable the scrollbar. This is currently disabled by default. It will occupy the
 ---right window padding space.
 ---
 ---If right padding is set to 0 then it will be increased to a single cell width.
-config.enable_scroll_bar = true
+config.enable_scroll_bar = false
 
 ---When `force_reverse_video_cursor = true`, override the `cursor_fg`, `cursor_bg`,
 ---`cursor_border` settings from the color scheme and force the cursor to use reverse
@@ -206,12 +214,22 @@ config.text_blink_rate_rapid = 250
 
 config.animation_fps = 60
 config.max_fps = 60
-config.front_end = "WebGpu"
-config.webgpu_power_preference = "HighPerformance"
 
 config.color_schemes = require "colorschemes"
 config.color_scheme = "kanagawa"
 config.font = wz.font "FiraCode Nerd Font"
+
+config.front_end = "WebGpu"
+config.webgpu_power_preference = "HighPerformance"
+config.webgpu_preferred_adapter = {
+  backend = "Vulkan",
+  device = 8081,
+  device_type = "DiscreteGpu",
+  driver = "NVIDIA",
+  driver_info = "537.58",
+  name = "NVIDIA GeForce GTX 1650 with Max-Q Design",
+  vendor = 4318,
+}
 
 ---@see config.char_select_fg_color
 ---@see config.char_select_bg_color
