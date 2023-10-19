@@ -14,28 +14,11 @@ local config = {}
 ---* `window_decorations = "TITLE | RESIZE"` - Enable titlebar and border. This is the
 ---  default.
 ---
----> _Since: Version 20230320-124340-559cb7b0_
---->
----> _The functionality described in this section requires version 20230320-124340-559cb7b0
----> of wezterm, or a more recent version._
---->
----> The following flags are also supported on macOS:
---->
----> * `MACOS_FORCE_DISABLE_SHADOW` - disable the window shadow effect
----> * `MACOS_FORCE_ENABLE_SHADOW` - enable the window shadow effect.
---->
----> The window shadow effect is normally disabled by wezterm when the
----> `window_background_opacity` is set to less than `1.0`.
-----
 ---> _Since: Version 20230408-112425-69ae8472_
---->
----> _The functionality described in this section requires version 20230408-112425-69ae8472
----> of wezterm, or a more recent version._
 --->
 ---> * `window_decorations = "INTEGRATED_BUTTONS|RESIZE"` - place window management
 ---> buttons (minimize, maximize, close) into the tab bar instead of showing a title bar.
 --->
----> See also integrated_title_button_style, integrated_title_buttons, integrated_title_button_alignment integrated_title_button_color and, if you are using the retro tab bar, tab_bar_style.
 ---
 ---On X11 and Wayland, the windowing system may override the window decorations.
 ---
@@ -52,7 +35,7 @@ local config = {}
 ---@see config.integrated_title_buttons
 ---@see config.integrated_title_button_alignment
 ---@see config.integrated_title_button_color
----@see config.tab_bar_style
+---@see config.tab_bar_style If you are using the retro rab style
 config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
 
 ---Configures the color of the set of window management buttons when
@@ -79,7 +62,8 @@ config.integrated_title_button_alignment = "Right"
 ---* `"Gnome"` - draw Adwaita-style buttons
 ---* `"MacOsNative"` - on macOS only, move the native macOS buttons into the tab bar.
 ---
----The default value is `"MacOsNative"` on macOS systems, but `"Windows"` on other systems.
+---The default value is `"MacOsNative"` on macOS systems, but `"Windows"` on other
+---systems.
 config.integrated_title_button_style = "Windows"
 
 ---Configures the ordering and set of window management buttons to show when
@@ -137,6 +121,7 @@ config.switch_to_last_active_tab_when_closing_tab = true
 
 ---// WIN32 ACRYLIC // -------------------------------------------------------------
 
+---!! SET BACKGROUND TO BLACK IN `config.background`!!
 ---When combined with `window_background_opacity`, chooses from available window
 ---background effects provided by Windows.
 ---
@@ -148,11 +133,13 @@ config.switch_to_last_active_tab_when_closing_tab = true
 ---* `"Acrylic"` - enable the _Acrylic_ blur-behind-window effect. Available on Windows
 ---  10 and 11.
 ---* `"Mica"` - enable the _Mica_ effect, available on Windows 11 build 22621 and later.
----* `"Tabbed"` - enable the _Tabbed_ effect, available on Windows 11 build 22621 and later.
+---* `"Tabbed"` - enable the _Tabbed_ effect, available on Windows 11 build 22621 and
+---  later.
 ---
 ---On Windows systems earlier than build 22621, the _Acrylic_ affect can be adjusted
----using win32_acrylic_accent_color. More recent versions of Windows do not permit
----configuring the accent color for _Acrylic_, so that option has no effect there.
+---using `config.win32_acrylic_accent_color`. More recent versions of Windows do not
+---permit configuring the accent color for _Acrylic_, so that option has no effect
+---there.
 ---
 ---The _Acrylic_ setting uses more resources than the others.
 ---
@@ -182,22 +169,8 @@ config.switch_to_last_active_tab_when_closing_tab = true
 ---config.window_background_opacity = 0
 ---config.win32_system_backdrop = 'Tabbed'
 ---```
+config.win32_system_backdrop = "Acrylic"
 -- config.win32_system_backdrop = "Mica" -- NOT WORKING RIGHT NOW
-
----If your Operating System provides Compositing support then WezTerm is able to specify
----the alpha channel value for the background content, rendering the window background
----translucent (some refer to this as transparent rather than translucent) and causing
----the windows/desktop behind it to show through the window.
----
----macOS, Windows and Wayland support compositing out of the box. X11 may require
----installing or configuring a compositing window manager. XWayland under Mutter/Wayland
----also works without any additional configuration.
----
----window_background_opacity specifies the alpha channel value with floating point
----numbers in the range `0.0` (meaning completely translucent/transparent) through to
----`1.0` (meaning completely opaque).
----
----Setting this to a value other than the default 1.0 may impact render performance.
--- config.window_background_opacity = 0.8
+-- config.win32_system_backdrop = "Tabbed" -- NOT WORKING RIGHT NOW
 
 return config
