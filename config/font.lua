@@ -280,4 +280,73 @@ config.underline_position = -2.1
 ---* `"0.1cell"` takes the cell height, scales it by `0.1` and uses that as the thickness
 config.underline_thickness = "2px"
 
+---An advanced option to fine tune the freetype rasterizer. This is a bitfield, so
+---you can combine one or more of these options together, separated by the `|` character,
+---although not many of the available options necessarily make sense to be combined.
+---
+---Available flags are:
+---
+---* `DEFAULT` - This is the default!
+---* `NO_HINTING` - Disable hinting. This generally generates ‘blurrier’ bitmap glyph
+---   when the glyph is rendered in any of the anti-aliased modes.
+---* `NO_BITMAP` - don't load any pre-rendered bitmap strikes
+---* `FORCE_AUTOHINT` - Use the freetype auto-hinter rather than the font's native
+---   hinter.
+---* `MONOCHROME` - instructs renderer to use 1-bit monochrome rendering. This option
+---   doesn't impact the hinter.
+---* `NO_AUTOHINT` - don't use the freetype auto-hinter
+---
+---```lua
+----- You probably don't want to do this, but this demonstrates
+----- that the flags can be combined
+---config.freetype_load_flags = 'NO_HINTING|MONOCHROME'
+---```
+config.freetype_load_flags = "NO_HINTING|NO_BITMAP"
+
+---Selects the freetype interpret version to use. Possible values are `35`, `38` and
+---`40` which have different characteristics with respective to subpixel hinting.
+---See <https://freetype.org/freetype2/docs/hinting/subpixel-hinting.html>
+config.freetype_interpreter_version = 38
+
+---Configures the hinting and (potentially) the rendering mode used with the freetype
+---rasterizer. The following values are possible:
+---
+---* `"Normal"` - This corresponds to the default hinting algorithm, optimized for
+---  standard gray-level rendering. This is the default setting.
+---* `"Light"` - A lighter hinting algorithm for non-monochrome modes. Many generated
+---  glyphs are more fuzzy but better resemble its original shape. A bit like rendering
+---  on Mac OS X.
+---* `"Mono"` - Strong hinting algorithm that should only be used for monochrome output.
+---  The result is probably unpleasant if the glyph is rendered in non-monochrome modes.
+---* `"HorizontalLcd"` - A subpixel-rendering variant of `Normal` optimized for
+---  horizontally decimated LCD displays.
+---
+---See also freetype_render_target and freetype_load_flags for more advanced flags
+---that can be primarily used to influence font hinting.
+---
+---Note: when using subpixel-rendering, it comes at the cost of the ability to explicitly
+---set the alpha channel for the text foreground color. You will need to choose between
+---using the alpha channel or using subpixel-rendering, and you must select
+---subpixel-rendering in your main configuration in order for the correct render mode
+---to activate: setting it only in a wezterm.font override is not sufficient.
+---@see config.freetype_render_target
+---@see config.freetype_load_flags
+config.font_antialias = "Subpixel"
+
+---Configures the _rendering_ mode used with the freetype rasterizer.
+---
+---The default is to use the value of `freetype_load_target`.
+---
+---You may wish to override that value if you want very fine control over how freetype
+---hints and then renders glyphs.
+---
+---For example, this configuration uses light hinting but produces subpixel-antialiased
+---glyph bitmaps:
+---
+---```lua
+---config.freetype_load_target = 'Light'
+---config.freetype_render_target = 'HorizontalLcd'
+---```
+config.freetype_render_target = "Normal"
+
 return config
