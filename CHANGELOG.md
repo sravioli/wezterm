@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.2](https://github.com/sRavioli/wezterm/compare/0.0.1..0.0.2) - 2023-10-19
+#### Bug Fixes
+- **(config:font)** increase underline heigth - ([db21668](https://github.com/sRavioli/wezterm/commit/db216684548c587cf561b37f761e4f88e383f30f)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(config:appearance)** add hyperlink rules, require colorschemes just once - ([35b12c5](https://github.com/sRavioli/wezterm/commit/35b12c57fdbdb859dd6269938eb79160b79d0ef1)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:general)** add some general configuration options - ([a2e42a1](https://github.com/sRavioli/wezterm/commit/a2e42a17ec4376466abd08baa9e902422c951737)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:window)** add window padding options - ([b6b495a](https://github.com/sRavioli/wezterm/commit/b6b495adc39cf23dbf4cbcbfe115bf5d435b14be)) - [@sRavioli](https://github.com/sRavioli)
+- **(wezterm)** load configs - ([93473fd](https://github.com/sRavioli/wezterm/commit/93473fddc3cf854443259fe5256f5ed00178ba6a)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [0.0.1](https://github.com/sRavioli/wezterm/compare/1660c836279c83a7c0ec119e99d2960a9dbb70e7..0.0.1) - 2023-10-19
 #### Bug Fixes
 - **(colorschemes)** rename `colors` folder to `colorshemes` - ([09e7186](https://github.com/sRavioli/wezterm/commit/09e7186962a4d62f9df8cf845f8dbf85882db2e4)) - [@sRavioli](https://github.com/sRavioli)
