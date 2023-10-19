@@ -1,5 +1,6 @@
+---@class WezTerm
 local wz = require "wezterm"
-local kanagawa = require "colorschemes.kanagawa"
+local colorschemes = require "colorschemes"
 
 ---@class config Appearance configuration options for WezTerm
 ---@field command_palette_bg_color string Specifies the background color used by
@@ -15,6 +16,8 @@ local kanagawa = require "colorschemes.kanagawa"
 ---@field char_select_font_size string Specifies the size of the font used with
 ---       `CharSelect`. Defaults to `14`
 local config = {}
+
+---// BACKGROUND //-----------------------------------------------------------------
 
 ---The `background` config option allows you to compose a number of layers to produce
 ---the background content in the terminal.
@@ -89,7 +92,7 @@ local config = {}
 config.background = {
   {
     source = {
-      Color = require("colorschemes.kanagawa").background,
+      Color = colorschemes["kanagawa"].background,
     },
     width = "100%",
     height = "100%",
@@ -102,6 +105,8 @@ config.background = {
     opacity = 0.4,
   },
 }
+
+---// SCROLL BAR AND CURSOR //------------------------------------------------------
 
 ---Enable the scrollbar. This is currently disabled by default. It will occupy the
 ---right window padding space.
@@ -126,6 +131,8 @@ config.force_reverse_video_cursor = true
 ---
 ---The default is `true`. Set to `false` to disable this behavior.
 config.hide_mouse_cursor_when_typing = true
+
+---// TEXT APPEARANCE //------------------------------------------------------------
 
 ---Specifies the easing function to use when computing the color for text that has
 ---the blinking attribute in the fading-in phase--when the text is fading from the
@@ -193,7 +200,7 @@ config.text_blink_rate_rapid = 250
 config.animation_fps = 60
 config.max_fps = 60
 
-config.color_schemes = require "colorschemes"
+config.color_schemes = colorschemes
 config.color_scheme = "kanagawa"
 
 ---@see config.char_select_fg_color
@@ -204,13 +211,62 @@ config.color_scheme = "kanagawa"
 ---@see config.command_palette_bg_color
 ---@see config.command_palette_font_size
 for key, value in pairs {
-  bg_color = kanagawa.ansi[6],
-  fg_color = kanagawa.ansi[1],
-  font_size = 12,
+  bg_color = colorschemes["kanagawa"].ansi[6],
+  fg_color = colorschemes["kanagawa"].ansi[1],
+  font_size = 14,
 } do
   for _, prefix in pairs { "command_palette_", "char_select_" } do
     config[prefix .. key] = value
   end
 end
+
+---// HYPERLINK RULES //------------------------------------------------------------
+
+---Defines rules to match text from the terminal output and generate clickable links.
+--
+---The value is a list of rule entries. Each entry has the following fields:
+---* `regex` - the regular expression to match (see supported Regex syntax)
+---* `format` - Controls which parts of the regex match will be used to form the link.
+---  Must have a `prefix:` signaling the protocol type (e.g., `https:`/`mailto:`), which
+---  can either come from the regex match or needs to be explicitly added. The format
+---  string can use placeholders like `$0`, `$1`, `$2` etc. that will be replaced with
+---  that numbered capture group. So, `$0` will take the entire region of text matched
+---  by the whole regex, while `$1` matches out the first capture group. In the example
+---  below, `mailto:$0` is used to prefix a protocol to the text to make it into an URL.
+---
+---_Since: Version 20230320-124340-559cb7b0_
+---* `highlight` - specifies the range of the matched text that should be
+---  highlighted/underlined when the mouse hovers over the link. The value is a number
+---  that corresponds to a capture group in the regex. The default is `0`,
+---  highlighting the entire region of text matched by the regex. `1` would be the
+---  first capture group, and so on.
+---
+---_Since: Version 20230408-112425-69ae8472_
+---The regex syntax now supports backreferences and look around assertions. See Fancy
+---Regex Syntax for the extended syntax, which builds atop the underlying Regex syntax.
+---In prior versions, only the base Regex syntax was supported.
+---
+---Assigning `hyperlink_rules` overrides the built-in default rules.
+---
+---The default value for `hyperlink_rules` can be retrieved using
+---`wezterm.default_hyperlink_rules()`
+config.hyperlink_rules = wz.default_hyperlink_rules()
+
+-- make task numbers clickable
+-- the first matched regex group is captured in $1.
+table.insert(config.hyperlink_rules, {
+  regex = [[\b[tt](\d+)\b]],
+  format = "https://example.com/tasks/?t=$1",
+})
+
+-- make username/project paths clickable. this implies paths like the following are
+-- for github. ( "nvim-treesitter/nvim-treesitter" | wbthomason/packer.nvim |
+-- wez/wezterm | "wez/wezterm.git" ) as long as a full url hyperlink regex exists
+-- above this it should not match a full url to github or gitlab / bitbucket (i.e.
+-- https://gitlab.com/user/project.git is still a whole clickable url)
+table.insert(config.hyperlink_rules, {
+  regex = [[["]?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["]?]],
+  format = "https://www.github.com/$1/$3",
+})
 
 return config
