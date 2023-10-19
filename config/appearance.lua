@@ -88,10 +88,18 @@ local config = {}
 ---* `width` - controls the width of the image. Same details as `height` but applies to the x-direction.
 config.background = {
   {
+    source = {
+      Color = require("colorschemes.kanagawa").background,
+    },
+    width = "100%",
+    height = "100%",
+    opacity = 0.1,
+  },
+  {
     source = { Color = "black" },
     width = "100%",
     height = "100%",
-    opacity = 0.45,
+    opacity = 0.4,
   },
 }
 
