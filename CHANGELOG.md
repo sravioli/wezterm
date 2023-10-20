@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.1.0](https://github.com/sRavioli/wezterm/compare/0.0.2..0.1.0) - 2023-10-20
+#### Bug Fixes
+- **(config:font)** move underline a bit down - ([7d79450](https://github.com/sRavioli/wezterm/commit/7d79450eb6b86e2907634f6e01dd7ab03c3b774b)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:font)** remove deprecated font setting - ([3f64fa6](https://github.com/sRavioli/wezterm/commit/3f64fa6f77cd72173e9f48888b85bc557d5d33ef)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:font)** bug where the command palette would render letters wrongly - ([9e83117](https://github.com/sRavioli/wezterm/commit/9e83117269283afcd727c277711aae5440d59b60)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:font)** disable backslash render variant - ([f375b51](https://github.com/sRavioli/wezterm/commit/f375b51e6be7e0cd2a55ac1a09bf0767080d91e1)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(config:appearance)** change styling for inactive panes - ([e9db4da](https://github.com/sRavioli/wezterm/commit/e9db4da757ce406bc0528864521899a31293073e)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:domains)** add wsl domain - ([69ec567](https://github.com/sRavioli/wezterm/commit/69ec5678134cc8aa429e19429506493472e54dc4)) - [@sRavioli](https://github.com/sRavioli)
+- **(keys)** add various keybinds - ([a804ed2](https://github.com/sRavioli/wezterm/commit/a804ed24ae41cc00153d3c2358a1c7f760400d9e)) - [@sRavioli](https://github.com/sRavioli)
+- **(wezterm)** load settings - ([d04a9c1](https://github.com/sRavioli/wezterm/commit/d04a9c1ba51c110e5787a502ee0d91d0481356df)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [0.0.2](https://github.com/sRavioli/wezterm/compare/0.0.1..0.0.2) - 2023-10-19
 #### Bug Fixes
 - **(config:font)** increase underline heigth - ([db21668](https://github.com/sRavioli/wezterm/commit/db216684548c587cf561b37f761e4f88e383f30f)) - [@sRavioli](https://github.com/sRavioli)
