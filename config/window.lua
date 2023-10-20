@@ -95,30 +95,6 @@ config.integrated_title_button_style = "Windows"
 ---```
 config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
 
----// TAB BAR //--------------------------------------------------------------------
-
----Controls whether the tab bar is enabled. Set to false to disable it.
----@see config.hide_tab_bar_if_only_one_tab
-config.enable_tab_bar = true
-
----When set to `true` (the default), the tab bar is rendered in a native style with
----proportional fonts.
----
----When set to `false`, the tab bar is rendered using a retro aesthetic using the main
----terminal font.
-config.use_fancy_tab_bar = true
-
----If set to true, when there is only a single tab, the tab bar is hidden from the
----display. If a second tab is created, the tab will be shown.
----@see config.enable_tab_bar
-config.hide_tab_bar_if_only_one_tab = false
-
----If set to true, when the active tab is closed, the previously activated tab will
----be activated.
----
----Otherwise, the tab to the left of the active tab will be activated.
-config.switch_to_last_active_tab_when_closing_tab = true
-
 ---// WIN32 ACRYLIC // -------------------------------------------------------------
 
 ---!! SET BACKGROUND TO BLACK IN `config.background`!!
