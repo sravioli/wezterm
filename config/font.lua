@@ -301,7 +301,8 @@ config.underline_thickness = "2px"
 ----- that the flags can be combined
 ---config.freetype_load_flags = 'NO_HINTING|MONOCHROME'
 ---```
-config.freetype_load_flags = "NO_HINTING|NO_BITMAP"
+-- config.freetype_load_flags = "NO_HINTING|NO_BITMAP"
+config.freetype_load_flags = "NO_HINTING"
 
 ---Selects the freetype interpret version to use. Possible values are `35`, `38` and
 ---`40` which have different characteristics with respective to subpixel hinting.
