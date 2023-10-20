@@ -235,7 +235,33 @@ config.inactive_pane_hsb = {
   brightness = 0.45,
 }
 
+---This setting controls the maximum frame rate used when rendering easing effects
+---for blinking cursors, blinking text and visual bell.
+---
+---Setting it larger will result in smoother easing effects but will increase GPU
+---utilization.
+---
+---If you are running with a CPU renderer (eg: you have front\_end = `"Software"`, or
+---your system doesn't have a GPU), then setting `animation_fps = 1` is recommended,
+---as doing so will disable easing effects and use transitions:
+---
+---```lua
+---config.animation_fps = 1
+---config.cursor_blink_ease_in = 'Constant'
+---config.cursor_blink_ease_out = 'Constant'
+---```
 config.animation_fps = 60
+
+---Limits the maximum number of frames per second that wezterm will attempt to draw.
+---
+---Defaults to `60`.
+---
+---| Environment | Supported Since                                                                    |
+---| ----------- | ---------------------------------------------------------------------------------- |
+---| Wayland     | Ignored; instead, uses information from the compositor to schedule painting frames |
+---| X11         | (_Since: Version 20211204-082213-a66c61ee9_)                                         |
+---| macOS       | (_Since: Version 20220903-194523-3bb1ed61_)                                          |
+---| Windows     | (_Since: Version 20220903-194523-3bb1ed61_)                                          |
 config.max_fps = 60
 
 config.color_schemes = colorschemes
@@ -306,5 +332,95 @@ table.insert(config.hyperlink_rules, {
   regex = [[["]?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["]?]],
   format = "https://www.github.com/$1/$3",
 })
+
+---Controls whether the tab bar is enabled. Set to false to disable it.
+---@see config.hide_tab_bar_if_only_one_tab
+config.enable_tab_bar = true
+
+---If set to true, when there is only a single tab, the tab bar is hidden from the
+---display. If a second tab is created, the tab will be shown.
+---@see config.enable_tab_bar
+config.hide_tab_bar_if_only_one_tab = false
+
+---When set to `true` (the default), the tab bar will display the new-tab button,
+---which can be left-clicked to create a new tab, or right-clicked to display the
+---Launcher Menu.
+---
+---When set to `false`, the new-tab button will not be drawn into the tab bar.
+---
+---This example turns off the tabs and new-tab button, leaving just the left and right
+---status areas:
+---
+---```lua
+---wezterm.on('update-right-status', function(window, pane)
+---  window:set_left_status 'left'
+---  window:set_right_status 'right'
+---end)
+---
+---config.use_fancy_tab_bar = false
+---config.show_tabs_in_tab_bar = false
+---config.show_new_tab_button_in_tab_bar = false
+---```
+config.show_new_tab_button_in_tab_bar = false
+
+---When set to `true` (the default), tab titles show their tab number (tab index) with
+---a prefix such as `1:`. When false, no numeric prefix is shown.
+---
+---The `tab_and_split_indices_are_zero_based` setting controls whether numbering
+---starts with `0` or `1`.
+config.show_tab_index_in_tab_bar = true
+
+---When set to `true` (the default), the tab bar will display the tabs associated with
+---the current window.
+---
+---When set to `false`, the tabs will not be drawn into the tab bar.
+---
+---This example turns off the tabs and new-tab button, leaving just the left and
+---right status areas:
+---
+---```lua
+---wezterm.on('update-right-status', function(window, pane)
+---  window:set_left_status 'left'
+---  window:set_right_status 'right'
+---end)
+---
+---config.use_fancy_tab_bar = false
+---config.show_tabs_in_tab_bar = false
+---config.show_new_tab_button_in_tab_bar = false
+---```
+config.show_tabs_in_tab_bar = true
+
+---If set to true, when the active tab is closed, the previously activated tab will
+---be activated.
+---
+---Otherwise, the tab to the left of the active tab will be activated.
+config.switch_to_last_active_tab_when_closing_tab = true
+
+---If true, show_tab_index_in_tab_bar uses a zero-based index. The default is false and
+---the tab shows a one-based index.
+config.tab_and_split_indices_are_zero_based = true
+
+---When `tab_bar_at_bottom = true`, the tab bar will be rendered at the bottom of the
+---window rather than the top of the window.
+---
+---The default is `false`.
+config.tab_bar_at_bottom = false
+
+---Specifies the maximum width that a tab can have in the tab bar when using retro
+---tab mode. It is ignored when using fancy tab mode.
+---
+---Defaults to 16 glyphs in width.
+---
+---```lua
+---config.tab_max_width = 16
+---```
+config.tab_max_width = 25
+
+---When set to `true` (the default), the tab bar is rendered in a native style with
+---proportional fonts.
+---
+---When set to `false`, the tab bar is rendered using a retro aesthetic using the
+---main terminal font.
+config.use_fancy_tab_bar = true
 
 return config
