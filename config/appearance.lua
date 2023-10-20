@@ -404,7 +404,7 @@ config.tab_and_split_indices_are_zero_based = true
 ---window rather than the top of the window.
 ---
 ---The default is `false`.
-config.tab_bar_at_bottom = false
+config.tab_bar_at_bottom = true
 
 ---Specifies the maximum width that a tab can have in the tab bar when using retro
 ---tab mode. It is ignored when using fancy tab mode.
@@ -414,13 +414,13 @@ config.tab_bar_at_bottom = false
 ---```lua
 ---config.tab_max_width = 16
 ---```
-config.tab_max_width = 25
+config.tab_max_width = 55
 
 ---When set to `true` (the default), the tab bar is rendered in a native style with
 ---proportional fonts.
 ---
 ---When set to `false`, the tab bar is rendered using a retro aesthetic using the
 ---main terminal font.
-config.use_fancy_tab_bar = true
+config.use_fancy_tab_bar = false
 
 return config
