@@ -261,7 +261,7 @@ config.font_size = 10.5
 ---
 ---Note that the `underline_position` is often a small negative number like `-2` or `-4`
 ---and specifies an offset from the baseline of the font.
-config.underline_position = -2.1
+config.underline_position = -3.1
 
 ---If specified, overrides the base thickness of underlines. The underline thickness
 ---is also used for rendering split pane dividers and a number of other lines in custom
