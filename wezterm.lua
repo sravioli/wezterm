@@ -8,5 +8,7 @@ return Config:init()
   :add(require "config.cursor")
   :add(require "config.general")
   :add(require "config.appearance")
-  :add(require "config.exit-behavior").options
+  :add(require "config.exit-behavior")
+  :add(require "keys.tables")
+  :add(require "keys.bindings").options
 -- :add(require "config.command-palette")
