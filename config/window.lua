@@ -36,7 +36,7 @@ local config = {}
 ---@see config.integrated_title_button_alignment
 ---@see config.integrated_title_button_color
 ---@see config.tab_bar_style If you are using the retro rab style
-config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
+config.window_decorations = "TITLE | RESIZE"
 
 ---Configures the color of the set of window management buttons when
 ---`window_decorations = "INTEGRATED_BUTTONS|RESIZE"`.
