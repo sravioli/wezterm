@@ -1,5 +1,5 @@
 ---@class WezTerm
-local wz = require "wezterm"
+local wez = require "wezterm"
 local colorschemes = require "colorschemes"
 
 ---@class config Appearance configuration options for WezTerm
@@ -314,7 +314,7 @@ end
 ---
 ---The default value for `hyperlink_rules` can be retrieved using
 ---`wezterm.default_hyperlink_rules()`
-config.hyperlink_rules = wz.default_hyperlink_rules()
+config.hyperlink_rules = wez.default_hyperlink_rules()
 
 -- make task numbers clickable
 -- the first matched regex group is captured in $1.

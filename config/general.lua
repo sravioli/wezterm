@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-field
 ---@class WezTerm
-local wz = require "wezterm"
+local wez = require "wezterm"
 
 ---@class config
 local config = {}
@@ -41,7 +41,7 @@ config.default_prog = { "pwsh" }
 ---On Windows, there isn't a process group leader concept, but `wezterm` will examine
 ---the process tree of the program that it started in the current pane and use some
 ---heuristics to determine an approximate equivalent.
-config.default_cwd = wz.home_dir
+config.default_cwd = wez.home_dir
 
 ---The launcher menu is accessed from the new tab button in the tab bar UI; the `+`
 ---button to the right of the tabs. Left clicking on the button will spawn a new tab,

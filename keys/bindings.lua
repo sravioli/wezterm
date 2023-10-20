@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-field
 ---@class WezTerm
-local wz = require "wezterm"
-local act = wz.action
+local wez = require "wezterm"
+local act = wez.action
 
 ---@class config
 local config = {}

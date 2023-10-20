@@ -1,5 +1,5 @@
 ---@class WezTerm
-local wz = require "wezterm"
+local wez = require "wezterm"
 
 ---@class Config
 ---@field options table[] All the configuration options for wezterm
@@ -9,7 +9,7 @@ local Config = {}
 ---@return Config opts The configuration options
 function Config:init()
   local opts = {}
-  if wz.config_builder then opts = wz.config_builder() end
+  if wez.config_builder then opts = wez.config_builder() end
 
   self = setmetatable(opts, { __index = Config })
   self.options = {}
@@ -28,7 +28,7 @@ end
 function Config:add(spec)
   for key, value in pairs(spec) do
     if self.options[key] ~= nil then
-      wz.log_warn(
+      wez.log_warn(
         "Duplicate config option detected: ",
         { old = self.options[key], new = spec[key] }
       )

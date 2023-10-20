@@ -1,5 +1,5 @@
 ---@class WezTerm
-local wz = require "wezterm"
+local wez = require "wezterm"
 
 ---@class config
 local config = {}
@@ -206,7 +206,7 @@ config.bold_brightens_ansi_colors = "No"
 ---* `assume_emoji_presentation = true` or `assume_emoji_presentation = false` to
 ---  control whether a font is considered to have emoji (rather than text)
 ---  presentation glyphs for emoji. (_Since: Version 20220807-113146-c2fee766_)
-config.font = wz.font {
+config.font = wez.font {
   family = "FiraCode Nerd Font",
   weight = "Regular",
   harfbuzz_features = {
