@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.2.0](https://github.com/sRavioli/wezterm/compare/0.1.0..0.2.0) - 2023-10-22
+#### Bug Fixes
+- **(colorschemes:kanagawa)** remove comment - ([7145dff](https://github.com/sRavioli/wezterm/commit/7145dff78ab59b2cefa0dff8608a556eb7f6938d)) - [@sRavioli](https://github.com/sRavioli)
+- **(config/keys)** rename `wz` to `wez` - ([262a6b1](https://github.com/sRavioli/wezterm/commit/262a6b1759af6821bdf7a259aad51bb763b99006)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:appearance)** reduce tab title max width - ([115e70b](https://github.com/sRavioli/wezterm/commit/115e70b48a766fa48cc7d067aafb69fb66280970)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:appearance)** disable fancy tab bar, move it to bottom - ([2b0a891](https://github.com/sRavioli/wezterm/commit/2b0a89199d5c094a2cac1272bbe6fa31ca76fcb1)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:font)** disable `NO_BITMAP` option that would prevent emojis from showing up - ([51d1e51](https://github.com/sRavioli/wezterm/commit/51d1e5119e2c056bd70389a9154f717be2abbd29)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:window)** do not use integrated buttons - ([6eaae36](https://github.com/sRavioli/wezterm/commit/6eaae36299d45ef56c365ba08c1624e823b4dbec)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(config:appearance)** add documentation, add tab bar settings - ([c164e03](https://github.com/sRavioli/wezterm/commit/c164e03b9cd1895ae742178cb5c856b1548d5baa)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:font)** try to change underline pos based on display - ([4b59f06](https://github.com/sRavioli/wezterm/commit/4b59f06c56a0b6f56982dd31c7d45c7f62eb8f82)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-tab-title)** custom format tab title - ([5d2b1a6](https://github.com/sRavioli/wezterm/commit/5d2b1a61a54d47f51a765a7949afb7a2729a7864)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-window-title)** custom format window title - ([cb876ce](https://github.com/sRavioli/wezterm/commit/cb876ce8a40d509a9956154ffc0b1c8d7bf8f9fa)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:update-status)** (wip) create status bar - ([a529aec](https://github.com/sRavioli/wezterm/commit/a529aec29a6e45a1ab3aace695b4d432b103e9aa)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:functions)** add some utility functions - ([f34834f](https://github.com/sRavioli/wezterm/commit/f34834ffe394ae2e7b0895603015b9058c9d185e)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** categorize `wezterm` nerdfont icons - ([59227c3](https://github.com/sRavioli/wezterm/commit/59227c325adf62c670787db267fb946198baee0b)) - [@sRavioli](https://github.com/sRavioli)
+- **(wezterm)** load events - ([f0ba708](https://github.com/sRavioli/wezterm/commit/f0ba708a42dede6d416eb81fc4a6572751b1d204)) - [@sRavioli](https://github.com/sRavioli)
+#### Refactoring
+- **(config:window)** move tab bar settings - ([bf839eb](https://github.com/sRavioli/wezterm/commit/bf839eb6508910299bb592a5d3b7f9c1ccfce140)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [0.1.0](https://github.com/sRavioli/wezterm/compare/0.0.2..0.1.0) - 2023-10-20
 #### Bug Fixes
 - **(config:font)** move underline a bit down - ([7d79450](https://github.com/sRavioli/wezterm/commit/7d79450eb6b86e2907634f6e01dd7ab03c3b774b)) - [@sRavioli](https://github.com/sRavioli)
