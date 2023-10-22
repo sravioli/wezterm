@@ -1,5 +1,9 @@
 local Config = require "config.init"
 
+require("events.format-tab-title").setup()
+require("events.format-window-title").setup()
+require("events.update-status").setup()
+
 return Config:init()
   :add(require "config.gpu")
   :add(require "config.font")
