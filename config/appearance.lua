@@ -414,7 +414,7 @@ config.tab_bar_at_bottom = true
 ---```lua
 ---config.tab_max_width = 16
 ---```
-config.tab_max_width = 55
+config.tab_max_width = 25
 
 ---When set to `true` (the default), the tab bar is rendered in a native style with
 ---proportional fonts.
