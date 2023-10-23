@@ -19,8 +19,8 @@ function M.setup()
     -- This is indeed a hack, but I'm never running cmd.exe so it's safe to override
     -- this way.
     if title == "cmd" then
-      title = "Neovim"
-        .. string.format(" %s%s%s", "(dir: ", fn.basename(pane.current_working_dir), ")")
+      local cwd, _ = fn.basename(pane.current_working_dir)
+      title = "Neovim" .. string.format(" %s%s%s", "(dir: ", cwd, ")")
     end
 
     -- return zoomed .. index .. tab.active_pane.title
