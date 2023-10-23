@@ -52,10 +52,10 @@ function M.setup()
 
     -- HACK: running Neovim will turn the tab title to "C:\WINDOWS\system32\cmd.exe".
     -- This is indeed a hack, but I'm never running cmd.exe so it's safe to override
-    -- this way.
+    -- it this way.
     if title == "cmd" then
-      title = nf.Vim.dev
-        .. string.format(" %s%s%s", "( ", fn.basename(pane.current_working_dir), ")")
+      local cwd, _ = fn.basename(tab.active_pane.current_working_dir)
+      title = nf.Vim.dev .. string.format(" %s%s%s", "( ", cwd, ")")
     end
 
     ---ensures that the title fits in the available space, and that we have room for
