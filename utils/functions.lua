@@ -22,13 +22,6 @@ functions.basename = function(path)
   return index and trimmed_path:sub(index) or trimmed_path
 end
 
----Checks if the current pane is running as Administrator.
----@param pane_title string The current pane title.
----@return boolean is_admin `true` if running as admin, `false` otherwise.
-functions.is_admin = function(pane_title)
-  return pane_title:match "^Administrator: " and true or false
-end
-
 ---Rounds the given number to the nearest multiple given.
 ---@param number number Any number.
 ---@param multiple number Any number.
