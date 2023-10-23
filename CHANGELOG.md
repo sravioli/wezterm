@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [1.0.2](https://github.com/sRavioli/wezterm/compare/1.0.1..1.0.2) - 2023-10-23
+#### Bug Fixes
+- **(config:appearance)** increase tab max width - ([6d54ff9](https://github.com/sRavioli/wezterm/commit/6d54ff9a3ef61809203911d1663591a0ac979afe)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [1.0.1](https://github.com/sRavioli/wezterm/compare/1.0.0..1.0.1) - 2023-10-23
 #### Bug Fixes
 - **(utils:functions)** remove `is_admin()` function - ([67cf00f](https://github.com/sRavioli/wezterm/commit/67cf00f295f8614d17a95550873bdd4c8bb77035)) - [@sRavioli](https://github.com/sRavioli)
