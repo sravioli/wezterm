@@ -11,26 +11,8 @@ local M = {}
 
 function M.setup()
   wez.on("format-tab-title", function(tab, _, _, _, hover, max_width)
-    ---The wezterm tab-bar layout
-    ---@class TabBarLayout
-    ---@field push function Adds elements to the layout class
-    local layout = {}
-
-    ---Add elements to the layout table.
-    ---@param background string The background color of the cell.
-    ---@param foreground string The foreground color of the cell.
-    ---@param text string The text to be added.
-    ---@param attribute? string The attribute to be added.
-    ---@return table self The updated layout table.
-    function layout:push(background, foreground, text, attribute)
-      self.layout = self.layout or {} ---Initialize self.layout if it is nil
-      table.insert(layout, { Background = { Color = background } })
-      table.insert(layout, { Foreground = { Color = foreground } })
-      if attribute then table.insert(layout, { Attribute = attribute }) end
-      table.insert(layout, { Text = text })
-
-      return self.layout
-    end
+    ---@class WezTermLayout
+    local layout = require("utils.layout"):new()
 
     local bg, fg
     local pane = tab.active_pane
