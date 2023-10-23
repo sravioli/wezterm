@@ -201,6 +201,7 @@ config.keys = {
   { key = "F2", mods = "NONE", action = act.ActivateCommandPalette },
   { key = "F3", mods = "NONE", action = act.ShowLauncher },
   { key = "F4", mods = "NONE", action = act.ShowTabNavigator },
+  { key = "F11", mods = "NONE", action = act.ToggleFullScreen },
   { key = "F12", mods = "NONE", action = act.ShowDebugOverlay },
   { key = "s", mods = "LEADER", action = act.Search { CaseInSensitiveString = "" } },
 
