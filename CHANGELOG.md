@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [1.0.0](https://github.com/sRavioli/wezterm/compare/0.2.0..1.0.0) - 2023-10-23
+#### Bug Fixes
+- **(utils:functions)** remove comments and unused function - ([fe3862f](https://github.com/sRavioli/wezterm/commit/fe3862fbc504d607f641bd5ff700ff180f0f1754)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(colorschemes:kanagawa)** change tag bar background color - ([e62f4fd](https://github.com/sRavioli/wezterm/commit/e62f4fdc1507a8767e6896fe5f05143dc1c62ef7)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:update-status)** create status bar layout - ([c37d4bc](https://github.com/sRavioli/wezterm/commit/c37d4bc1610b5a62f2dc11a2d00b4410e0338c8f)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:functions)** implement `mround`, `toint` and `get_cwd_hostname` functions - ([0e6d866](https://github.com/sRavioli/wezterm/commit/0e6d8665f0bdb13ab745bea3e10ac58e0b6982e5)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:layout)** crate layout class with utility `:push()` method - ([810ca3c](https://github.com/sRavioli/wezterm/commit/810ca3c54385d21acd2fdea736fcfff0a0ec7212)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** add powerline symbols - ([517dce3](https://github.com/sRavioli/wezterm/commit/517dce3e76498cfa90871f784c34f8d682f01e66)) - [@sRavioli](https://github.com/sRavioli)
+#### Refactoring
+- **(events:format-tab-title)** get cwd outside the call to `string.format` when formatting tab title - ([4aea4d8](https://github.com/sRavioli/wezterm/commit/4aea4d8f8d93e1ca25ef4594256cee6c6e169a48)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-tab-title)** set background once since it does not change - ([161eb99](https://github.com/sRavioli/wezterm/commit/161eb99dcba7d03d9fb9c71bfd74e36fd03e9bbe)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-tab-title)** make `layout` use the `Layout` class object - ([7f961b1](https://github.com/sRavioli/wezterm/commit/7f961b101ea8a01dd74c205aaa8e29794d681a80)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-window-title)** get cwd outside the `string.format` call when setting the title - ([c7513f4](https://github.com/sRavioli/wezterm/commit/c7513f4193efdc0a8ea83eb73c3ff01dd35b6bf9)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** add battery icons for charging and discharging with indexes - ([7aae5c2](https://github.com/sRavioli/wezterm/commit/7aae5c24acd231a84b2ae59d707b7486d94d81fe)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [0.2.0](https://github.com/sRavioli/wezterm/compare/0.1.0..0.2.0) - 2023-10-22
 #### Bug Fixes
 - **(colorschemes:kanagawa)** remove comment - ([7145dff](https://github.com/sRavioli/wezterm/commit/7145dff78ab59b2cefa0dff8608a556eb7f6938d)) - [@sRavioli](https://github.com/sRavioli)
