@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [1.0.1](https://github.com/sRavioli/wezterm/compare/1.0.0..1.0.1) - 2023-10-23
+#### Bug Fixes
+- **(utils:functions)** remove `is_admin()` function - ([67cf00f](https://github.com/sRavioli/wezterm/commit/67cf00f295f8614d17a95550873bdd4c8bb77035)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(keys:bindings)** add command to fullscreen window - ([6c0de47](https://github.com/sRavioli/wezterm/commit/6c0de477f7feacd1253dd3e014a6ca1e5c26cbba)) - [@sRavioli](https://github.com/sRavioli)
+#### Refactoring
+- **(events:format-tab-title)** don't check for admin, just `:gsub()` the string to the icon - ([bf5740a](https://github.com/sRavioli/wezterm/commit/bf5740a79cebe2be80cf906e9a6fff22abf705cf)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [1.0.0](https://github.com/sRavioli/wezterm/compare/0.2.0..1.0.0) - 2023-10-23
 #### Bug Fixes
 - **(utils:functions)** remove comments and unused function - ([fe3862f](https://github.com/sRavioli/wezterm/commit/fe3862fbc504d607f641bd5ff700ff180f0f1754)) - [@sRavioli](https://github.com/sRavioli)
