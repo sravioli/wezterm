@@ -14,19 +14,16 @@ function M.setup()
     ---@class WezTermLayout
     local layout = require("utils.layout"):new()
 
-    local bg, fg
+    local bg = kanagawa.background
+    local fg
     local pane = tab.active_pane
 
     ---set colors based on states
     if tab.is_active then
-      bg = kanagawa.background
       fg = kanagawa.ansi[6]
     elseif hover then
-      -- bg = kanagawa.selection_fg
-      bg = kanagawa.background
       fg = kanagawa.selection_bg
     else
-      bg = kanagawa.background
       fg = kanagawa.brights[1]
     end
 
