@@ -6,6 +6,7 @@ local wez = require "wezterm"
 ---Nerd font aggregated by type/class/etc.
 ---@class NerdFontIcons
 ---@field SemiCircle SemiCircleIcons
+---@field Powerline  PowerlineIcons
 ---@field Vim        VimIcons
 ---@field Powershell PowershellIcons
 ---@field Bash       BashIcons
@@ -21,6 +22,14 @@ local NerdFontIcons = {
   SemiCircle = {
     left = wez.nerdfonts.ple_left_half_circle_thick,
     right = wez.nerdfonts.ple_right_half_circle_thick,
+  },
+
+  ---@class PowerlineIcons: string, string
+  ---@field left  string ``
+  ---@field right string ``
+  Powerline = {
+    left = wez.nerdfonts.pl_left_hard_divider,
+    right = wez.nerdfonts.pl_right_hard_divider,
   },
 
   ---@class VimIcons: string, string
