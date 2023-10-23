@@ -39,14 +39,15 @@ function M.setup()
     ---left SemiCircle
     layout:push(bg, fg, nf.SemiCircle.left)
 
-    ---whether user is admin/sudo
-    if fn.is_admin(pane.title) then layout:push(fg, bg, nf.Admin.fill .. " ") end
-
     ---tab index
     layout:push(fg, bg, nf.Numbers[tab.tab_index + 1])
 
     ---tab title
-    local title = fn.basename(pane.title):gsub("%.exe%s?$", "")
+    local title = fn
+      .basename(pane.title)
+      :gsub("%.exe%s?$", "") ---remove `.exe` from procss name
+      :gsub("^Administrator:", nf.Admin.fill) ---swap `Administrator: ` for icon
+
     ---change pwsh and bash for their icons
     title = title:gsub("pwsh", nf.Powershell.md):gsub("bash", nf.Bash.seti)
 
