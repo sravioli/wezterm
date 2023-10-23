@@ -1,9 +1,9 @@
-local wez = require "wezterm"
-local nf = require "utils.nerdfont-icons"
+---@diagnostic disable: undefined-field
+local wez = require "wezterm" ---@class WezTerm
+local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
 
 ---User defined utility functions
 ---@class UtilityFunctions
----@field basename function Lua equivalent of `basename(3)`
 local functions = {}
 
 ---Equivalent to POSIX `basename(3)`
@@ -20,10 +20,6 @@ functions.basename = function(path)
   local index = trimmed_path:find "[^/\\]*$" ---Find the last occurrence of '/' in the path
 
   return index and trimmed_path:sub(index) or trimmed_path
-end
-
-functions.tab_title = function(tab)
-  return nf.SemiCircle.left .. tab.window_title --process .. " " .. cwd
 end
 
 ---Checks if the current pane is running as Administrator.
