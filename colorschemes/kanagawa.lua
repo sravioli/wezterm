@@ -33,4 +33,8 @@ return {
     "#dcd7ba",
   },
   indexed = { [16] = "#ffa066", [17] = "#ff5d62" },
+
+  tab_bar = {
+    background = "#1f1f28",
+  },
 }
