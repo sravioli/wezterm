@@ -51,28 +51,37 @@ local NerdFontIcons = {
     seti = wez.nerdfonts.seti_shell,
   },
 
-  ---@class BatteryIcons: string, string, string, string, string, string, string, string, string, string
-  ---@field charging10  string `󰢜`
-  ---@field charging20  string `󰂆`
-  ---@field charging30  string `󰂇`
-  ---@field charging40  string `󰂈`
-  ---@field charging50  string `󰢝`
-  ---@field charging60  string `󰂉`
-  ---@field charging70  string `󰢞`
-  ---@field charging80  string `󰂊`
-  ---@field charging90  string `󰂋`
-  ---@field charging100 string `󰂅`
+  ---@class BatteryIcons: table, table
+  ---@field charging table Icons for charging battery in increments of 10
+  ---@field normal table Icons for non-charging battery in increments of 10
   Battery = {
-    charging10 = wez.nerdfonts.md_battery_charging_10,
-    charging20 = wez.nerdfonts.md_battery_charging_20,
-    charging30 = wez.nerdfonts.md_battery_charging_30,
-    charging40 = wez.nerdfonts.md_battery_charging_40,
-    charging50 = wez.nerdfonts.md_battery_charging_50,
-    charging60 = wez.nerdfonts.md_battery_charging_60,
-    charging70 = wez.nerdfonts.md_battery_charging_70,
-    charging80 = wez.nerdfonts.md_battery_charging_80,
-    charging90 = wez.nerdfonts.md_battery_charging_90,
-    charging100 = wez.nerdfonts.md_battery_charging_100,
+    Charging = {
+      ["00"] = wez.nerdfonts.md_battery_alert,
+      ["10"] = wez.nerdfonts.md_battery_charging_10,
+      ["20"] = wez.nerdfonts.md_battery_charging_20,
+      ["30"] = wez.nerdfonts.md_battery_charging_30,
+      ["40"] = wez.nerdfonts.md_battery_charging_40,
+      ["50"] = wez.nerdfonts.md_battery_charging_50,
+      ["60"] = wez.nerdfonts.md_battery_charging_60,
+      ["70"] = wez.nerdfonts.md_battery_charging_70,
+      ["80"] = wez.nerdfonts.md_battery_charging_80,
+      ["90"] = wez.nerdfonts.md_battery_charging_90,
+      ["100"] = wez.nerdfonts.md_battery_charging_100,
+    },
+
+    Discharging = {
+      ["00"] = wez.nerdfonts.md_battery_outline, --- `󰂎`
+      ["10"] = wez.nerdfonts.md_battery_10, --- `󰁺`
+      ["20"] = wez.nerdfonts.md_battery_20, --- `󰁻`
+      ["30"] = wez.nerdfonts.md_battery_30, --- `󰁼`
+      ["40"] = wez.nerdfonts.md_battery_40, --- `󰁽`
+      ["50"] = wez.nerdfonts.md_battery_50, --- `󰁾`
+      ["60"] = wez.nerdfonts.md_battery_60, --- `󰁿`
+      ["70"] = wez.nerdfonts.md_battery_70, --- `󰂀`
+      ["80"] = wez.nerdfonts.md_battery_80, --- `󰂁`
+      ["90"] = wez.nerdfonts.md_battery_90, --- `󰂂`
+      ["100"] = wez.nerdfonts.md_battery, --- `󰁹`
+    },
   },
 
   ---@class WifiIcons: string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string
