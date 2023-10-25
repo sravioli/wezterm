@@ -83,14 +83,14 @@ functions.get_cwd_hostname = function(pane, search_git_root_instead)
       hostname = cwd_uri.host or wez.hostname()
     else
       ---an older version of wezterm, 20230712-072601-f4abf8fd or earlier, which
-      ---doesn't have the Url object
+      ---doesn't have the URL object
       cwd_uri = cwd_uri:sub(8)
       local slash = cwd_uri:find "/"
       if slash then
         hostname = cwd_uri:sub(1, slash - 1)
 
         ---extract the cwd from the uri, decoding %-encoding
-        local home = (os.getenv "HOMEDRIVE" .. os.getenv "HOMEPATH"):gsub("\\", "/")
+        local home = os.getenv "HOMEDRIVE" .. os.getenv("HOMEPATH"):gsub("\\", "/")
         cwd = cwd_uri
           :gsub("%%(%x%x)", function(hex) return string.char(tonumber(hex, 16)) end)
           :gsub("/" .. home .. "(.-)$", "~%1")
@@ -101,6 +101,13 @@ functions.get_cwd_hostname = function(pane, search_git_root_instead)
     local dot = hostname:find "[.]"
     if dot then hostname = hostname:sub(1, dot - 1) end
     if hostname == "" then hostname = wez.hostname() end
+  end
+
+  ---search for the git root of the project if specified
+  if search_git_root_instead then
+    local git_root = functions.find_git_dir(cwd)
+    ---if no git root has been found, return the original cwd
+    cwd = git_root and git_root or cwd
   end
 
   return cwd, hostname
