@@ -36,11 +36,41 @@ end
 ---@return integer result The closest integer.
 functions.toint = function(float) return float | 0 end
 
----Returns the current working directory and the hostname
----@param pane table The wezterm pane object
----@return string cwd The current working directory
----@return string hostname The hostname
-functions.get_cwd_hostname = function(pane)
+---Will search the git project root directory of the given directory path. (see
+---implementation to understand why this function exits)
+---@param directory string The directory path.
+---@return string|nil git_root If found, the `git_root`, else `nil`
+functions.find_git_dir = function(directory)
+  -- NOTE: this functions exits purely because calling the following function
+  -- `wezterm.run_child_process({ "git", "rev-parse", "--show-toplevel" })`
+  -- would cause the status bar to blinck every `config.status_update_interval`
+  -- milliseconds. Moreover when changing tab, the status bar wouldn't be drawn.
+  local home = os.getenv "HOMEDRIVE" .. os.getenv("HOMEPATH"):gsub("\\", "/")
+  directory = directory:gsub("~", home)
+
+  while directory do
+    local handle = io.open(directory .. "/.git/config", "r")
+    if handle then
+      handle:close()
+      directory = directory:gsub(home, "~")
+      return directory
+    elseif directory == "/" or directory == "" then
+      break
+    else
+      directory = directory:match "(.+)/[^/]*"
+    end
+  end
+
+  return nil
+end
+
+---Returns the current working directory and the hostname.
+---@param pane table The wezterm pane object.
+---@param search_git_root_instead? boolean Whether to search for the git root instead.
+---@return string cwd The current working directory.
+---@return string hostname The hostname.
+---@see UtilityFunctions.find_git_dir
+functions.get_cwd_hostname = function(pane, search_git_root_instead)
   local cwd, hostname = "", ""
   ---Figure out the cwd and host of the current pane. This will pick up the hostname
   ---for the remote host if your shell is using OSC 7 on the remote host.
