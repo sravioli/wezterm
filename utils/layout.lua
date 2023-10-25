@@ -19,7 +19,6 @@ function Layout:push(background, foreground, text, attributes)
   self.layout = self.layout or {}
   table.insert(self.layout, { Background = { Color = background } })
   table.insert(self.layout, { Foreground = { Color = foreground } })
-  table.insert(self.layout, { Text = text })
 
   if attributes then
     for _, attribute in ipairs(attributes) do
@@ -44,6 +43,8 @@ function Layout:push(background, foreground, text, attributes)
       end
     end
   end
+
+  table.insert(self.layout, { Text = text })
 
   return self.layout
 end
