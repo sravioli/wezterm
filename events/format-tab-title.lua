@@ -2,21 +2,20 @@
 -- see: <https://github.com/wez/wezterm/discussions/628#discussioncomment-1874614>
 
 local wez = require "wezterm" ---@class WezTerm
-local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
-local fn = require "utils.functions" ---@class UtilityFunctions
-
 local kanagawa = require "colorschemes.kanagawa"
 
 local M = {}
 
 function M.setup()
-  wez.on("format-tab-title", function(tab, _, _, _, hover, max_width)
-    ---@class WezTermLayout
-    local layout = require("utils.layout"):new()
+  wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
+    local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
+    local fn = require "utils.functions" ---@class UtilityFunctions
+
+    local layout = require("utils.layout"):new() ---@class WezTermLayout
 
     local bg = kanagawa.background
     local fg
-    local pane = tab.active_pane
+    local pane, tab_idx = tab.active_pane, tab.tab_index
 
     ---set colors based on states
     if tab.is_active then
