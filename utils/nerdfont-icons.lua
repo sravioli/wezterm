@@ -5,31 +5,28 @@ local wez = require "wezterm"
 
 ---Nerd font aggregated by type/class/etc.
 ---@class NerdFontIcons
----@field SemiCircle SemiCircleIcons
----@field Powerline  PowerlineIcons
----@field Vim        VimIcons
----@field Powershell PowershellIcons
----@field Bash       BashIcons
----@field Battery    BatteryIcons
----@field Wifi       WifiIcons
----@field Admin      AdminIcons
----@field Circle     CircleIcons
----@field Numbers    table
 local NerdFontIcons = {
-  ---@class SemiCircleIcons: string, string
-  ---@field left  string ``
-  ---@field right string ``
-  SemiCircle = {
-    left = wez.nerdfonts.ple_left_half_circle_thick,
-    right = wez.nerdfonts.ple_right_half_circle_thick,
-  },
+  ---@class SeparatorsIcons: StatusBarIcons, TabBarIcons
+  Separators = {
+    ---@class StatusBarIcons: string, string
+    ---@field left  string ``
+    ---@field right string ``
+    StatusBar = {
+      left = wez.nerdfonts.pl_left_hard_divider,
+      right = wez.nerdfonts.pl_right_hard_divider,
+    },
 
-  ---@class PowerlineIcons: string, string
-  ---@field left  string ``
-  ---@field right string ``
-  Powerline = {
-    left = wez.nerdfonts.pl_left_hard_divider,
-    right = wez.nerdfonts.pl_right_hard_divider,
+    ---@class TabBarIcons: string, string, string
+    ---@field leftmost string `▐`
+    ---@field left     string ``
+    ---@field right    string ``
+    TabBar = {
+      leftmost = "▐",
+      left = wez.nerdfonts.ple_upper_right_triangle,
+      right = wez.nerdfonts.ple_lower_left_triangle,
+    },
+
+    FullBlock = "█",
   },
 
   ---@class VimIcons: string, string
