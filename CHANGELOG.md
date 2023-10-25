@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.1](https://github.com/sRavioli/wezterm/compare/2.0.0..2.0.1) - 2023-10-25
+#### Bug Fixes
+- **(utils:layout)** insert text after attributes - ([bf1d779](https://github.com/sRavioli/wezterm/commit/bf1d779367850ab8c6eaecc2d2e178e380477677)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.0](https://github.com/sRavioli/wezterm/compare/1.0.2..2.0.0) - 2023-10-25
 #### Bug Fixes
 - **(config:appearance)** reduce tab title max width - ([1a976b9](https://github.com/sRavioli/wezterm/commit/1a976b9486ad0236cf5476909fdc3a4586617a9a)) - [@sRavioli](https://github.com/sRavioli)
