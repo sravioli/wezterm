@@ -103,21 +103,7 @@ local NerdFontIcons = {
     outline = wez.nerdfonts.md_lightning_bolt_outline,
   },
 
-  ---@class CircleIcons: string, string, string, string, string, string
-  ---@field circle        string ``
-  ---@field filled        string ``
-  ---@field large         string ``
-  ---@field large_filled  string ``
-  ---@field slash         string ``
-  ---@field small_filled  string ``
-  Circle = {
-    circle = wez.nerdfonts.cod_circle,
-    filled = wez.nerdfonts.cod_circle_filled,
-    large = wez.nerdfonts.cod_circle_large,
-    large_filled = wez.nerdfonts.cod_circle_large_filled,
-    slash = wez.nerdfonts.cod_circle_slash,
-    small_filled = wez.nerdfonts.cod_circle_small_filled,
-  },
+  UnseenNotification = wez.nerdfonts.cod_circle_small_filled,
 
   ---@enum Numbers
   Numbers = {
