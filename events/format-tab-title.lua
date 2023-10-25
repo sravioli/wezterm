@@ -12,6 +12,7 @@ function M.setup()
     local fn = require "utils.functions" ---@class UtilityFunctions
 
     local layout = require("utils.layout"):new() ---@class WezTermLayout
+    local separators = nf.Separators.TabBar ---@class TabBarIcons
 
     local bg = kanagawa.background
     local fg
@@ -27,49 +28,64 @@ function M.setup()
     end
 
     ---Check if any pane has unseen output
-    local has_unseen_output = false
+    local is_unseen_output_present = false
     for _, p in ipairs(tab.panes) do
       if p.has_unseen_output then
-        has_unseen_output = true
+        is_unseen_output_present = true
         break
       end
     end
 
-    ---left SemiCircle
-    layout:push(bg, fg, nf.SemiCircle.left)
-
-    ---tab index
-    layout:push(fg, bg, nf.Numbers[tab.tab_index + 1])
-
-    ---tab title
-    local title = fn
-      .basename(pane.title)
-      :gsub("%.exe%s?$", "") ---remove `.exe` from procss name
-      :gsub("^Administrator:", nf.Admin.fill) ---swap `Administrator: ` for icon
-
-    ---change pwsh and bash for their icons
-    title = title:gsub("pwsh", nf.Powershell.md):gsub("bash", nf.Bash.seti)
+    ---get pane title, remove any `.exe` from the title, swap `Administrator` for the
+    ---desired icon, swap `pwsh` and `bash` for their icons
+    local title = fn.basename(pane.title)
+      :gsub("%.exe%s?$", "")
+      :gsub("^Administrator: %w+", nf.Admin.fill)
+      :gsub("pwsh", nf.Powershell.md)
+      :gsub("bash", nf.Bash.seti)
 
     -- HACK: running Neovim will turn the tab title to "C:\WINDOWS\system32\cmd.exe".
-    -- This is indeed a hack, but I'm never running cmd.exe so it's safe to override
-    -- it this way.
+    -- After getting the basename the tab name ends up being "cmd".
+    -- This is not the best way to detect when neovim is running but I will never use
+    -- `cmd.exe` from WezTerm.
+    local is_truncation_needed = true
     if title == "cmd" then
-      local cwd, _ = fn.basename(tab.active_pane.current_working_dir)
-      title = nf.Vim.dev .. string.format(" %s%s%s", "( ", cwd, ")")
+      ---full title truncation is not necessary since the dir name will be truncated
+      is_truncation_needed = false
+      local cwd, _ = fn.basename(pane.current_working_dir)
+
+      ---instead of truncating the whole title, truncate to length the cwd to ensure
+      ---that the right parenthesis always closes.
+      if max_width == config.tab_max_width then
+        cwd = wez.truncate_right(cwd, max_width - 13) .. "..."
+      end
+      title = string.format("%s ( %s)", nf.Vim.dev, cwd)
     end
 
-    ---ensures that the title fits in the available space, and that we have room for
-    ---the edges.
-    title = wez.truncate_right(title, max_width - 2)
+    ---truncate the tab title when it overflows the maximum available space, then
+    ---concatenate some dots to indicate the occurred truncation
+    -- if is_truncation_needed and max_width == config.tab_max_width then
+    if is_truncation_needed and max_width == config.tab_max_width then
+      title = wez.truncate_right(title, max_width - 8) .. "..."
+    end
 
-    ---the tab title
+    ---add the either the leftmost element or the normal left separator. This is done
+    ---to esure a bit of space from the left margin.
+    layout:push(bg, fg, tab_idx == 0 and separators.leftmost or separators.left)
+
+    ---add the tab number. can be substituted by the `has_unseen_output` notification
+    layout:push(
+      fg,
+      bg,
+      (is_unseen_output_present and nf.UnseenNotification or nf.Numbers[tab_idx + 1])
+        .. " "
+    )
+
+    ---the formatted tab title
     layout:push(fg, bg, title)
 
-    ---alert about unseen output
-    if has_unseen_output then layout:push(fg, bg, nf.Circle.small_filled) end
-
-    ---the right SemiCircle
-    layout:push(bg, fg, nf.SemiCircle.right)
+    ---the right tab bar separator
+    layout:push(bg, fg, nf.Separators.FullBlock .. separators.right)
 
     return layout
   end)
