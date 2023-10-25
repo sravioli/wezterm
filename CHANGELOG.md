@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.0](https://github.com/sRavioli/wezterm/compare/1.0.2..2.0.0) - 2023-10-25
+#### Bug Fixes
+- **(config:appearance)** reduce tab title max width - ([1a976b9](https://github.com/sRavioli/wezterm/commit/1a976b9486ad0236cf5476909fdc3a4586617a9a)) - [@sRavioli](https://github.com/sRavioli)
+- **(event:format-tab-title)** improve trucation, improve unseen notification handling, use new `nf.Separators` class - ([6116cda](https://github.com/sRavioli/wezterm/commit/6116cdae841399c6243381ef600cee6cca3d7520)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** remove `Powerline` and `SemiCircle` class, add the `Separators` class - ([a1fe61b](https://github.com/sRavioli/wezterm/commit/a1fe61be209a259c1ff1cb977cf7cc7d7cd580d7)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** swap the `Circle` class with simpler `UnseenNotification` string - ([a2354bf](https://github.com/sRavioli/wezterm/commit/a2354bf1bc1103b67ad77387424af728fd762bf5)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** remove unused icons - ([4445508](https://github.com/sRavioli/wezterm/commit/4445508fd5dcb9b9fe378b63b9147275ce9be8de)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(events:update-status)** improve cell push cycle, when possible display the git project root - ([8678a79](https://github.com/sRavioli/wezterm/commit/8678a7986adceccd4a8a5a9b1e9d629a753cbd7c)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:functions)** update `get_cwd_hostname()` to have the option to search for the git root - ([64a3913](https://github.com/sRavioli/wezterm/commit/64a39132750c104a246990eef637a8eed330927c)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:functions)** implement `find_git_dir()` that given a directory finds the project git root - ([e83f41d](https://github.com/sRavioli/wezterm/commit/e83f41d1dab181b6e47f2f1c197194ee23764e91)) - [@sRavioli](https://github.com/sRavioli)
+#### Style
+- **(events:format-tab-title)** move includes inside the `wezterm.on()` call - ([a141adb](https://github.com/sRavioli/wezterm/commit/a141adb2a074697b65855e2535440c42fff443b3)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [1.0.2](https://github.com/sRavioli/wezterm/compare/1.0.1..1.0.2) - 2023-10-23
 #### Bug Fixes
 - **(config:appearance)** increase tab max width - ([6d54ff9](https://github.com/sRavioli/wezterm/commit/6d54ff9a3ef61809203911d1663591a0ac979afe)) - [@sRavioli](https://github.com/sRavioli)
