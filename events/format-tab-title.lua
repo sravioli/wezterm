@@ -57,7 +57,7 @@ function M.setup()
       ---instead of truncating the whole title, truncate to length the cwd to ensure
       ---that the right parenthesis always closes.
       if max_width == config.tab_max_width then
-        cwd = wez.truncate_right(cwd, max_width - 13) .. "..."
+        cwd = wez.truncate_right(cwd, max_width - 14) .. "..."
       end
       title = string.format("%s ( %s)", nf.Vim.dev, cwd)
     end
