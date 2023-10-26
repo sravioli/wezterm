@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.2](https://github.com/sRavioli/wezterm/compare/2.0.1..2.0.2) - 2023-10-26
+#### Hotfixes
+- **(events:format-tab-title)** truncate more whe showing neovim directory - ([8d240c6](https://github.com/sRavioli/wezterm/commit/8d240c6a3aed29c4c2ad3732c81368002544646c)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.1](https://github.com/sRavioli/wezterm/compare/2.0.0..2.0.1) - 2023-10-25
 #### Bug Fixes
 - **(utils:layout)** insert text after attributes - ([bf1d779](https://github.com/sRavioli/wezterm/commit/bf1d779367850ab8c6eaecc2d2e178e380477677)) - [@sRavioli](https://github.com/sRavioli)
