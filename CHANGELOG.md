@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.4](https://github.com/sRavioli/wezterm/compare/2.0.3..2.0.4) - 2023-10-29
+#### Hotfixes
+- **(colorschemes:kanagawa)** add `tab_bar` colors, update config to use correct colors - ([e48910c](https://github.com/sRavioli/wezterm/commit/e48910cd07c750938be9c2435dfabeccc5276149)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.3](https://github.com/sRavioli/wezterm/compare/2.0.2..2.0.3) - 2023-10-29
 #### Bug Fixes
 - **(colorschemes:kanagawa)** update kanagawa-wave, add dragon and lotus variants - ([63d7fd9](https://github.com/sRavioli/wezterm/commit/63d7fd938cd11bc99ff73f2783a81a4d6dc95965)) - [@sRavioli](https://github.com/sRavioli)
