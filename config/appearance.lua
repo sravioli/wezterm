@@ -92,7 +92,7 @@ local config = {}
 config.background = {
   {
     source = {
-      Color = colorschemes["kanagawa"].background,
+      Color = colorschemes["kanagawa-wave"].background,
     },
     width = "100%",
     height = "100%",
@@ -265,7 +265,7 @@ config.animation_fps = 60
 config.max_fps = 60
 
 config.color_schemes = colorschemes
-config.color_scheme = "kanagawa"
+config.color_scheme = "kanagawa-wave"
 
 ---@see config.char_select_fg_color
 ---@see config.char_select_bg_color
@@ -275,8 +275,8 @@ config.color_scheme = "kanagawa"
 ---@see config.command_palette_bg_color
 ---@see config.command_palette_font_size
 for key, value in pairs {
-  bg_color = colorschemes["kanagawa"].ansi[6],
-  fg_color = colorschemes["kanagawa"].ansi[1],
+  bg_color = colorschemes["kanagawa-wave"].ansi[6],
+  fg_color = colorschemes["kanagawa-wave"].ansi[1],
   font_size = 14,
 } do
   for _, prefix in pairs { "command_palette_", "char_select_" } do

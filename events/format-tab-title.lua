@@ -2,7 +2,7 @@
 -- see: <https://github.com/wez/wezterm/discussions/628#discussioncomment-1874614>
 
 local wez = require "wezterm" ---@class WezTerm
-local kanagawa = require "colorschemes.kanagawa"
+local kanagawa = require "colorschemes.kanagawa-wave"
 
 local M = {}
 
