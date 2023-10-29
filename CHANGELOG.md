@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.3](https://github.com/sRavioli/wezterm/compare/2.0.2..2.0.3) - 2023-10-29
+#### Bug Fixes
+- **(colorschemes:kanagawa)** update kanagawa-wave, add dragon and lotus variants - ([63d7fd9](https://github.com/sRavioli/wezterm/commit/63d7fd938cd11bc99ff73f2783a81a4d6dc95965)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.2](https://github.com/sRavioli/wezterm/compare/2.0.1..2.0.2) - 2023-10-26
 #### Hotfixes
 - **(events:format-tab-title)** truncate more whe showing neovim directory - ([8d240c6](https://github.com/sRavioli/wezterm/commit/8d240c6a3aed29c4c2ad3732c81368002544646c)) - [@sRavioli](https://github.com/sRavioli)
