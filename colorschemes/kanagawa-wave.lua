@@ -40,6 +40,33 @@ return {
   },
 
   tab_bar = {
-    background = "#1F1F28",
+    background = "#181616",
+
+    active_tab = {
+      bg_color = "#957FB8",
+      fg_color = "#181616",
+    },
+
+    inactive_tab = {
+      bg_color = "#a6a69c",
+      fg_color = "#181616",
+    },
+
+    inactive_tab_hover = {
+      bg_color = "#223249",
+      fg_color = "#181616",
+      italic = true,
+    },
+
+    new_tab = {
+      bg_color = "#938AA9",
+      fg_color = "#181616",
+    },
+
+    new_tab_hover = {
+      bg_color = "#223249",
+      fg_color = "#181616",
+      italic = true,
+    },
   },
 }

@@ -35,11 +35,38 @@ return {
   },
 
   indexed = {
-    [16] = "#b6927b", -- extended color 1
-    [17] = "#b98d7b", -- extended color 2
+    [16] = "#b6927b",
+    [17] = "#b98d7b",
   },
 
   tab_bar = {
-    background = "#181616",
+    background = "#0d0c0c",
+
+    active_tab = {
+      bg_color = "#938AA9",
+      fg_color = "#0d0c0c",
+    },
+
+    inactive_tab = {
+      bg_color = "#a6a69c",
+      fg_color = "#0d0c0c",
+    },
+
+    inactive_tab_hover = {
+      bg_color = "#223249",
+      fg_color = "#0d0c0c",
+      italic = true,
+    },
+
+    new_tab = {
+      bg_color = "#938AA9",
+      fg_color = "#0d0c0c",
+    },
+
+    new_tab_hover = {
+      bg_color = "#223249",
+      fg_color = "#0d0c0c",
+      italic = true,
+    },
   },
 }

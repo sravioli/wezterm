@@ -14,7 +14,7 @@ function M.setup()
     local layout = require("utils.layout"):new() ---@class WezTermLayout
     local separators = nf.Separators.TabBar ---@class TabBarIcons
 
-    local bg = kanagawa.background
+    local bg = kanagawa.tab_bar.background
     local fg
     local pane, tab_idx = tab.active_pane, tab.tab_index
 
