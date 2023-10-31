@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-field
 local wez = require "wezterm" ---@class WezTerm
 
-local kanagawa = require "colorschemes.kanagawa-wave"
+local colorscheme = require("colorschemes")[require "utils.current-colorscheme"]
 
 local M = {}
 
@@ -33,13 +33,13 @@ function M.setup()
     ---push each cell and the cells separator
     for i, cell in ipairs { cwd, hostname, datetime, battery:icon() } do
       local fg = colors[i]
-      local bg = i == 1 and kanagawa.tab_bar.background or colors[i - 1]
+      local bg = i == 1 and colorscheme.tab_bar.background or colors[i - 1]
 
       ---add each cell separator
       layout:push(bg, fg, nf.Separators.StatusBar.right)
 
       ---add each cell
-      layout:push(colors[i], kanagawa.tab_bar.background, " " .. cell .. " ")
+      layout:push(colors[i], colorscheme.tab_bar.background, " " .. cell .. " ")
     end
 
     window:set_right_status(wez.format(layout))

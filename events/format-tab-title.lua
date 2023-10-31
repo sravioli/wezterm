@@ -2,7 +2,7 @@
 -- see: <https://github.com/wez/wezterm/discussions/628#discussioncomment-1874614>
 
 local wez = require "wezterm" ---@class WezTerm
-local kanagawa = require "colorschemes.kanagawa-wave"
+local colorscheme = require("colorschemes")[require "utils.current-colorscheme"]
 
 local M = {}
 
@@ -14,17 +14,17 @@ function M.setup()
     local layout = require("utils.layout"):new() ---@class WezTermLayout
     local separators = nf.Separators.TabBar ---@class TabBarIcons
 
-    local bg = kanagawa.tab_bar.background
+    local bg = colorscheme.tab_bar.background
     local fg
     local pane, tab_idx = tab.active_pane, tab.tab_index
 
     ---set colors based on states
     if tab.is_active then
-      fg = kanagawa.ansi[6]
+      fg = colorscheme.ansi[6]
     elseif hover then
-      fg = kanagawa.selection_bg
+      fg = colorscheme.selection_bg
     else
-      fg = kanagawa.brights[1]
+      fg = colorscheme.brights[1]
     end
 
     ---Check if any pane has unseen output

@@ -2,6 +2,8 @@
 local wez = require "wezterm"
 local colorschemes = require "colorschemes"
 
+local colorscheme = colorschemes[require "utils.current-colorscheme"]
+
 ---@class config Appearance configuration options for WezTerm
 ---@field command_palette_bg_color string Specifies the background color used by
 ---       `ActivateCommandPalette`. Defaults to `"#333333"`.
@@ -89,22 +91,35 @@ local config = {}
 ---  * `"50%"` - specifies a size of `50%` of the viewport height
 ---  * `"2cell"` - specifies a size equivalent to `2` rows
 ---* `width` - controls the width of the image. Same details as `height` but applies to the x-direction.
-config.background = {
-  {
-    source = {
-      Color = colorschemes["kanagawa-wave"].background,
-    },
-    width = "100%",
-    height = "100%",
-    opacity = 0.1,
-  },
-  {
-    source = { Color = "black" },
-    width = "100%",
-    height = "100%",
-    opacity = 0.4,
-  },
-}
+local background = function()
+  local current_colorscheme = require "utils.current-colorscheme"
+  if current_colorscheme == "kanagawa-lotus" then
+    return {
+      {
+        source = { Color = colorscheme.background },
+      },
+    }
+  else
+    return {
+      {
+        source = {
+          Color = colorscheme.background,
+        },
+        width = "100%",
+        height = "100%",
+        opacity = 0.3,
+      },
+      {
+        source = { Color = "black" },
+        width = "100%",
+        height = "100%",
+        opacity = 0.2,
+      },
+    }
+  end
+end
+
+config.background = background()
 
 ---// SCROLL BAR AND CURSOR //------------------------------------------------------
 
@@ -265,7 +280,7 @@ config.animation_fps = 60
 config.max_fps = 60
 
 config.color_schemes = colorschemes
-config.color_scheme = "kanagawa-wave"
+config.color_scheme = require "utils.current-colorscheme"
 
 ---@see config.char_select_fg_color
 ---@see config.char_select_bg_color
@@ -275,8 +290,8 @@ config.color_scheme = "kanagawa-wave"
 ---@see config.command_palette_bg_color
 ---@see config.command_palette_font_size
 for key, value in pairs {
-  bg_color = colorschemes["kanagawa-wave"].ansi[6],
-  fg_color = colorschemes["kanagawa-wave"].ansi[1],
+  bg_color = colorscheme.ansi[6],
+  fg_color = colorscheme.ansi[1],
   font_size = 14,
 } do
   for _, prefix in pairs { "command_palette_", "char_select_" } do
