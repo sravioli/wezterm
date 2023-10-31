@@ -45,7 +45,7 @@ functions.find_git_dir = function(directory)
   -- `wezterm.run_child_process({ "git", "rev-parse", "--show-toplevel" })`
   -- would cause the status bar to blinck every `config.status_update_interval`
   -- milliseconds. Moreover when changing tab, the status bar wouldn't be drawn.
-  local home = os.getenv "HOMEDRIVE" .. os.getenv("HOMEPATH"):gsub("\\", "/")
+  local home = os.getenv("USERPROFILE"):gsub("\\", "/")
   directory = directory:gsub("~", home)
 
   while directory do
@@ -90,7 +90,7 @@ functions.get_cwd_hostname = function(pane, search_git_root_instead)
         hostname = cwd_uri:sub(1, slash - 1)
 
         ---extract the cwd from the uri, decoding %-encoding
-        local home = os.getenv "HOMEDRIVE" .. os.getenv("HOMEPATH"):gsub("\\", "/")
+        local home = os.getenv("USERPROFILE"):gsub("\\", "/")
         cwd = cwd_uri
           :gsub("%%(%x%x)", function(hex) return string.char(tonumber(hex, 16)) end)
           :gsub("/" .. home .. "(.-)$", "~%1")
