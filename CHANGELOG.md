@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.5](https://github.com/sRavioli/wezterm/compare/2.0.4..2.0.5) - 2023-10-31
+#### Bug Fixes
+- **(utils:functions)** get `USERPROFILE` variable instead of combining two - ([10145fb](https://github.com/sRavioli/wezterm/commit/10145fb30b8aa2c25a29e4bceadae4ebfef84931)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- make changing colorscheme easier - ([0531534](https://github.com/sRavioli/wezterm/commit/053153423b5c3741216d5d9eac466680a3377be5)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.4](https://github.com/sRavioli/wezterm/compare/2.0.3..2.0.4) - 2023-10-29
 #### Hotfixes
 - **(colorschemes:kanagawa)** add `tab_bar` colors, update config to use correct colors - ([e48910c](https://github.com/sRavioli/wezterm/commit/e48910cd07c750938be9c2435dfabeccc5276149)) - [@sRavioli](https://github.com/sRavioli)
