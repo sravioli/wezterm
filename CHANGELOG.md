@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.6](https://github.com/sRavioli/wezterm/compare/2.0.5..2.0.6) - 2023-11-02
+#### Bug Fixes
+- **(config:appearance)** make acrylic background a bit darker - ([f17d0a4](https://github.com/sRavioli/wezterm/commit/f17d0a4e416d8a100a31c135c799a69699933cb1)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.5](https://github.com/sRavioli/wezterm/compare/2.0.4..2.0.5) - 2023-10-31
 #### Bug Fixes
 - **(utils:functions)** get `USERPROFILE` variable instead of combining two - ([10145fb](https://github.com/sRavioli/wezterm/commit/10145fb30b8aa2c25a29e4bceadae4ebfef84931)) - [@sRavioli](https://github.com/sRavioli)
