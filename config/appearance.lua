@@ -107,13 +107,13 @@ local background = function()
         },
         width = "100%",
         height = "100%",
-        opacity = 0.3,
+        opacity = 0.45,
       },
       {
         source = { Color = "black" },
         width = "100%",
         height = "100%",
-        opacity = 0.2,
+        opacity = 0.25,
       },
     }
   end
