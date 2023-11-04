@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.7](https://github.com/sRavioli/wezterm/compare/2.0.6..2.0.7) - 2023-11-04
+#### Bug Fixes
+- **(utils:layout)** use table mapping to check for attributes - ([4ce974f](https://github.com/sRavioli/wezterm/commit/4ce974f32dd990f76ee58e7afa5a71c33a33c05c)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.6](https://github.com/sRavioli/wezterm/compare/2.0.5..2.0.6) - 2023-11-02
 #### Bug Fixes
 - **(config:appearance)** make acrylic background a bit darker - ([f17d0a4](https://github.com/sRavioli/wezterm/commit/f17d0a4e416d8a100a31c135c799a69699933cb1)) - [@sRavioli](https://github.com/sRavioli)
