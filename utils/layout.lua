@@ -20,26 +20,22 @@ function Layout:push(background, foreground, text, attributes)
   table.insert(self.layout, { Background = { Color = background } })
   table.insert(self.layout, { Foreground = { Color = foreground } })
 
+  local attribute_mappings = {
+    Single = { Underline = "Single" },
+    Double = { Underline = "Double" },
+    Curly = { Underline = "Curly" },
+    Dotted = { Underline = "Dotted" },
+    Dashed = { Underline = "Dashed" },
+    Normal = { Intensity = "Normal" },
+    Bold = { Intensity = "Bold" },
+    Half = { Intensity = "Half" },
+    Italic = { Italic = true },
+  }
+
   if attributes then
     for _, attribute in ipairs(attributes) do
-      if attribute == "Single" then
-        table.insert(self.layout, { Attribute = { Underline = "Single" } })
-      elseif attribute == "Double" then
-        table.insert(self.layout, { Attribute = { Underline = "Double" } })
-      elseif attribute == "Curly" then
-        table.insert(self.layout, { Attribute = { Underline = "Curly" } })
-      elseif attribute == "Dotted" then
-        table.insert(self.layout, { Attribute = { Underline = "Dotted" } })
-      elseif attribute == "Dashed" then
-        table.insert(self.layout, { Attribute = { Underline = "Dashed" } })
-      elseif attribute == "Normal" then
-        table.insert(self.layout, { Attribute = { Intensity = "Normal" } })
-      elseif attribute == "Bold" then
-        table.insert(self.layout, { Attribute = { Intensity = "Bold" } })
-      elseif attribute == "Half" then
-        table.insert(self.layout, { Attribute = { Intensity = "Half" } })
-      elseif attribute == "Italic" then
-        table.insert(self.layout, { Attribute = { Italic = true } })
+      if attribute_mappings[attribute] then
+        table.insert(self.layout, { Attribute = attribute_mappings[attribute] })
       end
     end
   end
