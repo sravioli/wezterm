@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.8](https://github.com/sRavioli/wezterm/compare/2.0.7..2.0.8) - 2023-11-08
+#### Features
+- **(config:appearance)** suppress notification (only nightly builds) - ([9ed4b14](https://github.com/sRavioli/wezterm/commit/9ed4b14557e07f1864539f4622f5c64fa41f2e24)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.7](https://github.com/sRavioli/wezterm/compare/2.0.6..2.0.7) - 2023-11-04
 #### Bug Fixes
 - **(utils:layout)** use table mapping to check for attributes - ([4ce974f](https://github.com/sRavioli/wezterm/commit/4ce974f32dd990f76ee58e7afa5a71c33a33c05c)) - [@sRavioli](https://github.com/sRavioli)
