@@ -438,4 +438,30 @@ config.tab_max_width = 30
 ---main terminal font.
 config.use_fancy_tab_bar = false
 
+---This option controls how wezterm behaves when a toast notification escape
+---sequence is received.
+---
+---The following escape sequences will generate a toast notification:
+---
+---```sh
+---$ printf "\e]777;notify;%s;%s\e\\" "title" "body"
+---```
+---
+---```sh
+---$ printf "\e]9;%s\e\\" "hello there"
+---```
+---
+---This configuration option can have one of the following values, which have the
+---following effects:
+---
+---* `AlwaysShow` - Show the notification regardless of the current focus
+---* `NeverShow` - Never show the notification
+---* `SuppressFromFocusedPane` - Show the notification unless it was generated
+---   from the currently focused pane
+---* `SuppressFromFocusedTab` - Show the notification unless it was generated
+---   from the currently focused tab
+---* `SuppressFromFocusedWindow` - Show the notification unless it was generated
+---  from the currently focused window
+config.notification_handling = "NeverShow"
+
 return config
