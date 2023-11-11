@@ -462,6 +462,6 @@ config.use_fancy_tab_bar = false
 ---   from the currently focused tab
 ---* `SuppressFromFocusedWindow` - Show the notification unless it was generated
 ---  from the currently focused window
-config.notification_handling = "NeverShow"
+-- config.notification_handling = "NeverShow"
 
 return config
