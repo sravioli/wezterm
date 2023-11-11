@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.9](https://github.com/sRavioli/wezterm/compare/2.0.8..2.0.9) - 2023-11-11
+#### Bug Fixes
+- **(config:appearance)** remove `notification_handling` - ([501762c](https://github.com/sRavioli/wezterm/commit/501762cda6c24d4e74fb795fb9ac1ab05d1448de)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(config:font)** use `font_with_fallback`, list all `harbuzz_features` - ([0549df4](https://github.com/sRavioli/wezterm/commit/0549df48e8e3e7bb359176c36c07148c12757240)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.8](https://github.com/sRavioli/wezterm/compare/2.0.7..2.0.8) - 2023-11-08
 #### Features
 - **(config:appearance)** suppress notification (only nightly builds) - ([9ed4b14](https://github.com/sRavioli/wezterm/commit/9ed4b14557e07f1864539f4622f5c64fa41f2e24)) - [@sRavioli](https://github.com/sRavioli)
