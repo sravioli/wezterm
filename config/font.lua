@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-field
+
 ---@class WezTerm
 local wez = require "wezterm"
 
@@ -206,22 +208,46 @@ config.bold_brightens_ansi_colors = "No"
 ---* `assume_emoji_presentation = true` or `assume_emoji_presentation = false` to
 ---  control whether a font is considered to have emoji (rather than text)
 ---  presentation glyphs for emoji. (_Since: Version 20220807-113146-c2fee766_)
-config.font = wez.font {
-  family = "FiraCode Nerd Font",
-  weight = "Regular",
-  harfbuzz_features = {
-    "cv25", ---changes .-
-    "cv26", ---changes :-
-    "cv28", ---changes {. .}
-    -- "cv30", ---changes |
-    "cv32", ---changes .=
-    -- "ss02", ---changes >= and <=
-    "ss03", ---changes &
-    "ss04", ---changes $
-    -- "ss06", ---changes \\
-    "ss07", ---changes =~ and !~
-    "ss09", ---changes >>=, <<=, ||= and |==
+config.font = wez.font_with_fallback {
+  {
+    family = "FiraCode Nerd Font",
+    weight = "Regular",
+    harfbuzz_features = {
+      -- "cv01", ---styles: a
+      -- "cv02", ---styles: g
+      "cv06", ---styles: i (03..06)
+      -- "cv09", ---styles: l (07..10)
+      "cv12", ---styles: 0 (11..13, zero)
+      "cv14", ---styles: 3
+      "cv16", ---styles: * (15..16)
+      -- "cv17", ---styles: ~
+      -- "cv18", ---styles: %
+      -- "cv19", ---styles: <= (19..20)
+      -- "cv21", ---styles: =< (21..22)
+      -- "cv23", ---styles: >=
+      -- "cv24", ---styles: /=
+      "cv25", ---styles: .-
+      "cv26", ---styles: :-
+      -- "cv27", ---styles: []
+      "cv28", ---styles: {. .}
+      -- "cv29", ---styles: { }
+      -- "cv30", ---styles: |
+      -- "cv31", ---styles: ()
+      "cv32", ---styles: .=
+      -- "ss01", ---styles: r
+      -- "ss02", ---styles: <= >=
+      "ss03", ---styles: &
+      "ss04", ---styles: $
+      "ss05", ---styles: @
+      -- "ss06", ---styles: \\
+      "ss07", ---styles: =~ !~
+      -- "ss08", ---styles: == === != !==
+      "ss09", ---styles: >>= <<= ||= |=
+      -- "ss10", ---styles: Fl Tl fi fj fl ft
+      -- "onum", ---styles: 1234567890
+    },
   },
+  { family = "Noto Color Emoji" },
 }
 
 ---Specifies the size of the font, measured in points.
