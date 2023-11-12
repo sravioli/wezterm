@@ -198,10 +198,10 @@ config.win32_system_backdrop = "Acrylic"
 ---}
 ---```
 config.window_padding = {
-  left = 5,
-  right = 5,
-  top = 10,
-  bottom = 5,
+  left = "0.3cell",
+  right = "0.3cell",
+  top = 0,
+  bottom = 0,
 }
 
 return config
