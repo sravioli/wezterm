@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.0.10](https://github.com/sRavioli/wezterm/compare/2.0.9..2.0.10) - 2023-11-14
+#### Bug Fixes
+- **(config:window)** change window padding - ([2675a42](https://github.com/sRavioli/wezterm/commit/2675a4286aad5ce2b7bbc7e6e0d776489a671fb4)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(config:font)** use MonaspaceRadon for italic and MonaspaceKrypton for bold-italic - ([63b0b3f](https://github.com/sRavioli/wezterm/commit/63b0b3fbd6be8b55658bffcef24ba26733ac6d6b)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.9](https://github.com/sRavioli/wezterm/compare/2.0.8..2.0.9) - 2023-11-11
 #### Bug Fixes
 - **(config:appearance)** remove `notification_handling` - ([501762c](https://github.com/sRavioli/wezterm/commit/501762cda6c24d4e74fb795fb9ac1ab05d1448de)) - [@sRavioli](https://github.com/sRavioli)
