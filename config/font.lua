@@ -355,4 +355,189 @@ config.freetype_interpreter_version = 38
 ---```
 config.freetype_render_target = "Normal"
 
+---The harfbuzz features to use for the Monaspace font family
+local monaspace_features =
+  { "dlig", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
+
+---When textual output in the terminal is styled with bold, italic or other attributes,
+---wezterm uses `font_rules` to decide how to render that text.
+---
+---By default, unstyled text will use the font specified by the font configuration,
+---and wezterm will use that as a base, and then automatically generate appropriate
+---`font_rules` that use heavier weight fonts for bold text, lighter weight fonts for
+---dim text and italic fonts for italic text.
+---
+---Most users won't need to specify any explicit value for `font_rules`, as the
+---defaults should be sufficient.
+---
+---If you have some unusual fonts or mixtures of fonts that you'd like to use, such
+---as using your favourite monospace font for the base and a fancy italic font from a
+---different font family for italics, then `font_rules` will allow you to do so.
+---
+---`font_rules` is comprised of a list of rule entries with fields that are split into
+---_matcher_ fields and _action_ fields. Matcher fields specify which textual attributes
+---you want to match on, while action fields specify how you want to render them.
+---
+---The following fields are matcher fields:
+---
+---- <Name> (<Associated Attribute>): <Possible Values>;
+---- **italic** (_italic_): `true` (italic) or `false` (not italic);
+---- **intensity** (_bold/bright or dim/half-bright_): `"Normal"` (neither bold nor dim), `"Bold"`, `"Half"`;
+---- **underline** (_underline_): `"None"` (not underlined), `"Single"` (single underline), `"Double"` (double underline);
+---- **blink** (_blinking_): `"None"` (not blinking), `"Rapid"` (regular rapid blinking), `"Slow"` (slow blinking);
+---- **reverse** (_reverse/inverse_): `true` (reversed) or `false` (not reversed);
+---- **strikethrough** (_strikethrough_): `true` (struck-through) or `false` (not struck-through);
+---- **invisible** (_invisible_): `true` (invisible) or `false` (not invisible);
+---
+---If a matcher field is omitted, then the associated attribute has no impact on the
+---match: the rule _doesn't care about_ that attribute and will match based on the
+---attributes that were listed.
+---
+---The following fields are action fields:
+---
+---| Name | Action                               |
+---| ---- | ------------------------------------ |
+---| font | Specify the font that should be used |
+---
+---The way that `font_rules` are processed is:
+---
+---1. Take the list of `font_rules` from your configuration
+---2. For each rule in the order listed in `font_rules`:
+---3. Consider each _matcher_ field explicitly specified in the entry. If the
+---   associated attribute does not match the value specified in the entry, move on
+---   to the next rule.
+---4. If all of the _matcher_ fields explicitly specified in the entry match the
+---   attributes of the text, then:
+---5. The `font` _action_ field, if specified, will override the base `font` configuration
+---6. No further `font_rules` will be considered: the matching is complete
+---7. If none of the rules you specify matched, then a set of default rules based on your base `font` will be used in the same way as above.
+---
+---Here's an example from my configuration file, which I use with a variant of
+---`Operator Mono` that is patched to add ligatures. This particular font has font-weights
+---that are either too bold or too light for the default rules to produce great results,
+---hence this set of rules.
+---
+---```lua
+---config.font = wezterm.font_with_fallback 'Operator Mono SSm Lig Medium'
+---config.font_rules = {
+---  -- For Bold-but-not-italic text, use this relatively bold font, and override
+---  -- its color to a tomato-red color to make bold text really stand out.
+---  {
+---    intensity = 'Bold',
+---    italic = false,
+---    font = wezterm.font_with_fallback(
+---      'Operator Mono SSm Lig',
+---      -- Override the color specified by the terminal output and force
+---      -- it to be tomato-red.
+---      -- The color value you set here can be any CSS color name or
+---      -- RGB color string.
+---      { foreground = 'tomato' }
+---    ),
+---  },
+---
+---  -- Bold-and-italic
+---  {
+---    intensity = 'Bold',
+---    italic = true,
+---    font = wezterm.font_with_fallback {
+---      family = 'Operator Mono SSm Lig',
+---      italic = true,
+---    },
+---  },
+---
+---  -- normal-intensity-and-italic
+---  {
+---    intensity = 'Normal',
+---    italic = true,
+---    font = wezterm.font_with_fallback {
+---      family = 'Operator Mono SSm Lig',
+---      weight = 'DemiLight',
+---      italic = true,
+---    },
+---  },
+---
+---  -- half-intensity-and-italic (half-bright or dim); use a lighter weight font
+---  {
+---    intensity = 'Half',
+---    italic = true,
+---    font = wezterm.font_with_fallback {
+---      family = 'Operator Mono SSm Lig',
+---      weight = 'Light',
+---      italic = true,
+---    },
+---  },
+---
+---  -- half-intensity-and-not-italic
+---  {
+---    intensity = 'Half',
+---    italic = false,
+---    font = wezterm.font_with_fallback {
+---      family = 'Operator Mono SSm Lig',
+---      weight = 'Light',
+---    },
+---  },
+---}
+---
+---```
+---
+---Here's another example combining `FiraCode` with `Victor Mono`, using `Victor Mono`
+---only for italics:
+---
+---```lua
+---config.font = wezterm.font { family = 'FiraCode' }
+---
+---config.font_rules = {
+---  {
+---    intensity = 'Bold',
+---    italic = true,
+---    font = wezterm.font {
+---      family = 'VictorMono',
+---      weight = 'Bold',
+---      style = 'Italic',
+---    },
+---  },
+---  {
+---    italic = true,
+---    intensity = 'Half',
+---    font = wezterm.font {
+---      family = 'VictorMono',
+---      weight = 'DemiBold',
+---      style = 'Italic',
+---    },
+---  },
+---  {
+---    italic = true,
+---    intensity = 'Normal',
+---    font = wezterm.font {
+---      family = 'VictorMono',
+---      style = 'Italic',
+---    },
+---  },
+---}
+---```
+config.font_rules = {
+  {
+    intensity = "Normal",
+    italic = true,
+    font = wez.font {
+      family = "Monaspace Radon Var",
+      style = "Normal",
+      weight = "Regular",
+      stretch = "Expanded",
+      harfbuzz_features = monaspace_features,
+    },
+  },
+  {
+    intensity = "Bold",
+    italic = true,
+    font = wez.font {
+      family = "Monaspace Krypton Var",
+      style = "Italic",
+      -- stretch = "Expanded",
+      weight = "Black",
+      harfbuzz_features = monaspace_features,
+    },
+  },
+}
+
 return config
