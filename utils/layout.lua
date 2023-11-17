@@ -10,6 +10,22 @@ function Layout:new()
 end
 
 ---Add elements to the layout table.
+---
+---the following attributes are supported:
+---
+---```lua
+---local attributes = {
+---  Single = { Underline = "Single" },
+---  Double = { Underline = "Double" },
+---  Curly = { Underline = "Curly" },
+---  Dotted = { Underline = "Dotted" },
+---  Dashed = { Underline = "Dashed" },
+---  Normal = { Intensity = "Normal" },
+---  Bold = { Intensity = "Bold" },
+---  Half = { Intensity = "Half" },
+---  Italic = { Italic = true },
+---}
+---```
 ---@param background string The background color of the cell.
 ---@param foreground string The foreground color of the cell.
 ---@param text string The text to be added.
