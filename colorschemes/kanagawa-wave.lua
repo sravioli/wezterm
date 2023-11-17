@@ -59,7 +59,7 @@ return {
     },
 
     new_tab = {
-      bg_color = "#938AA9",
+      bg_color = "#727169",
       fg_color = "#181616",
     },
 
