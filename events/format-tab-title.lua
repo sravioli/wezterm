@@ -43,16 +43,17 @@ function M.setup()
       :gsub("^Administrator: %w+", nf.Admin.fill)
       :gsub("pwsh", nf.Powershell.md)
       :gsub("bash", nf.Bash.seti)
+      :gsub(fn.basename(os.getenv "USERPROFILE" or ""), "󰋜 ")
 
-    -- HACK: running Neovim will turn the tab title to "C:\WINDOWS\system32\cmd.exe".
-    -- After getting the basename the tab name ends up being "cmd".
-    -- This is not the best way to detect when neovim is running but I will never use
-    -- `cmd.exe` from WezTerm.
+    ---HACK: running Neovim will turn the tab title to "C:\WINDOWS\system32\cmd.exe".
+    ---After getting the basename the tab name ends up being "cmd".
+    ---This is not the best way to detect when neovim is running but I will never use
+    ---`cmd.exe` from WezTerm.
     local is_truncation_needed = true
     if title == "cmd" then
       ---full title truncation is not necessary since the dir name will be truncated
       is_truncation_needed = false
-      local cwd, _ = fn.basename(pane.current_working_dir)
+      local cwd = fn.basename(pane.current_working_dir)
 
       ---instead of truncating the whole title, truncate to length the cwd to ensure
       ---that the right parenthesis always closes.
@@ -64,7 +65,6 @@ function M.setup()
 
     ---truncate the tab title when it overflows the maximum available space, then
     ---concatenate some dots to indicate the occurred truncation
-    -- if is_truncation_needed and max_width == config.tab_max_width then
     if is_truncation_needed and max_width == config.tab_max_width then
       title = wez.truncate_right(title, max_width - 8) .. "..."
     end
