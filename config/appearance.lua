@@ -92,11 +92,12 @@ local config = {}
 ---  * `"2cell"` - specifies a size equivalent to `2` rows
 ---* `width` - controls the width of the image. Same details as `height` but applies to the x-direction.
 local background = function()
-  local current_colorscheme = require "utils.current-colorscheme"
-  if current_colorscheme == "kanagawa-lotus" then
+  if require "utils.current-colorscheme" == "kanagawa-lotus" then
     return {
       {
         source = { Color = colorscheme.background },
+        width = "100%",
+        height = "100%",
       },
     }
   else
@@ -329,6 +330,7 @@ end
 ---
 ---The default value for `hyperlink_rules` can be retrieved using
 ---`wezterm.default_hyperlink_rules()`
+---@diagnostic disable-next-line: undefined-field
 config.hyperlink_rules = wez.default_hyperlink_rules()
 
 -- make task numbers clickable
@@ -376,14 +378,14 @@ config.hide_tab_bar_if_only_one_tab = false
 ---config.show_tabs_in_tab_bar = false
 ---config.show_new_tab_button_in_tab_bar = false
 ---```
-config.show_new_tab_button_in_tab_bar = false
+config.show_new_tab_button_in_tab_bar = true
 
 ---When set to `true` (the default), tab titles show their tab number (tab index) with
 ---a prefix such as `1:`. When false, no numeric prefix is shown.
 ---
 ---The `tab_and_split_indices_are_zero_based` setting controls whether numbering
 ---starts with `0` or `1`.
-config.show_tab_index_in_tab_bar = true
+config.show_tab_index_in_tab_bar = false
 
 ---When set to `true` (the default), the tab bar will display the tabs associated with
 ---the current window.
@@ -421,6 +423,18 @@ config.tab_and_split_indices_are_zero_based = true
 ---The default is `false`.
 config.tab_bar_at_bottom = true
 
+---`new_tab_left`, `new_tab_right`, `new_tab_hover_left`, `new_tab_hover_right` have been
+---removed and replaced by the more flexible `new_tab` and `new_tab_hover` elements.
+config.tab_bar_style = {}
+for _, tab_button in ipairs { "new_tab", "new_tab_hover" } do
+  ---@diagnostic disable-next-line: undefined-field
+  config.tab_bar_style[tab_button] = wez.format {
+    { Text = require("utils.nerdfont-icons").Separators.TabBar.right },
+    { Text = " + " },
+    { Text = require("utils.nerdfont-icons").Separators.TabBar.left },
+  }
+end
+
 ---Specifies the maximum width that a tab can have in the tab bar when using retro
 ---tab mode. It is ignored when using fancy tab mode.
 ---
@@ -429,7 +443,7 @@ config.tab_bar_at_bottom = true
 ---```lua
 ---config.tab_max_width = 16
 ---```
-config.tab_max_width = 30
+config.tab_max_width = 25
 
 ---When set to `true` (the default), the tab bar is rendered in a native style with
 ---proportional fonts.
