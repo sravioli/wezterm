@@ -59,7 +59,7 @@ local NerdFontIcons = {
 
   ---@class BatteryIcons: table, table
   ---@field charging table Icons for charging battery in increments of 10
-  ---@field normal table Icons for non-charging battery in increments of 10
+  ---@field normal   table Icons for non-charging battery in increments of 10
   Battery = {
     Charging = {
       ["00"] = wez.nerdfonts.md_battery_alert,
@@ -76,17 +76,17 @@ local NerdFontIcons = {
     },
 
     Discharging = {
-      ["00"] = wez.nerdfonts.md_battery_outline, --- `󰂎`
-      ["10"] = wez.nerdfonts.md_battery_10, --- `󰁺`
-      ["20"] = wez.nerdfonts.md_battery_20, --- `󰁻`
-      ["30"] = wez.nerdfonts.md_battery_30, --- `󰁼`
-      ["40"] = wez.nerdfonts.md_battery_40, --- `󰁽`
-      ["50"] = wez.nerdfonts.md_battery_50, --- `󰁾`
-      ["60"] = wez.nerdfonts.md_battery_60, --- `󰁿`
-      ["70"] = wez.nerdfonts.md_battery_70, --- `󰂀`
-      ["80"] = wez.nerdfonts.md_battery_80, --- `󰂁`
-      ["90"] = wez.nerdfonts.md_battery_90, --- `󰂂`
-      ["100"] = wez.nerdfonts.md_battery, --- `󰁹`
+      ["00"] = wez.nerdfonts.md_battery_outline,
+      ["10"] = wez.nerdfonts.md_battery_10,
+      ["20"] = wez.nerdfonts.md_battery_20,
+      ["30"] = wez.nerdfonts.md_battery_30,
+      ["40"] = wez.nerdfonts.md_battery_40,
+      ["50"] = wez.nerdfonts.md_battery_50,
+      ["60"] = wez.nerdfonts.md_battery_60,
+      ["70"] = wez.nerdfonts.md_battery_70,
+      ["80"] = wez.nerdfonts.md_battery_80,
+      ["90"] = wez.nerdfonts.md_battery_90,
+      ["100"] = wez.nerdfonts.md_battery,
     },
   },
 
