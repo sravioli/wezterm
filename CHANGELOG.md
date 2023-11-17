@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.1.1](https://github.com/sRavioli/wezterm/compare/2.1.0..2.1.1) - 2023-11-17
+#### Hotfixes
+- **(wezterm.lua)** load new-tab-button-click event - ([31ee482](https://github.com/sRavioli/wezterm/commit/31ee4821acb4785b831b460f7630f020e5222311)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.1.0](https://github.com/sRavioli/wezterm/compare/2.0.10..2.1.0) - 2023-11-17
 #### Bug Fixes
 - **(colorschemes:kanagawa)** use correct bg and fg for tabs - ([9b62fc7](https://github.com/sRavioli/wezterm/commit/9b62fc7d4e28a21a79e02ea924c51b5b8f3b75d7)) - [@sRavioli](https://github.com/sRavioli)
