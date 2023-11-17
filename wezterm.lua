@@ -3,6 +3,7 @@ local Config = require "config.init"
 require("events.format-tab-title").setup()
 require("events.format-window-title").setup()
 require("events.update-status").setup()
+require("events.new-tab-button-click").setup()
 
 return Config:init()
   :add(require "config.gpu")
@@ -15,4 +16,3 @@ return Config:init()
   :add(require "config.exit-behavior")
   :add(require "keys.tables")
   :add(require "keys.bindings").options
--- :add(require "config.command-palette")
