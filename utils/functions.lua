@@ -41,10 +41,10 @@ functions.toint = function(float) return float | 0 end
 ---@param directory string The directory path.
 ---@return string|nil git_root If found, the `git_root`, else `nil`
 functions.find_git_dir = function(directory)
-  -- NOTE: this functions exits purely because calling the following function
-  -- `wezterm.run_child_process({ "git", "rev-parse", "--show-toplevel" })`
-  -- would cause the status bar to blinck every `config.status_update_interval`
-  -- milliseconds. Moreover when changing tab, the status bar wouldn't be drawn.
+  ---NOTE: this functions exits purely because calling the following function
+  ---`wezterm.run_child_process({ "git", "rev-parse", "--show-toplevel" })`
+  ---would cause the status bar to blinck every `config.status_update_interval`
+  ---milliseconds. Moreover when changing tab, the status bar wouldn't be drawn.
   local home = os.getenv("USERPROFILE"):gsub("\\", "/")
   directory = directory:gsub("~", home)
 
