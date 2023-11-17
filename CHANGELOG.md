@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.1.0](https://github.com/sRavioli/wezterm/compare/2.0.10..2.1.0) - 2023-11-17
+#### Bug Fixes
+- **(colorschemes:kanagawa)** use correct bg and fg for tabs - ([9b62fc7](https://github.com/sRavioli/wezterm/commit/9b62fc7d4e28a21a79e02ea924c51b5b8f3b75d7)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-tab-title)** substitute `~` with home icon, remove useless stuff - ([7b29ee8](https://github.com/sRavioli/wezterm/commit/7b29ee8cfdc3deafb9e78567f7287ddf59bf79fa)) - [@sRavioli](https://github.com/sRavioli)
+#### Documentation
+- **(utils:functions)** format comment - ([199ce14](https://github.com/sRavioli/wezterm/commit/199ce14b4f3289c0d6976838998d2328916eda32)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:layout)** add supported attributes for `layout:push()` - ([794bceb](https://github.com/sRavioli/wezterm/commit/794bcebd17b4ecc9e923cbb07a73c17fc0185207)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:nerdfont-icons)** remove comments - ([851e82c](https://github.com/sRavioli/wezterm/commit/851e82c91bad20942b9b4a6c184e780a95cae4d6)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(config:appearance)** enable the new tab button, style it - ([fe41c3a](https://github.com/sRavioli/wezterm/commit/fe41c3a50f805fdb7e4a45e6c9752b5b7aa84d26)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:new-tab-button-click)** launch wezterm launcher on left click of new tab button - ([64832c7](https://github.com/sRavioli/wezterm/commit/64832c708cc598ce721b9afcc04774674e957acc)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:update-status)** dynamically resolve status-bar rendering - ([17e948a](https://github.com/sRavioli/wezterm/commit/17e948a24837e46b9f085962f87905248fd436b9)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.0.10](https://github.com/sRavioli/wezterm/compare/2.0.9..2.0.10) - 2023-11-14
 #### Bug Fixes
 - **(config:window)** change window padding - ([2675a42](https://github.com/sRavioli/wezterm/commit/2675a4286aad5ce2b7bbc7e6e0d776489a671fb4)) - [@sRavioli](https://github.com/sRavioli)
