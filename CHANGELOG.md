@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [2.1.2](https://github.com/sRavioli/wezterm/compare/2.1.1..2.1.2) - 2023-12-08
+#### Bug Fixes
+- **(config:font)** add LegacyComputing font, reduce font size - ([309c6c2](https://github.com/sRavioli/wezterm/commit/309c6c2716b71cfa4eb54a33707df8c8ae030862)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [2.1.1](https://github.com/sRavioli/wezterm/compare/2.1.0..2.1.1) - 2023-11-17
 #### Hotfixes
 - **(wezterm.lua)** load new-tab-button-click event - ([31ee482](https://github.com/sRavioli/wezterm/commit/31ee4821acb4785b831b460f7630f020e5222311)) - [@sRavioli](https://github.com/sRavioli)
