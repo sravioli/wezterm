@@ -248,6 +248,7 @@ config.font = wez.font_with_fallback {
     },
   },
   { family = "Noto Color Emoji" },
+  { family = "LegacyComputing" },
 }
 
 ---Specifies the size of the font, measured in points.
@@ -256,7 +257,7 @@ config.font = wez.font_with_fallback {
 ---
 ---The default font size is `12.0` points. In earlier versions prior to
 ---20210314-114017-04b7cedd it was `10.0`.
-config.font_size = 10.5
+config.font_size = 9.5
 
 ---If specified, overrides the position of strikethrough lines.
 ---
@@ -541,3 +542,4 @@ config.font_rules = {
 }
 
 return config
+
