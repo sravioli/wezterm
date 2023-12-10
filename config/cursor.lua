@@ -66,3 +66,4 @@ config.default_cursor_style = "BlinkingUnderline"
 config.cursor_thickness = "0.9px"
 
 return config
+

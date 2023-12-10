@@ -19,3 +19,4 @@ config.wsl_domains = {
 }
 
 return config
+

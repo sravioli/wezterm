@@ -193,3 +193,4 @@ config.skip_close_confirmation_for_processes_named = {
 config.window_close_confirmation = "AlwaysPrompt"
 
 return config
+

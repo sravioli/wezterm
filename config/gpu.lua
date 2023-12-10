@@ -153,3 +153,4 @@ config.webgpu_preferred_adapter = {
 }
 
 return config
+

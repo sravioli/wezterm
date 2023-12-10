@@ -7,3 +7,4 @@ return {
   ["catppuccin-macchiato"] = require("colorschemes.catppuccin").macchiato,
   ["catppuccin-frappe"] = require("colorschemes.catppuccin").frappe,
 }
+

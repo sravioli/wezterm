@@ -479,3 +479,4 @@ config.use_fancy_tab_bar = false
 -- config.notification_handling = "NeverShow"
 
 return config
+

@@ -97,7 +97,6 @@ config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
 
 ---// WIN32 ACRYLIC // -------------------------------------------------------------
 
----!! SET BACKGROUND TO BLACK IN `config.background`!!
 ---When combined with `window_background_opacity`, chooses from available window
 ---background effects provided by Windows.
 ---
@@ -205,3 +204,4 @@ config.window_padding = {
 }
 
 return config
+

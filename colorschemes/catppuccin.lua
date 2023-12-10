@@ -291,3 +291,4 @@ return {
   macchiato = M.select(colors, "macchiato", "mauve"),
   frappe = M.select(colors, "frappe", "mauve"),
 }
+

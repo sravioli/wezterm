@@ -1,5 +1,4 @@
 local wez = require "wezterm" ---@class WezTerm
-local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
 local fn = require "utils.functions" ---@class UtilityFunctions
 
 local M = {}
@@ -29,3 +28,4 @@ function M.setup()
 end
 
 return M
+

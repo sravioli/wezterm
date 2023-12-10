@@ -1,6 +1,5 @@
 ---@diagnostic disable: undefined-field
 local wez = require "wezterm" ---@class WezTerm
-local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
 
 ---User defined utility functions
 ---@class UtilityFunctions
@@ -114,3 +113,4 @@ functions.get_cwd_hostname = function(pane, search_git_root_instead)
 end
 
 return functions
+

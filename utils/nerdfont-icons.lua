@@ -30,10 +30,10 @@ local NerdFontIcons = {
   },
 
   ---@class VimIcons: string, string
-  ---@field dev    string ``
-  ---@field custom string ``
+  ---@field dev    string ``
+  ---@field custom string ``
   Vim = {
-    dev = wez.nerdfonts.dev_vim,
+    dev = "",
     custom = wez.nerdfonts.custom_vim,
   },
 
@@ -118,3 +118,4 @@ local NerdFontIcons = {
 }
 
 return NerdFontIcons
+

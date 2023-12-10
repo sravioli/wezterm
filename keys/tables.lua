@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-field
+
 ---@class WezTerm
 local wez = require "wezterm"
 local act = wez.action
@@ -163,3 +165,4 @@ config.key_tables = {
 }
 
 return config
+

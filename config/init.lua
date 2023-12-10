@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-field
+
 ---@class WezTerm
 local wez = require "wezterm"
 
@@ -41,3 +43,4 @@ function Config:add(spec)
 end
 
 return Config
+
