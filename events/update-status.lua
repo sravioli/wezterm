@@ -24,7 +24,7 @@ wez.on("update-status", function(window, pane)
   local LeftStatus = StatusBar:new() ---@class Layout
   local name = window:active_key_table()
   if name then
-    mode_indicator_width = strwidth(modes[name].text)
+    mode_indicator_width = strwidth(modes[name].text) + 1
     bg = modes[name].bg
     LeftStatus:push(bg, theme.background, modes[name].text or "", { "Bold" })
   end
