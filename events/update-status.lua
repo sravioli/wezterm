@@ -1,77 +1,86 @@
----@diagnostic disable: undefined-field
-local wez = require "wezterm" ---@class WezTerm
+---@class WezTerm
+local wez = require "wezterm"
 
-local colorscheme = require("colorschemes")[require "utils.current-colorscheme"]
+local fun = require "utils.fun" ---@class Fun
+local icons = require "utils.icons" ---@class Icons
+local StatusBar = require "utils.layout" ---@class Layout
 
-local M = {}
+local strwidth = fun.strwidth
 
-function M.setup()
-  wez.on("update-status", function(window, pane)
-    local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
-    local fn = require "utils.functions" ---@class UtilityFunctions
+-- luacheck: push ignore 561
+wez.on("update-status", function(window, pane)
+  local theme = require("colors")[fun.get_scheme()]
+  local modes = {
+    copy_mode = { text = " 󰆏 COPY ", bg = theme.brights[3] },
+    search_mode = { text = " 󰍉 SEARCH ", bg = theme.brights[4] },
+    window_mode = { text = " 󱂬 WINDOW ", bg = theme.ansi[6] },
+    font_mode = { text = " 󰛖 FONT ", bg = theme.indexed[16] or theme.ansi[8] },
+  }
 
-    local layout = require("utils.layout"):new() ---@class WezTermLayout
+  local bg = theme.ansi[5]
+  local mode_indicator_width = 0
 
-    ---colors to use as background for the status bar
-    local colors = { "#6e5497", "#876faf", "#a38fc1", "#b0a0ca", "#beb0d3" }
+  -- {{{1 LEFT STATUS
+  local LeftStatus = StatusBar:new() ---@class Layout
+  local name = window:active_key_table()
+  if name then
+    mode_indicator_width = strwidth(modes[name].text)
+    bg = modes[name].bg
+    LeftStatus:push(bg, theme.background, modes[name].text or "", { "Bold" })
+  end
 
-    local battery = wez.battery_info()[1]
+  window:set_left_status(wez.format(LeftStatus))
+  -- }}}
 
-    ---Returns the battery icon that should be used in the status.
-    ---@return string battery_icon The icon corresponding to the battery charge level.
-    function battery:icon()
-      return nf.Battery[self.state][tostring(
-        fn.toint(fn.mround(self.state_of_charge * 100, 10))
-      )]
-    end
+  -- {{{1 RIGHT STATUS
+  local RightStatus = StatusBar:new() ---@class Layout
 
-    local datetime = wez.strftime "%a %b %-d %H:%M"
+  bg = wez.color.parse(bg)
+  local colors = { bg:darken(0.15), bg, bg:lighten(0.15), bg:lighten(0.25) }
 
-    local search_git_root_instead = true
-    local cwd, hostname = fn.get_cwd_hostname(pane, search_git_root_instead)
+  local battery = wez.battery_info()[1]
+  battery.lvl = fun.toint(fun.mround(battery.state_of_charge * 100, 10))
+  battery.ico = icons.Battery[battery.state][tostring(battery.lvl)]
+  battery.full = ("%s %i%%"):format(battery.ico, battery.lvl)
 
-    local MuxWindow = window:mux_window()
-    local Config = MuxWindow:gui_window():effective_config()
-    local tab_max_width = Config.tab_max_width
-    local new_tab_button_width = Config.show_new_tab_button_in_tab_bar and 5 or 0
+  local datetime = wez.strftime "%a %b %-d %H:%M"
+  local cwd, hostname = fun.get_cwd_hostname(pane, true)
 
-    ---estimate the total tab-bar width
-    ---
-    ---with this information it's possible to dynamically disable each status-bar cell
-    ---if the screen width is not sufficient to accommodate both the tab-bar and the
-    ---status-bar. In this case, wezterm cuts abruptly the status bar; using this results
-    ---in a (imho) more visually pleasing status-bar/tab-bar
-    local tab_bar_width = 0
-    for _, MuxTab in ipairs(MuxWindow:tabs()) do
-      local panes = MuxTab:panes()
-      local len = panes[1]:get_title():len()
+  --~ {{{2 Calculate the used width by the tabs
+  local MuxWindow = window:mux_window()
+  local tab_bar_width = 0
+  for _, MuxTab in ipairs(MuxWindow:tabs()) do
+    tab_bar_width = tab_bar_width + strwidth(MuxTab:panes()[1]:get_title()) + 3
+  end
 
-      ---calculate the effective width for the current tab
-      local effective_width = math.min(len, tab_max_width) * 0.95
+  local Config = MuxWindow:gui_window():effective_config() ---@class Config
+  local has_button = Config.show_new_tab_button_in_tab_bar
+  local new_tab_button = has_button and Config.tab_bar_style.new_tab or ""
+  tab_bar_width = tab_bar_width + mode_indicator_width + strwidth(new_tab_button)
+  --~ }}}
 
-      tab_bar_width = tab_bar_width + effective_width + new_tab_button_width
-    end
+  local usable_width = pane:get_dimensions().cols - tab_bar_width
 
-    local usable_width, used_width = pane:get_dimensions().cols - tab_bar_width, 0
-    ---push each cell and the cells separator
-    for i, cell in ipairs { cwd, hostname, datetime, battery:icon() } do
-      local fg = colors[i]
-      local bg = i == 1 and colorscheme.tab_bar.background or colors[i - 1]
+  ---push each cell and the cells separator
+  for i, cell in ipairs { cwd, hostname, datetime, battery.full } do
+    local cell_bg = colors[i]
+    local cell_fg = i == 1 and theme.tab_bar.background or colors[i - 1]
+    local sep = icons.Separators.StatusBar.right
 
-      ---add each cell separator
-      layout:push(bg, fg, nf.Separators.StatusBar.right)
+    ---add each cell separator
+    RightStatus:push(cell_fg, cell_bg, sep)
 
-      ---don't render cell if tab bar gets too long or if the win width isn't sufficient
-      used_width = used_width + string.len(cell)
-      cell = used_width >= usable_width and "" or cell
+    usable_width = usable_width - strwidth(cell) - strwidth(sep) - 1
 
-      ---add each cell
-      layout:push(colors[i], colorscheme.tab_bar.background, " " .. cell .. " ")
-    end
+    ---add cell or empty string
+    cell = usable_width < 0 and "" or " " .. cell .. " "
+    RightStatus:push(colors[i], theme.tab_bar.background, cell, { "Bold" })
+  end
 
-    window:set_right_status(wez.format(layout))
-  end)
-end
+  window:set_right_status(wez.format(RightStatus))
+  -- }}}
+end)
+-- luacheck: pop
 
-return M
+-- vim: fdm=marker fdl=1
 
