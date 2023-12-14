@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.0.1](https://github.com/sRavioli/wezterm/compare/3.0.0..3.0.1) - 2023-12-14
+#### Features
+- update changelog - ([79a3f9b](https://github.com/sRavioli/wezterm/commit/79a3f9b0a8173cbecde6a697a1b3de33845af421)) - [@sRavioli](https://github.com/sRavioli)
+#### Hotfixes
+- **(github)** restore release action - ([37e5719](https://github.com/sRavioli/wezterm/commit/37e5719f93bf38cfda0682e7b31c7ea7d7eb75b8)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 
 ## [3.0.0](https://github.com/sRavioli/wezterm/compare/2.1.2..3.0.0) - 2023-12-14
 
