@@ -40,6 +40,7 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     :gsub("^Administrator: %w+", icons.Admin)
     :gsub("pwsh", icons.Pwsh)
     :gsub("bash", icons.Bash)
+    :gsub("Copy mode: ", "")
 
   local proc = pane.foreground_process_name
   if proc:find "nvim" then
