@@ -33,9 +33,13 @@ local keys = {
   ["<C-Insert>"] = act.CopyTo "PrimarySelection",
   ["<C-S-Space>"] = act.QuickSelect,
 
-  ---quick split
+  ---quick split and nav
   ['<C-S-">'] = act.SplitHorizontal { domain = "CurrentPaneDomain" },
   ["<C-S-%>"] = act.SplitVertical { domain = "CurrentPaneDomain" },
+  ["<C-M-h>"] = act.ActivatePaneDirection "Left",
+  ["<C-M-j>"] = act.ActivatePaneDirection "Down",
+  ["<C-M-k>"] = act.ActivatePaneDirection "Up",
+  ["<C-M-l>"] = act.ActivatePaneDirection "Right",
 
   ---key tables
   ["<leader>w"] = act.ActivateKeyTable { name = "window_mode", one_shot = false },
