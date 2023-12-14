@@ -1,12 +1,10 @@
----@class WezTermLayout: function, function
+---@class Layout
 local Layout = {}
 
 ---Creates a new instance of the Layout class.
----@return table obj The newly created Layout instance.
+---@return table instance newly created class instance
 function Layout:new()
-  self.layout = {}
-  self = setmetatable(self.layout, { __index = Layout })
-  return self
+  return setmetatable({ layout = {} }, { __index = self })
 end
 
 ---Add elements to the layout table.
@@ -32,9 +30,10 @@ end
 ---@param attributes? table The list of attributes to be added.
 ---@return table self The updated layout table.
 function Layout:push(background, foreground, text, attributes)
-  self.layout = self.layout or {}
-  table.insert(self.layout, { Background = { Color = background } })
-  table.insert(self.layout, { Foreground = { Color = foreground } })
+  self = self or {}
+  local insert = table.insert
+  insert(self, { Background = { Color = background } })
+  insert(self, { Foreground = { Color = foreground } })
 
   local attribute_mappings = {
     Single = { Underline = "Single" },
@@ -46,19 +45,20 @@ function Layout:push(background, foreground, text, attributes)
     Bold = { Intensity = "Bold" },
     Half = { Intensity = "Half" },
     Italic = { Italic = true },
+    NoItalic = { Italic = false },
   }
 
   if attributes then
     for _, attribute in ipairs(attributes) do
       if attribute_mappings[attribute] then
-        table.insert(self.layout, { Attribute = attribute_mappings[attribute] })
+        insert(self, { Attribute = attribute_mappings[attribute] })
       end
     end
   end
 
-  table.insert(self.layout, { Text = text })
+  table.insert(self, { Text = text })
 
-  return self.layout
+  return self
 end
 
 return Layout
