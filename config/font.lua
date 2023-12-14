@@ -4,7 +4,7 @@ local wez = require "wezterm"
 ---@class Config
 local Config = {}
 
-Config.adjust_window_size_when_changing_font_size = true
+Config.adjust_window_size_when_changing_font_size = false
 Config.allow_square_glyphs_to_overflow_width = "WhenFollowedBySpace"
 Config.anti_alias_custom_block_glyphs = true
 
