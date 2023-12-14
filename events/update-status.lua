@@ -73,7 +73,7 @@ wez.on("update-status", function(window, pane)
     usable_width = usable_width - strwidth(cell) - strwidth(sep) - 1
 
     ---add cell or empty string
-    cell = usable_width < 0 and "" or " " .. cell .. " "
+    cell = usable_width <= 0 and "" or " " .. cell .. " "
     RightStatus:push(colors[i], theme.tab_bar.background, cell, { "Bold" })
   end
 
