@@ -33,7 +33,7 @@ jobs:
 
       - name: SemVer release
         uses: cocogitto/cocogitto-action@v3.5
-        id: relase
+        id: release
 
       - name: Generate changelog
         run: >-
@@ -48,3 +48,4 @@ jobs:
         with:
           body_path: GITHUB_CHANGELOG.md
           tag_name: ${{ env.LATEST_TAG }}
+
