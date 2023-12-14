@@ -1,0 +1,51 @@
+---
+name: ci
+run-name: Perform release from latest tag
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags: ['*']
+
+jobs:
+  release:
+    name: Create a GitHub release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - run: >-
+          git config user.name github-actions;
+          git config user.email github-actions@github.com;
+          git config --global user.email github-actions@github.com;
+          git config --global user.name github-actions;
+
+      - name: Fetch latest tag
+        run: >-
+          echo "LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)"
+          >> "$GITHUB_ENV"
+
+      - name: SemVer release
+        uses: cocogitto/cocogitto-action@v3.5
+        id: relase
+
+      - name: Generate changelog
+        run: >-
+          cog changelog --at ${{env.LATEST_TAG }} --template
+          remote > GITHUB_CHANGELOG.md
+
+      - name: print
+        run: echo ${{ env.LATEST_TAG }}
+
+      - name: Upload github release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: GITHUB_CHANGELOG.md
+          tag_name: ${{ env.LATEST_TAG }}
+
