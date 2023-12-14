@@ -85,7 +85,7 @@ For the full mappings list take a look at
 
 ### Flexible status-bar
 
-![flexible status bar showcase](./.github/assets/flexible-status-bar-showcase.mp4)
+https://github.com/sravioli/wezterm/assets/76562615/59785192-34b3-4e57-9804-cf2e64225887
 
 The status bar will give priority to the tab bar. During the status bar evaluation
 the available width is calculated and elements are not rendered to gracefully
