@@ -2,7 +2,7 @@
 local Layout = {}
 
 ---Creates a new instance of the Layout class.
----@return table instance newly created class instance
+---@return Layout instance newly created class instance.
 function Layout:new()
   return setmetatable({ layout = {} }, { __index = self })
 end
@@ -13,6 +13,7 @@ end
 ---
 ---```lua
 ---local attributes = {
+---  NoUnderline = { Underline = "None" },
 ---  Single = { Underline = "Single" },
 ---  Double = { Underline = "Double" },
 ---  Curly = { Underline = "Curly" },
@@ -22,13 +23,14 @@ end
 ---  Bold = { Intensity = "Bold" },
 ---  Half = { Intensity = "Half" },
 ---  Italic = { Italic = true },
+--   NoItalic = { Italic = false },
 ---}
 ---```
----@param background string The background color of the cell.
----@param foreground string The foreground color of the cell.
----@param text string The text to be added.
----@param attributes? table The list of attributes to be added.
----@return table self The updated layout table.
+---@param background string background color of the cell.
+---@param foreground string foreground color of the cell.
+---@param text string text to be added.
+---@param attributes? table list of attributes to be added.
+---@return Layout self The updated layout instance.
 function Layout:push(background, foreground, text, attributes)
   self = self or {}
   local insert = table.insert
@@ -36,6 +38,7 @@ function Layout:push(background, foreground, text, attributes)
   insert(self, { Foreground = { Color = foreground } })
 
   local attribute_mappings = {
+    NoUnderline = { Underline = "None" },
     Single = { Underline = "Single" },
     Double = { Underline = "Double" },
     Curly = { Underline = "Curly" },
