@@ -1,0 +1,6 @@
+{
+    "diagnostics.disable": [
+        "undefined-field",
+        "assign-type-mismatch"
+    ]
+}
