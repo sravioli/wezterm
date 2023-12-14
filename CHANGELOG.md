@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.0.3](https://github.com/sRavioli/wezterm/compare/3.0.2..3.0.3) - 2023-12-14
+#### Bug Fixes
+- **(events:update-status)** improve width calculation - ([6004de6](https://github.com/sRavioli/wezterm/commit/6004de6f683f959eaaccb1c1593a4e0629fa2807)) - [@sRavioli](https://github.com/sRavioli)
+- embed showcase video - ([b31ab12](https://github.com/sRavioli/wezterm/commit/b31ab12c9437acd51d14d2bc87508dae7c09b719)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(assets)** update flexible statusbar showcase - ([25c2c3e](https://github.com/sRavioli/wezterm/commit/25c2c3e46d4bcca888a8dea7d72433cae6d3574a)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [3.0.2](https://github.com/sRavioli/wezterm/compare/3.0.1..3.0.2) - 2023-12-14
 #### Bug Fixes
 - **(config:font)** don't adjust window size when changing font size - ([aa35df7](https://github.com/sRavioli/wezterm/commit/aa35df7b0869e1d7d7e9b5b5f950b0d044ba9207)) - [@sRavioli](https://github.com/sRavioli)
