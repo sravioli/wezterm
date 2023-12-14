@@ -1,10 +1,73 @@
+# Approximate line length for printing. Used as a guide for line wrapping - this
+# is not a hard requirement: lines may fall under or over the limit.
+#
+# (default: `120`)
 column_width = 90
-line_endings = "Windows"
-indent_type = "Spaces"
-indent_width = 2
-quote_style = "AutoPreferDouble"
-call_parentheses = "None"
-collapse_simple_statement = "Always"
 
+# Line endings type. Possible options: `Unix` (LF) or `Windows` (CRLF)
+#
+# (default: `Unix`)
+line_endings = "Windows"
+
+# Indent type. Possible options: `Tabs` or `Spaces`
+#
+# (default: `Tabs`)
+indent_type = "Spaces"
+
+# Character size of single indentation. If `indent_type` is set to `Tabs`, this
+# option is used as a heuristic to determine column width only.
+#
+# (default: `4`)
+indent_width = 2
+
+# Quote style for string literals. Possible options:
+#
+# - `AutoPreferDouble`,
+# - `AutoPreferSingle`,
+# - `ForceDouble`,
+# - `ForceSingle`.
+#
+# `AutoPrefer` styles will prefer the specified quote style, but fall back to the
+# alternative if it has fewer string escapes.
+# `Force` styles always use the specified style regardless of escapes.
+#
+# (default: `AutoPreferDouble`)
+quote_style = "AutoPreferDouble"
+
+# Whether parentheses should be applied on function calls with a single string/table
+# argument. Possible options:
+#
+# - `Always` applies parentheses in all cases.
+# - `NoSingleString` omits parentheses on calls with a single string argument.
+# - `NoSingleTable` omits parentheses on calls with a single table argument.
+# - `None` omits parentheses in both cases. Note: parentheses are still kept in
+#   situations where removal can lead to obscurity (e.g.
+#   `foo "bar".setup -> foo("bar").setup`, since the index is on the call result,
+#   not the string).
+# - `Input` removes all automation and preserves parentheses only if they were
+#   present in input code: consistency is not enforced.
+#
+# (default: `Always`)
+call_parentheses = "None"
+
+# Specify whether to collapse simple statements. Possible options:
+#
+# - `Never`,
+# - `FunctionOnly`,
+# - `ConditionalOnly`,
+# - `Always`
+#
+# (default: `Never`)
+collapse_simple_statement = "Never"
+
+# StyLua has built-in support for sorting require statements. We group consecutive
+# require statements into a single "block", and then requires are sorted only within
+# that block. Blocks of requires do not move around the file.
+#
+# We only include requires of the form `local NAME = require(EXPR)`, and sort
+# lexicographically based on `NAME`. (We also sort Roblox services of the form
+# `local NAME = game:GetService(EXPR)`)
+#
+# Requires sorting is off by default.
 [sort_requires]
-enabled = false
+  enabled = false
