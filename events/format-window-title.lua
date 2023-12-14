@@ -1,31 +1,30 @@
 local wez = require "wezterm" ---@class WezTerm
-local fn = require "utils.functions" ---@class UtilityFunctions
+local fun = require "utils.functions" ---@class UtilityFunctions
 
-local M = {}
+wez.on("format-window-title", function(tab, pane, tabs, _, _)
+  local zoomed = ""
+  if tab.active_pane.is_zoomed then
+    zoomed = "[Z] "
+  end
 
-function M.setup()
-  wez.on("format-window-title", function(tab, pane, tabs, _, _)
-    local zoomed = ""
-    if tab.active_pane.is_zoomed then zoomed = "[Z] " end
+  local index = ""
+  if #tabs > 1 then
+    index = ("[%d/%d] "):format(tab.tab_index + 1, #tabs)
+  end
 
-    local index = ""
-    if #tabs > 1 then index = string.format("[%d/%d] ", tab.tab_index + 1, #tabs) end
+  ---tab title
+  local title = fun.basename(pane.title):gsub("%.exe%s?$", "")
 
-    ---tab title
-    local title = fn.basename(pane.title):gsub("%.exe%s?$", "")
+  local proc = pane.foreground_process_name
+  if proc:find "nvim" then
+    proc = proc:sub(proc:find "nvim")
+  end
+  if proc == "nvim" then
+    local cwd, _ = fun.basename(pane.current_working_dir.file_path)
+    title = ("Neovim (dir: %s)"):format(cwd)
+  end
 
-    -- HACK: running Neovim will turn the tab title to "C:\WINDOWS\system32\cmd.exe".
-    -- This is indeed a hack, but I'm never running cmd.exe so it's safe to override
-    -- this way.
-    if title == "cmd" then
-      local cwd, _ = fn.basename(pane.current_working_dir)
-      title = "Neovim" .. string.format(" %s%s%s", "(dir: ", cwd, ")")
-    end
-
-    -- return zoomed .. index .. tab.active_pane.title
-    return zoomed .. index .. title
-  end)
-end
-
-return M
+  -- return zoomed .. index .. tab.active_pane.title
+  return zoomed .. index .. title
+end)
 
