@@ -245,7 +245,7 @@ M.map = function(lhs, rhs, tbl)
   end
 
   ---skip checks for single key mapping, just map it.
-  if lhs:len() == 1 then
+  if #lhs == 1 then
     map(lhs)
     return
   end
