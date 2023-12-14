@@ -1,95 +1,90 @@
----@diagnostic disable: undefined-field
--- see: <https://github.com/wez/wezterm/discussions/628#discussioncomment-1874614>
-
 local wez = require "wezterm" ---@class WezTerm
-local colorscheme = require("colorschemes")[require "utils.current-colorscheme"]
+local fun = require "utils.fun" ---@class Fun
+local icons = require "utils.icons" ---@class Icons
+local tabicons = icons.Separators.TabBar ---@class TabBarIcons
 
-local M = {}
+wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
+  local theme = require("colors")[fun.get_scheme()]
+  local bg = theme.tab_bar.background
+  local fg
 
-function M.setup()
-  wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
-    local nf = require "utils.nerdfont-icons" ---@class NerdFontIcons
-    local fn = require "utils.functions" ---@class UtilityFunctions
+  local TabTitle = require("utils.layout"):new() ---@class WezTermLayout
 
-    local layout = require("utils.layout"):new() ---@class WezTermLayout
-    local separators = nf.Separators.TabBar ---@class TabBarIcons
+  local pane, tab_idx = tab.active_pane, tab.tab_index
+  local opts = {}
 
-    local bg = colorscheme.tab_bar.background
-    local fg
-    local pane, tab_idx = tab.active_pane, tab.tab_index
+  ---set colors based on states
+  if tab.is_active then
+    fg = theme.ansi[5]
+    opts = { "Bold" }
+  elseif hover then
+    fg = theme.selection_bg
+  else
+    fg = theme.brights[1]
+  end
 
-    ---set colors based on states
-    if tab.is_active then
-      fg = colorscheme.ansi[6]
-    elseif hover then
-      fg = colorscheme.selection_bg
-    else
-      fg = colorscheme.brights[1]
+  ---Check if any pane has unseen output
+  local unseen_output = false
+  for _, p in ipairs(tab.panes) do
+    if p.has_unseen_output then
+      unseen_output = true
+      break
+    end
+  end
+
+  ---get pane title, remove any `.exe` from the title, swap `Administrator` for the desired
+  ---icon, swap `pwsh` and `bash` for their icons
+  local title = fun
+    .basename(pane.title)
+    :gsub("%.exe%s?$", "")
+    :gsub("^Administrator: %w+", icons.Admin)
+    :gsub("pwsh", icons.Pwsh)
+    :gsub("bash", icons.Bash)
+
+  local proc = pane.foreground_process_name
+  if proc:find "nvim" then
+    proc = proc:sub(proc:find "nvim")
+  end
+  local is_truncation_needed = true
+  if proc == "nvim" then
+    ---full title truncation is not necessary since the dir name will be truncated
+    is_truncation_needed = false
+    local cwd = fun.basename(pane.current_working_dir.file_path)
+
+    ---instead of truncating the whole title, truncate to length the cwd to ensure that the
+    ---right parenthesis always closes.
+    if max_width == config.tab_max_width then
+      cwd = wez.truncate_right(cwd, max_width - 14) .. "..."
     end
 
-    ---Check if any pane has unseen output
-    local is_unseen_output_present = false
-    for _, p in ipairs(tab.panes) do
-      if p.has_unseen_output then
-        is_unseen_output_present = true
-        break
-      end
-    end
+    title = ("%s ( %s)"):format(icons.Vim, cwd)
+  end
+  title = title:gsub(fun.basename(fun.home), "󰋜 ")
 
-    ---get pane title, remove any `.exe` from the title, swap `Administrator` for the
-    ---desired icon, swap `pwsh` and `bash` for their icons
-    local title = fn.basename(pane.title)
-      :gsub("%.exe%s?$", "")
-      :gsub("^Administrator: %w+", nf.Admin.fill)
-      :gsub("pwsh", nf.Powershell.md)
-      :gsub("bash", nf.Bash.seti)
-      :gsub(fn.basename(os.getenv "USERPROFILE" or ""), "󰋜 ")
+  ---truncate the tab title when it overflows the maximum available space, then concatenate
+  ---some dots to indicate the occurred truncation
+  if is_truncation_needed and max_width == config.tab_max_width then
+    title = wez.truncate_right(title, max_width - 8) .. "..."
+  end
 
-    ---HACK: running Neovim will turn the tab title to "C:\WINDOWS\system32\cmd.exe".
-    ---After getting the basename the tab name ends up being "cmd".
-    ---This is not the best way to detect when neovim is running but I will never use
-    ---`cmd.exe` from WezTerm.
-    local is_truncation_needed = true
-    if title == "cmd" then
-      ---full title truncation is not necessary since the dir name will be truncated
-      is_truncation_needed = false
-      local cwd = fn.basename(pane.current_working_dir)
+  ---add the either the leftmost element or the normal left separator. This is done to
+  ---esure a bit of space from the left margin.
+  TabTitle:push(bg, fg, tab_idx == 0 and tabicons.leftmost or tabicons.left, opts)
 
-      ---instead of truncating the whole title, truncate to length the cwd to ensure
-      ---that the right parenthesis always closes.
-      if max_width == config.tab_max_width then
-        cwd = wez.truncate_right(cwd, max_width - 14) .. "..."
-      end
-      title = string.format("%s ( %s)", nf.Vim.dev, cwd)
-    end
+  ---add the tab number. can be substituted by the `has_unseen_output` notification
+  TabTitle:push(
+    fg,
+    bg,
+    (unseen_output and icons.UnseenNotification or icons.Numbers[tab_idx + 1]) .. " ",
+    opts
+  )
 
-    ---truncate the tab title when it overflows the maximum available space, then
-    ---concatenate some dots to indicate the occurred truncation
-    if is_truncation_needed and max_width == config.tab_max_width then
-      title = wez.truncate_right(title, max_width - 8) .. "..."
-    end
+  ---the formatted tab title
+  TabTitle:push(fg, bg, title, opts)
 
-    ---add the either the leftmost element or the normal left separator. This is done
-    ---to esure a bit of space from the left margin.
-    layout:push(bg, fg, tab_idx == 0 and separators.leftmost or separators.left)
+  ---the right tab bar separator
+  TabTitle:push(bg, fg, icons.Separators.FullBlock .. tabicons.right, opts)
 
-    ---add the tab number. can be substituted by the `has_unseen_output` notification
-    layout:push(
-      fg,
-      bg,
-      (is_unseen_output_present and nf.UnseenNotification or nf.Numbers[tab_idx + 1])
-        .. " "
-    )
-
-    ---the formatted tab title
-    layout:push(fg, bg, title)
-
-    ---the right tab bar separator
-    layout:push(bg, fg, nf.Separators.FullBlock .. separators.right)
-
-    return layout
-  end)
-end
-
-return M
+  return TabTitle
+end)
 
