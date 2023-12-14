@@ -72,7 +72,7 @@ Config.font_rules = {
         stretch = "Expanded",
         harfbuzz_features = monaspace_features,
       },
-      { family = "Symbols Nerd Font Regular" },
+      { family = "Symbols Nerd Font" },
     },
   },
   {
@@ -86,7 +86,7 @@ Config.font_rules = {
         harfbuzz_features = monaspace_features,
         scale = 1.1,
       },
-      { family = "Symbols Nerd Font Regular" },
+      { family = "Symbols Nerd Font" },
     },
   },
 }
