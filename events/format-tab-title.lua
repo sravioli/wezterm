@@ -46,7 +46,9 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     proc = proc:sub(proc:find "nvim")
   end
   local is_truncation_needed = true
-  if proc == "nvim" then
+  ---HACK: running nvim somehow causes the tab title to become cmd. (don't use cmd
+  ---      so it's safe for me)
+  if proc == "nvim" or title == "cmd" then
     ---full title truncation is not necessary since the dir name will be truncated
     is_truncation_needed = false
     local cwd = fun.basename(pane.current_working_dir.file_path)
