@@ -59,7 +59,7 @@ wez.on("update-status", function(window, pane)
   tab_bar_width = tab_bar_width + mode_indicator_width + strwidth(new_tab_button)
   --~ }}}
 
-  local usable_width = pane:get_dimensions().cols - tab_bar_width
+  local usable_width = pane:get_dimensions().cols - tab_bar_width - 2 ---padding
 
   ---push each cell and the cells separator
   for i, cell in ipairs { cwd, hostname, datetime, battery.full } do
