@@ -8,15 +8,15 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   local bg = theme.tab_bar.background
   local fg
 
-  local TabTitle = require("utils.layout"):new() ---@class WezTermLayout
+  local TabTitle = require("utils.layout"):new() ---@class Layout
 
   local pane, tab_idx = tab.active_pane, tab.tab_index
-  local opts = {}
+  local attributes = {}
 
   ---set colors based on states
   if tab.is_active then
     fg = theme.ansi[5]
-    opts = { "Bold" }
+    attributes = { "Bold" }
   elseif hover then
     fg = theme.selection_bg
   else
@@ -69,21 +69,21 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
 
   ---add the either the leftmost element or the normal left separator. This is done to
   ---esure a bit of space from the left margin.
-  TabTitle:push(bg, fg, tab_idx == 0 and tabicons.leftmost or tabicons.left, opts)
+  TabTitle:push(bg, fg, tab_idx == 0 and tabicons.leftmost or tabicons.left, attributes)
 
   ---add the tab number. can be substituted by the `has_unseen_output` notification
   TabTitle:push(
     fg,
     bg,
     (unseen_output and icons.UnseenNotification or icons.Numbers[tab_idx + 1]) .. " ",
-    opts
+    attributes
   )
 
   ---the formatted tab title
-  TabTitle:push(fg, bg, title, opts)
+  TabTitle:push(fg, bg, title, attributes)
 
   ---the right tab bar separator
-  TabTitle:push(bg, fg, icons.Separators.FullBlock .. tabicons.right, opts)
+  TabTitle:push(bg, fg, icons.Separators.FullBlock .. tabicons.right, attributes)
 
   return TabTitle
 end)
