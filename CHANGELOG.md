@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.0.2](https://github.com/sRavioli/wezterm/compare/3.0.1..3.0.2) - 2023-12-14
+#### Bug Fixes
+- **(config:font)** don't adjust window size when changing font size - ([aa35df7](https://github.com/sRavioli/wezterm/commit/aa35df7b0869e1d7d7e9b5b5f950b0d044ba9207)) - [@sRavioli](https://github.com/sRavioli)
+- **(config:font)** use correct nerd font fallback - ([7d2d1ff](https://github.com/sRavioli/wezterm/commit/7d2d1ffb3939c7f2790172c3cd5eea55fa8831c7)) - [@sRavioli](https://github.com/sRavioli)
+- **(event:format-tab-title)** rename `opts` to `attributes` - ([c2fbfb9](https://github.com/sRavioli/wezterm/commit/c2fbfb97e875c698853f13da4a0fc31600b1fdd2)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-tab-title)** re-use nvim cmd hack - ([434e7d2](https://github.com/sRavioli/wezterm/commit/434e7d23fd9b48939a75d39673d81365514f8266)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:fun)** use # operator for string length - ([de9f6e8](https://github.com/sRavioli/wezterm/commit/de9f6e8f692a775d2557d35eb321d5e21706f473)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:layout)** documentation, add attributes option - ([7c390f0](https://github.com/sRavioli/wezterm/commit/7c390f08ebed776ced4e1aa56644330b44ba0bbb)) - [@sRavioli](https://github.com/sRavioli)
+- remove copy mode indicator from tab title - ([6c9d1e2](https://github.com/sRavioli/wezterm/commit/6c9d1e2a14757725833e59c0e6e823c1f093ddd2)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(events:update-status)** add 2 cells of padding from tab bar - ([a0b83d9](https://github.com/sRavioli/wezterm/commit/a0b83d9f361619a2d7193b41726023ff2d40ed4c)) - [@sRavioli](https://github.com/sRavioli)
+- **(readme)** add README - ([a8f7f82](https://github.com/sRavioli/wezterm/commit/a8f7f82cc82e487a9969c961218879debfe6d1e6)) - [@sRavioli](https://github.com/sRavioli)
+#### Hotfixes
+- **(github)** wrong folder name for github workflows - ([2e0e69e](https://github.com/sRavioli/wezterm/commit/2e0e69e549d51e49194f9b2228b83505e8fa8c58)) - [@sRavioli](https://github.com/sRavioli)
+#### Style
+- **(mappings)** remove variable - ([e84c855](https://github.com/sRavioli/wezterm/commit/e84c855948a64f2ae601aa31cb7b2a0df4109eef)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [3.0.1](https://github.com/sRavioli/wezterm/compare/3.0.0..3.0.1) - 2023-12-14
 #### Features
 - update changelog - ([79a3f9b](https://github.com/sRavioli/wezterm/commit/79a3f9b0a8173cbecde6a697a1b3de33845af421)) - [@sRavioli](https://github.com/sRavioli)
