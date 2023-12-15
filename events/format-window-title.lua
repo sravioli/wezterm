@@ -19,12 +19,11 @@ wez.on("format-window-title", function(tab, pane, tabs, _, _)
   if proc:find "nvim" then
     proc = proc:sub(proc:find "nvim")
   end
-  if proc == "nvim" then
+  if proc == "nvim" or title == "cmd" then
     local cwd, _ = fun.basename(pane.current_working_dir.file_path)
     title = ("Neovim (dir: %s)"):format(cwd)
   end
 
-  -- return zoomed .. index .. tab.active_pane.title
   return zoomed .. index .. title
 end)
 
