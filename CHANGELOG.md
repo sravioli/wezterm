@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.0.4](https://github.com/sRavioli/wezterm/compare/3.0.3..3.0.4) - 2023-12-15
+#### Bug Fixes
+- **(events:update-status)** check usable width with `<=` instead of `<` - ([c1c8972](https://github.com/sRavioli/wezterm/commit/c1c8972bd44ac66bfbaa177a4f2b1d8ccf19d4f9)) - [@sRavioli](https://github.com/sRavioli)
+- **(mappings:default)** change leader key - ([5fa58a4](https://github.com/sRavioli/wezterm/commit/5fa58a47468bd608b21c203c9ed84ccf36b904f6)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(events:format-window-title)** check for nvim and cmd - ([c078d40](https://github.com/sRavioli/wezterm/commit/c078d40587978de999cb855ba80e7daae4a4778c)) - [@sRavioli](https://github.com/sRavioli)
+- **(mappings:default)** add mapping for quick window navigation - ([5994425](https://github.com/sRavioli/wezterm/commit/5994425d04439489f6ca60468b3043d4cdb84d08)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [3.0.3](https://github.com/sRavioli/wezterm/compare/3.0.2..3.0.3) - 2023-12-14
 #### Bug Fixes
 - **(events:update-status)** improve width calculation - ([6004de6](https://github.com/sRavioli/wezterm/commit/6004de6f683f959eaaccb1c1593a4e0629fa2807)) - [@sRavioli](https://github.com/sRavioli)
