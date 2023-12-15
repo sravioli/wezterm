@@ -40,7 +40,7 @@ Config.wsl_domains = {
   },
   {
     name = "WSL:Alpine",
-    distribution = "Alpin",
+    distribution = "Alpine",
     username = "sravioli",
     default_cwd = "/home/sravioli",
     default_prog = { "ash" },
