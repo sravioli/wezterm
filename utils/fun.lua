@@ -1,4 +1,5 @@
 local wez = require "wezterm" ---@class WezTerm
+local wcwidth, utf8 = require "utils.wcwidth", require "utf8"
 
 ---User defined utility functions
 ---@class Fun
@@ -127,20 +128,25 @@ end
 
 ---Merges two tables
 ---@param t1 table
----@param t2 table
+---@param ... table[] one or more tables to merge
 ---@return table t1 modified t1 table
-M.tbl_merge = function(t1, t2)
-  for k, v in pairs(t2) do
-    if type(v) == "table" then
-      if type(t1[k] or false) == "table" then
-        M.tbl_merge(t1[k] or {}, t2[k] or {})
+M.tbl_merge = function(t1, ...)
+  local tables = { ... }
+
+  for _, t2 in ipairs(tables) do
+    for k, v in pairs(t2) do
+      if type(v) == "table" then
+        if type(t1[k] or false) == "table" then
+          M.tbl_merge(t1[k] or {}, t2[k] or {})
+        else
+          t1[k] = v
+        end
       else
         t1[k] = v
       end
-    else
-      t1[k] = v
     end
   end
+
   return t1
 end
 
@@ -303,7 +309,6 @@ end
 ---@param num? integer
 ---@return number|-1
 M.strwidth = function(str, num)
-  local wcwidth, utf8 = require "utils.wcwidth", require "utf8"
   local cells = 0
   if num then
     local count = 0
