@@ -23,10 +23,10 @@ wez.on("update-status", function(window, pane)
   -- {{{1 LEFT STATUS
   local LeftStatus = StatusBar:new() ---@class Layout
   local name = window:active_key_table()
-  if name then
-    mode_indicator_width = strwidth(modes[name].text) + 1
-    bg = modes[name].bg
-    LeftStatus:push(bg, theme.background, modes[name].text or "", { "Bold" })
+  if name and modes[name] then
+    local txt = modes[name].text or ""
+    mode_indicator_width, bg = strwidth(txt), modes[name].bg
+    LeftStatus:push(bg, theme.background, txt, { "Bold" })
   end
 
   window:set_left_status(wez.format(LeftStatus))
@@ -50,7 +50,7 @@ wez.on("update-status", function(window, pane)
   local MuxWindow = window:mux_window()
   local tab_bar_width = 0
   for _, MuxTab in ipairs(MuxWindow:tabs()) do
-    tab_bar_width = tab_bar_width + strwidth(MuxTab:panes()[1]:get_title()) + 3
+    tab_bar_width = tab_bar_width + strwidth(MuxTab:panes()[1]:get_title()) + 2
   end
 
   local Config = MuxWindow:gui_window():effective_config() ---@class Config
@@ -60,11 +60,13 @@ wez.on("update-status", function(window, pane)
   --~ }}}
 
   local usable_width = pane:get_dimensions().cols - tab_bar_width - 2 ---padding
+  local fancy_bg = Config.window_frame.active_titlebar_bg
+  local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
   ---push each cell and the cells separator
   for i, cell in ipairs { cwd, hostname, datetime, battery.full } do
     local cell_bg = colors[i]
-    local cell_fg = i == 1 and theme.tab_bar.background or colors[i - 1]
+    local cell_fg = i == 1 and last_fg or colors[i - 1]
     local sep = icons.Separators.StatusBar.right
 
     ---add each cell separator
@@ -73,7 +75,7 @@ wez.on("update-status", function(window, pane)
     usable_width = usable_width - strwidth(cell) - strwidth(sep) - 1
 
     ---add cell or empty string
-    cell = usable_width <= 0 and "" or " " .. cell .. " "
+    cell = usable_width <= 0 and " " or " " .. cell .. " "
     RightStatus:push(colors[i], theme.tab_bar.background, cell, { "Bold" })
   end
 
