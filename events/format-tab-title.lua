@@ -4,6 +4,10 @@ local icons = require "utils.icons" ---@class Icons
 local tabicons = icons.Separators.TabBar ---@class TabBarIcons
 
 wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
+  if config.use_fancy_tab_bar or not config.enable_tab_bar then
+    return
+  end
+
   local theme = require("colors")[fun.get_scheme()]
   local bg = theme.tab_bar.background
   local fg
@@ -78,7 +82,8 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   TabTitle:push(
     fg,
     bg,
-    (unseen_output and icons.UnseenNotification or icons.Numbers[tab_idx + 1]) .. " ",
+    (unseen_output and icons.UnseenNotification or icons.Numbers[tab_idx + 1] or "")
+      .. " ",
     attributes
   )
 
