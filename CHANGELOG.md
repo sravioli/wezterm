@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.0.5](https://github.com/sRavioli/wezterm/compare/3.0.4..3.0.5) - 2023-12-16
+#### Bug Fixes
+- **(config:general)** remove default program for Alpine - ([7b05ee2](https://github.com/sRavioli/wezterm/commit/7b05ee2dc7d90702f2da245f1b87cdb16667151e)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:format-tab-title)** don't render in fancy bar and with no bar, nil check icons - ([0743b90](https://github.com/sRavioli/wezterm/commit/0743b90cc58e3e31d99dbe216ac4728807be7e53)) - [@sRavioli](https://github.com/sRavioli)
+- **(events:update-status)** add fancy tab bar support - ([9685c2a](https://github.com/sRavioli/wezterm/commit/9685c2abf3701612a847f37ae9729fa48cf69e64)) - [@sRavioli](https://github.com/sRavioli)
+- **(mappings:default)** change leader key - ([fa46272](https://github.com/sRavioli/wezterm/commit/fa462726f598da1e3204b559f5aa57aebeba5796)) - [@sRavioli](https://github.com/sRavioli)
+- **(mappings:modes)** change config initialization - ([11cc38c](https://github.com/sRavioli/wezterm/commit/11cc38c25e45ef69a51762311d0a739dc5413e34)) - [@sRavioli](https://github.com/sRavioli)
+- **(utils:fun)** make `tbl_merge()` take a list of strings - ([e74ea0c](https://github.com/sRavioli/wezterm/commit/e74ea0cf3d8cc56a699d70141c08e869d2b60b74)) - [@sRavioli](https://github.com/sRavioli)
+#### Features
+- **(wezterm.lua)** load new config - ([49c6c55](https://github.com/sRavioli/wezterm/commit/49c6c5564ef97cffe6a99f7f1f5ebf19d177a509)) - [@sRavioli](https://github.com/sRavioli)
+- merge config in config and mappings folder - ([1c7d50a](https://github.com/sRavioli/wezterm/commit/1c7d50a119b84e47d40ec63537c0b0422aadc04a)) - [@sRavioli](https://github.com/sRavioli)
+#### Hotfixes
+- **(config:general)** typo in wsl domains - ([4b88a75](https://github.com/sRavioli/wezterm/commit/4b88a75fd5987b15210133cb422c79e4489a9a22)) - [@sRavioli](https://github.com/sRavioli)
+#### Refactoring
+- **(utils:wcwidth)** rewrite portions of the wcwidth file - ([ba48223](https://github.com/sRavioli/wezterm/commit/ba48223a60333768a55e983404ae0608a9cebe5b)) - [@sRavioli](https://github.com/sRavioli)
+
+- - -
+
 ## [3.0.4](https://github.com/sRavioli/wezterm/compare/3.0.3..3.0.4) - 2023-12-15
 #### Bug Fixes
 - **(events:update-status)** check usable width with `<=` instead of `<` - ([c1c8972](https://github.com/sRavioli/wezterm/commit/c1c8972bd44ac66bfbaa177a4f2b1d8ccf19d4f9)) - [@sRavioli](https://github.com/sRavioli)
