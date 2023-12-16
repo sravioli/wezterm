@@ -4,7 +4,7 @@ local act = wez.action
 local fun = require "utils.fun" ---@class Fun
 
 ---@class Config
-local Config = { key_tables = {} }
+local Config = {}
 
 local key_tables = {
   -- {{{1 COPY MODE (copy_mode)
@@ -96,6 +96,7 @@ local key_tables = {
   }, -- }}}
 }
 
+Config.key_tables = {}
 for mode, key_table in pairs(key_tables) do
   Config.key_tables[mode] = {}
   fun.map("<ESC>", "PopKeyTable", Config.key_tables[mode])
