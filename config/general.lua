@@ -43,7 +43,6 @@ Config.wsl_domains = {
     distribution = "Alpine",
     username = "sravioli",
     default_cwd = "/home/sravioli",
-    default_prog = { "ash" },
   },
 }
 
