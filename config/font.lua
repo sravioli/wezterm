@@ -51,9 +51,13 @@ Config.font = wez.font_with_fallback {
   { family = "LegacyComputing" },
 }
 
-Config.font_size = 9.5
+if require("utils.fun").is_windows then
+  Config.font_size = 9.5
+else
+  Config.font_size = 10.5
+end
 
-Config.underline_position = -3.1
+Config.underline_position = -2.5
 Config.underline_thickness = "2px"
 Config.warn_about_missing_glyphs = false
 
