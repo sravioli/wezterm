@@ -41,7 +41,7 @@ wez.on("update-status", function(window, pane)
   local battery = wez.battery_info()[1]
   battery.lvl = fun.toint(fun.mround(battery.state_of_charge * 100, 10))
   battery.ico = icons.Battery[battery.state][tostring(battery.lvl)]
-  battery.full = ("%s %i%%"):format(battery.ico, battery.lvl)
+  battery.full = ("%s %i%%"):format(battery.ico, tonumber(math.floor(battery.state_of_charge * 100 + 0.5)))
 
   local datetime = wez.strftime "%a %b %-d %H:%M"
   local cwd, hostname = fun.get_cwd_hostname(pane, true)
