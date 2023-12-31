@@ -7,7 +7,7 @@ local M = {}
 
 ---User home directory
 ---@return string home path to the suer home directory.
-M.home = os.getenv("USERPROFILE"):gsub("\\", "/")
+M.home = tostring(os.getenv "USERPROFILE"):gsub("\\", "/")
   or os.getenv "HOME"
   or wez.home_dir
   or ""
