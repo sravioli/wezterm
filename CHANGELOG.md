@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.0.6](https://github.com/sRavioli/wezterm/compare/3.0.5..3.0.6) - 2024-01-24
+#### Bug Fixes
+- **(colors)** change kanagawa-lotus tab bar backround colors - ([dfe5c92](https://github.com/sRavioli/wezterm/commit/dfe5c921e5be7ddf86665d8f2f5762b8260aadf8)) - sravioli
+- **(events:update-stauts)** display correct battery percentage, add padding - ([525881e](https://github.com/sRavioli/wezterm/commit/525881e2b8cb39da7ed156c2d06fbc6de3b7b313)) - sravioli
+- **(mappings)** change leader key - ([6160705](https://github.com/sRavioli/wezterm/commit/61607051e20e0ba987ed8cdbddcdf0ca869d4529)) - sravioli
+- **(utils:fun)** correctly retrieve the user home directory - ([3ed4dfd](https://github.com/sRavioli/wezterm/commit/3ed4dfdb4e6a6b78c384daad6fae16dded93fa18)) - sravioli
+#### Features
+- **(config:font)** add linux support - ([d0d309a](https://github.com/sRavioli/wezterm/commit/d0d309a008a7c3367a975fccc68f962154d8d7fb)) - sravioli
+- **(config:general)** add linux support - ([7a68ea6](https://github.com/sRavioli/wezterm/commit/7a68ea648be556bcf1194264b8c438ed178bf886)) - sravioli
+- **(events:lock-interface)** add event to lock the interface - ([d80dfe2](https://github.com/sRavioli/wezterm/commit/d80dfe21579f5bada297b0388f5cf1c3d2b33b88)) - sravioli
+- **(events:update-status)** display real battery level - ([13b26cb](https://github.com/sRavioli/wezterm/commit/13b26cb9463a4a10ace1e485aaaca5e95bf1be8d)) - sravioli
+- **(mappings)** add lock mode - ([0957fa8](https://github.com/sRavioli/wezterm/commit/0957fa8ad025f3858909352a87a872cdcffb8673)) - sravioli
+- **(utils:fun)** add linux support, uppercase first letter of hostname - ([432e9ff](https://github.com/sRavioli/wezterm/commit/432e9ffe76148dfa539846da4d60e4502e9c5943)) - sravioli
+- **(wezterm.lua)** source new event - ([e821785](https://github.com/sRavioli/wezterm/commit/e821785c17c8531082d0537a45b5880e76bb9193)) - sravioli
+#### Miscellaneous Chores
+- **(changelog)** format with markdownlint - ([bf8fd33](https://github.com/sRavioli/wezterm/commit/bf8fd33fa272468fc579783e926611faec4fd155)) - sravioli
+
+- - -
+
 
 ## [3.0.5](https://github.com/sRavioli/wezterm/compare/3.0.4..3.0.5) - 2023-12-16
 
