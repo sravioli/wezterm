@@ -3,45 +3,64 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+
 ## [3.0.5](https://github.com/sRavioli/wezterm/compare/3.0.4..3.0.5) - 2023-12-16
+
 #### Bug Fixes
+
 - **(config:general)** remove default program for Alpine - ([7b05ee2](https://github.com/sRavioli/wezterm/commit/7b05ee2dc7d90702f2da245f1b87cdb16667151e)) - [@sRavioli](https://github.com/sRavioli)
 - **(events:format-tab-title)** don't render in fancy bar and with no bar, nil check icons - ([0743b90](https://github.com/sRavioli/wezterm/commit/0743b90cc58e3e31d99dbe216ac4728807be7e53)) - [@sRavioli](https://github.com/sRavioli)
 - **(events:update-status)** add fancy tab bar support - ([9685c2a](https://github.com/sRavioli/wezterm/commit/9685c2abf3701612a847f37ae9729fa48cf69e64)) - [@sRavioli](https://github.com/sRavioli)
 - **(mappings:default)** change leader key - ([fa46272](https://github.com/sRavioli/wezterm/commit/fa462726f598da1e3204b559f5aa57aebeba5796)) - [@sRavioli](https://github.com/sRavioli)
 - **(mappings:modes)** change config initialization - ([11cc38c](https://github.com/sRavioli/wezterm/commit/11cc38c25e45ef69a51762311d0a739dc5413e34)) - [@sRavioli](https://github.com/sRavioli)
 - **(utils:fun)** make `tbl_merge()` take a list of strings - ([e74ea0c](https://github.com/sRavioli/wezterm/commit/e74ea0cf3d8cc56a699d70141c08e869d2b60b74)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Features
+
 - **(wezterm.lua)** load new config - ([49c6c55](https://github.com/sRavioli/wezterm/commit/49c6c5564ef97cffe6a99f7f1f5ebf19d177a509)) - [@sRavioli](https://github.com/sRavioli)
 - merge config in config and mappings folder - ([1c7d50a](https://github.com/sRavioli/wezterm/commit/1c7d50a119b84e47d40ec63537c0b0422aadc04a)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Hotfixes
+
 - **(config:general)** typo in wsl domains - ([4b88a75](https://github.com/sRavioli/wezterm/commit/4b88a75fd5987b15210133cb422c79e4489a9a22)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Refactoring
+
 - **(utils:wcwidth)** rewrite portions of the wcwidth file - ([ba48223](https://github.com/sRavioli/wezterm/commit/ba48223a60333768a55e983404ae0608a9cebe5b)) - [@sRavioli](https://github.com/sRavioli)
 
 - - -
 
 ## [3.0.4](https://github.com/sRavioli/wezterm/compare/3.0.3..3.0.4) - 2023-12-15
+
 #### Bug Fixes
+
 - **(events:update-status)** check usable width with `<=` instead of `<` - ([c1c8972](https://github.com/sRavioli/wezterm/commit/c1c8972bd44ac66bfbaa177a4f2b1d8ccf19d4f9)) - [@sRavioli](https://github.com/sRavioli)
 - **(mappings:default)** change leader key - ([5fa58a4](https://github.com/sRavioli/wezterm/commit/5fa58a47468bd608b21c203c9ed84ccf36b904f6)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Features
+
 - **(events:format-window-title)** check for nvim and cmd - ([c078d40](https://github.com/sRavioli/wezterm/commit/c078d40587978de999cb855ba80e7daae4a4778c)) - [@sRavioli](https://github.com/sRavioli)
 - **(mappings:default)** add mapping for quick window navigation - ([5994425](https://github.com/sRavioli/wezterm/commit/5994425d04439489f6ca60468b3043d4cdb84d08)) - [@sRavioli](https://github.com/sRavioli)
 
 - - -
 
 ## [3.0.3](https://github.com/sRavioli/wezterm/compare/3.0.2..3.0.3) - 2023-12-14
+
 #### Bug Fixes
+
 - **(events:update-status)** improve width calculation - ([6004de6](https://github.com/sRavioli/wezterm/commit/6004de6f683f959eaaccb1c1593a4e0629fa2807)) - [@sRavioli](https://github.com/sRavioli)
 - embed showcase video - ([b31ab12](https://github.com/sRavioli/wezterm/commit/b31ab12c9437acd51d14d2bc87508dae7c09b719)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Features
+
 - **(assets)** update flexible statusbar showcase - ([25c2c3e](https://github.com/sRavioli/wezterm/commit/25c2c3e46d4bcca888a8dea7d72433cae6d3574a)) - [@sRavioli](https://github.com/sRavioli)
 
 - - -
 
 ## [3.0.2](https://github.com/sRavioli/wezterm/compare/3.0.1..3.0.2) - 2023-12-14
+
 #### Bug Fixes
+
 - **(config:font)** don't adjust window size when changing font size - ([aa35df7](https://github.com/sRavioli/wezterm/commit/aa35df7b0869e1d7d7e9b5b5f950b0d044ba9207)) - [@sRavioli](https://github.com/sRavioli)
 - **(config:font)** use correct nerd font fallback - ([7d2d1ff](https://github.com/sRavioli/wezterm/commit/7d2d1ffb3939c7f2790172c3cd5eea55fa8831c7)) - [@sRavioli](https://github.com/sRavioli)
 - **(event:format-tab-title)** rename `opts` to `attributes` - ([c2fbfb9](https://github.com/sRavioli/wezterm/commit/c2fbfb97e875c698853f13da4a0fc31600b1fdd2)) - [@sRavioli](https://github.com/sRavioli)
@@ -49,24 +68,33 @@ All notable changes to this project will be documented in this file. See [conven
 - **(utils:fun)** use # operator for string length - ([de9f6e8](https://github.com/sRavioli/wezterm/commit/de9f6e8f692a775d2557d35eb321d5e21706f473)) - [@sRavioli](https://github.com/sRavioli)
 - **(utils:layout)** documentation, add attributes option - ([7c390f0](https://github.com/sRavioli/wezterm/commit/7c390f08ebed776ced4e1aa56644330b44ba0bbb)) - [@sRavioli](https://github.com/sRavioli)
 - remove copy mode indicator from tab title - ([6c9d1e2](https://github.com/sRavioli/wezterm/commit/6c9d1e2a14757725833e59c0e6e823c1f093ddd2)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Features
+
 - **(events:update-status)** add 2 cells of padding from tab bar - ([a0b83d9](https://github.com/sRavioli/wezterm/commit/a0b83d9f361619a2d7193b41726023ff2d40ed4c)) - [@sRavioli](https://github.com/sRavioli)
 - **(readme)** add README - ([a8f7f82](https://github.com/sRavioli/wezterm/commit/a8f7f82cc82e487a9969c961218879debfe6d1e6)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Hotfixes
+
 - **(github)** wrong folder name for github workflows - ([2e0e69e](https://github.com/sRavioli/wezterm/commit/2e0e69e549d51e49194f9b2228b83505e8fa8c58)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Style
+
 - **(mappings)** remove variable - ([e84c855](https://github.com/sRavioli/wezterm/commit/e84c855948a64f2ae601aa31cb7b2a0df4109eef)) - [@sRavioli](https://github.com/sRavioli)
 
 - - -
 
 ## [3.0.1](https://github.com/sRavioli/wezterm/compare/3.0.0..3.0.1) - 2023-12-14
+
 #### Features
+
 - update changelog - ([79a3f9b](https://github.com/sRavioli/wezterm/commit/79a3f9b0a8173cbecde6a697a1b3de33845af421)) - [@sRavioli](https://github.com/sRavioli)
+
 #### Hotfixes
+
 - **(github)** restore release action - ([37e5719](https://github.com/sRavioli/wezterm/commit/37e5719f93bf38cfda0682e7b31c7ea7d7eb75b8)) - [@sRavioli](https://github.com/sRavioli)
 
 - - -
-
 
 ## [3.0.0](https://github.com/sRavioli/wezterm/compare/2.1.2..3.0.0) - 2023-12-14
 
@@ -406,4 +434,3 @@ All notable changes to this project will be documented in this file. See [conven
 - - -
 
 Changelog generated by [cocogitto](https://github.com/cocogitto/cocogitto).
-
