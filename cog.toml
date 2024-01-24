@@ -17,8 +17,8 @@ path = "CHANGELOG.md"
 template = "remote"
 remote = "github.com"
 repository = "wezterm"
-owner = "sRavioli"
-authors = [{ username = "sRavioli", signature = "Simone Fidanza" }]
+owner = "sravioli"
+authors = [{ username = "sravioli", signature = "Simone Fidanza" }]
 
 # [bump_profiles]
 
