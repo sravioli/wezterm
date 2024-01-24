@@ -15,6 +15,7 @@ wez.on("update-status", function(window, pane)
     search_mode = { text = " 󰍉 SEARCH ", bg = theme.brights[4] },
     window_mode = { text = " 󱂬 WINDOW ", bg = theme.ansi[6] },
     font_mode = { text = " 󰛖 FONT ", bg = theme.indexed[16] or theme.ansi[8] },
+    lock_mode = { text = "  LOCK ", bg = theme.ansi[8] },
   }
 
   local bg = theme.ansi[5]
@@ -41,7 +42,10 @@ wez.on("update-status", function(window, pane)
   local battery = wez.battery_info()[1]
   battery.lvl = fun.toint(fun.mround(battery.state_of_charge * 100, 10))
   battery.ico = icons.Battery[battery.state][tostring(battery.lvl)]
-  battery.full = ("%s %i%%"):format(battery.ico, tonumber(math.floor(battery.state_of_charge * 100 + 0.5)))
+  battery.full = ("%s %i%%"):format(
+    battery.ico,
+    tonumber(math.floor(battery.state_of_charge * 100 + 0.5))
+  )
 
   local datetime = wez.strftime "%a %b %-d %H:%M"
   local cwd, hostname = fun.get_cwd_hostname(pane, true)
@@ -50,7 +54,9 @@ wez.on("update-status", function(window, pane)
   local MuxWindow = window:mux_window()
   local tab_bar_width = 0
   for _, MuxTab in ipairs(MuxWindow:tabs()) do
-    tab_bar_width = tab_bar_width + strwidth(MuxTab:panes()[1]:get_title()) + 2
+    -- tab_bar_width = tab_bar_width + strwidth(MuxTab:panes()[1]:get_title()) + 2
+    tab_bar_width = tab_bar_width + string.len(MuxTab:panes()[1]:get_title()) + 2
+    wez.log_info(tab_bar_width)
   end
 
   local Config = MuxWindow:gui_window():effective_config() ---@class Config
@@ -59,7 +65,7 @@ wez.on("update-status", function(window, pane)
   tab_bar_width = tab_bar_width + mode_indicator_width + strwidth(new_tab_button)
   --~ }}}
 
-  local usable_width = pane:get_dimensions().cols - tab_bar_width - 2 ---padding
+  local usable_width = pane:get_dimensions().cols - tab_bar_width - 4 ---padding
   local fancy_bg = Config.window_frame.active_titlebar_bg
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
@@ -72,7 +78,7 @@ wez.on("update-status", function(window, pane)
     ---add each cell separator
     RightStatus:push(cell_fg, cell_bg, sep)
 
-    usable_width = usable_width - strwidth(cell) - strwidth(sep) - 1
+    usable_width = usable_width - strwidth(cell) - strwidth(sep)
 
     ---add cell or empty string
     cell = usable_width <= 0 and " " or " " .. cell .. " "
