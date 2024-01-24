@@ -5,10 +5,9 @@ local fun = require "utils.fun" ---@class Fun
 local Config = {}
 
 Config.disable_default_key_bindings = true
-Config.leader = { key = "\\", mods = "", timeout_milliseconds = 1000 }
+Config.leader = { key = "\\", mods = "ALT", timeout_milliseconds = 1000 }
 
 local keys = {
-  ["<C-\\>"] = act.SendKey { key = "\\" },
   ["<C-Tab>"] = act.ActivateTabRelative(1),
   ["<C-S-Tab>"] = act.ActivateTabRelative(-1),
   ["<M-CR>"] = act.ToggleFullScreen,
