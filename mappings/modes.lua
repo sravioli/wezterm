@@ -94,6 +94,12 @@ local key_tables = {
     ["+"] = act.AdjustPaneSize { "Up", 2 },
     ["-"] = act.AdjustPaneSize { "Down", 2 },
   }, -- }}}
+
+  -- {{{1 LOCK MODE (lock_mode)
+  lock_mode = {
+    ["<C-g>"] = "PopKeyTable",
+  },
+  -- }}}
 }
 
 Config.key_tables = {}
