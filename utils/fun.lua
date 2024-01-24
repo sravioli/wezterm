@@ -1,5 +1,6 @@
 local wez = require "wezterm" ---@class WezTerm
 local wcwidth, utf8 = require "utils.wcwidth", require "utf8"
+local insert = table.insert
 
 ---User defined utility functions
 ---@class Fun
@@ -7,10 +8,10 @@ local M = {}
 
 ---User home directory
 ---@return string home path to the suer home directory.
-M.home = tostring(os.getenv "USERPROFILE"):gsub("\\", "/")
-  or os.getenv "HOME"
-  or wez.home_dir
-  or ""
+M.home = (os.getenv "USERPROFILE" or os.getenv "HOME" or wez.home_dir or ""):gsub(
+  "\\",
+  "/"
+)
 
 ---Equivalent to POSIX `basename(3)`
 ---@param path string Any string representing a path.
@@ -43,7 +44,7 @@ end
 ---@return integer result
 M.toint = function(number, increment)
   if increment then
-    return M.round(number / increment) * increment
+    return math.floor(number / increment) * increment
   end
   return number >= 0 and math.floor(number + 0.5) or math.ceil(number - 0.5)
 end
@@ -113,9 +114,14 @@ M.get_cwd_hostname = function(pane, search_git_root_instead)
     if hostname == "" then
       hostname = wez.hostname()
     end
+    hostname = hostname:gsub("^%l", string.upper)
   end
 
-  cwd = cwd:gsub("/" .. M.home .. "(.-)$", "~%1")
+  if M.is_windows then
+    cwd = cwd:gsub("/" .. M.home .. "(.-)$", "~%1")
+  else
+    cwd = cwd:gsub(M.home .. "(.-)$", "~%1")
+  end
 
   ---search for the git root of the project if specified
   if search_git_root_instead then
@@ -208,7 +214,7 @@ M.gsplit = function(s, sep, opts)
       empty_start = false
     elseif trimempty and seg == "" then
       while not done and seg == "" do
-        table.insert(segs, 1, "")
+        insert(segs, 1, "")
         seg = _pass(s:find(sep, start, plain))
       end
       if done and seg == "" then
@@ -219,7 +225,7 @@ M.gsplit = function(s, sep, opts)
         return seg
       end
       if seg ~= "" then
-        table.insert(segs, 1, seg)
+        insert(segs, 1, seg)
       end
       return table.remove(segs)
     end
@@ -231,12 +237,10 @@ end
 M.split = function(s, sep, opts)
   local t = {}
   for c in M.gsplit(s, sep, opts) do
-    table.insert(t, c)
+    insert(t, c)
   end
   return t
 end
-
-local insert = table.insert
 
 ---Map an action using (n)vim-like syntax
 ---@param lhs string keymap
