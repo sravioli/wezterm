@@ -7,7 +7,7 @@ local fun = require "utils.fun" ---@class Fun
 ---@class Config
 local Config = {}
 
-if fun.is_windows then
+if fun.is_windows() then
   Config.default_prog =
     { "pwsh", "-NoLogo", "-ExecutionPolicy", "RemoteSigned", "-NoProfileLoadTime" }
 
@@ -55,4 +55,3 @@ Config.ssh_domains = {}
 Config.unix_domains = {}
 
 return Config
-

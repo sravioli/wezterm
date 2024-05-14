@@ -51,7 +51,7 @@ Config.font = wez.font_with_fallback {
   { family = "LegacyComputing" },
 }
 
-if require("utils.fun").is_windows then
+if require("utils.fun").is_windows() then
   Config.font_size = 9.5
 else
   Config.font_size = 10.5
@@ -96,4 +96,3 @@ Config.font_rules = {
 }
 
 return Config
-
