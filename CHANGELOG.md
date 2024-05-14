@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.1.0](https://github.com/sravioli/wezterm/compare/3709298bb9ac25a75dba06caee5383a8412602cb..3.1.0) - 2024-05-14
+#### Bug Fixes
+- **(cog)** update username - ([3709298](https://github.com/sravioli/wezterm/commit/3709298bb9ac25a75dba06caee5383a8412602cb)) - sravioli
+#### Hotfixes
+- **(config)** remove RESIZE decoration, not working under wayland - ([32e1d1e](https://github.com/sravioli/wezterm/commit/32e1d1e1709e0dfaff5f2735cc910309fff30a6b)) - sravioli
+- **(utils)** add is_windows function, fixes #1 - ([40f3306](https://github.com/sravioli/wezterm/commit/40f330649a92b1bdca6e76bd66da59feebaa9aa1)) - [@sravioli](https://github.com/sravioli)
+
+- - -
+
 ## [3.0.6](https://github.com/sRavioli/wezterm/compare/3.0.5..3.0.6) - 2024-01-24
 #### Bug Fixes
 - **(colors)** change kanagawa-lotus tab bar backround colors - ([dfe5c92](https://github.com/sRavioli/wezterm/commit/dfe5c921e5be7ddf86665d8f2f5762b8260aadf8)) - sravioli
