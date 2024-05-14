@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [3.1.1](https://github.com/sravioli/wezterm/compare/c4dfb7a506e89c021026507f1194853f8694096b..3.1.1) - 2024-05-14
+#### Hotfixes
+- correctly call is_windows() as a function - ([c4dfb7a](https://github.com/sravioli/wezterm/commit/c4dfb7a506e89c021026507f1194853f8694096b)) - sravioli
+
+- - -
+
 ## [3.1.0](https://github.com/sravioli/wezterm/compare/3709298bb9ac25a75dba06caee5383a8412602cb..3.1.0) - 2024-05-14
 #### Bug Fixes
 - **(cog)** update username - ([3709298](https://github.com/sravioli/wezterm/commit/3709298bb9ac25a75dba06caee5383a8412602cb)) - sravioli
