@@ -370,4 +370,23 @@ M.strwidth = function(str, num)
   return cells
 end
 
+---comment
+---@param path string
+---@param len any
+M.pathshortener = function(path, len)
+  local path_separator = M.is_windows() and "\\" or "/"
+  local splitted_path = M.split(path, path_separator)
+  local short_path = ""
+  for _, dir in ipairs(splitted_path) do
+    local short_dir = dir:sub(1, len)
+    if short_dir == "" then
+      break
+    end
+    short_path = short_path
+      .. (short_dir == "." and dir:sub(1, len + 1) or short_dir)
+      .. path_separator
+  end
+  wez.log_info(short_path)
+end
+
 return M
