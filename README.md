@@ -6,7 +6,7 @@
 
 ### Flexible status-bar
 
-![flexible status bar showcase](./.github/assets/flexible-status-bar-showcase.webm)
+<https://github.com/sravioli/wezterm/assets/76562615/990e099d-c933-4f45-89f6-503135341fb9>
 
 This configuration provides a flexible and responsive status bar for WezTerm,
 ensuring important information is always visible and adapts gracefully to changes
