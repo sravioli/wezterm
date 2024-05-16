@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [4.0.0](https://github.com/sravioli/wezterm/compare/2a1412cd060a7047feeea4d2e4efd702384e87f7..4.0.0) - 2024-05-16
+#### Features
+- **(events)** add command palette entry to rename tab - ([560bd59](https://github.com/sravioli/wezterm/commit/560bd59c1e46f9ef52324d627cb2db69b5eca8b0)) - sravioli
+- **(events:update-status)** make status-bar truly flexible, add padding - ([946fafa](https://github.com/sravioli/wezterm/commit/946fafa4d6a9bf4abc55c20e438cef5403f72520)) - sravioli
+- **(utils)** add path shortener function - ([2a1412c](https://github.com/sravioli/wezterm/commit/2a1412cd060a7047feeea4d2e4efd702384e87f7)) - sravioli
+- **(wezterm.lua)** load new event - ([1a22b9a](https://github.com/sravioli/wezterm/commit/1a22b9ae0b79bb61ccc91caf9b81216da371375a)) - sravioli
+- rewrite and update README - ([7bc203d](https://github.com/sravioli/wezterm/commit/7bc203dd41e353ede22f5049e9162112f29534ef)) - sravioli
+#### Miscellaneous Chores
+- update all README assets - ([23357f0](https://github.com/sravioli/wezterm/commit/23357f051322293b4a583cb620a5e0270f10097d)) - sravioli
+
+- - -
+
 ## [3.1.1](https://github.com/sravioli/wezterm/compare/c4dfb7a506e89c021026507f1194853f8694096b..3.1.1) - 2024-05-14
 #### Hotfixes
 - correctly call is_windows() as a function - ([c4dfb7a](https://github.com/sravioli/wezterm/commit/c4dfb7a506e89c021026507f1194853f8694096b)) - sravioli
