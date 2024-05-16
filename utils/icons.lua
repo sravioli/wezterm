@@ -40,6 +40,9 @@ M.Git = wez.nerdfonts.md_git
 ---@field charging table Icons for charging battery in increments of 10
 ---@field normal   table Icons for non-charging battery in increments of 10
 M.Battery = {
+  Full = {
+    ["100"] = wez.nerdfonts.md_battery,
+  },
   Charging = {
     ["00"] = wez.nerdfonts.md_battery_alert,
     ["10"] = wez.nerdfonts.md_battery_charging_10,
