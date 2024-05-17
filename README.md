@@ -155,10 +155,8 @@ The config defines custom key bindings, inspired by Vim's keymap system.
 
 The `<leader>` (`LEADER` for wezterm) key is `<M-\>` (Alt + Backspace).
 
-The key bindings are defined using Vim syntax, allowing users to leverage their
-familiarity with Vim's intuitive keymap system.  Key combinations try to follow
-the same conventions as Vim, with the added modifier of `W` that maps to the
-`SUPER`/`WINDOWS` key.
+Key combinations try to follow the same conventions as Vim, with the added modifier 
+of `W` that maps to the `SUPER`/`WINDOWS` key.
 
 Switching mode is made possibile using designated leader key combinations:
 `<leader>w` for window mode, `<leader>f` for font mode, `<leader>c` for copy mode
@@ -191,8 +189,8 @@ the previous mapping will be translated to:
 <details>
   <summary><strong>default keymaps</strong></summary>
 
-  | Key Combination | Action                                   |
-  |-----------------|------------------------------------------|
+  | Key Combination | Action                                    |
+  | --------------- |------------------------------------------ |
   | `<C-Tab>`       | Next Tab                                  |
   | `<C-S-Tab>`     | Previous Tab                              |
   | `<M-CR>`        | Toggle Fullscreen                         |
