@@ -75,7 +75,7 @@ wez.on("update-status", function(window, pane)
     { battery.full, battery.lvl .. "%", battery.ico },
   }
 
-  local usable_width = pane:get_dimensions().cols - tab_bar_width - 4 ---padding
+  local usable_width = pane:get_dimensions().cols - tab_bar_width - 6 ---padding
   local fancy_bg = Config.window_frame.active_titlebar_bg
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
