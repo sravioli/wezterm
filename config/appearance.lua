@@ -90,4 +90,3 @@ for _, tab_button in ipairs { "new_tab", "new_tab_hover" } do
 end
 
 return Config
-
