@@ -38,4 +38,3 @@ function Config:add(spec)
 end
 
 return Config
-
