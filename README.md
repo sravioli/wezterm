@@ -155,7 +155,7 @@ The config defines custom key bindings, inspired by Vim's keymap system.
 
 The `<leader>` (`LEADER` for wezterm) key is `<M-\>` (Alt + Backspace).
 
-Key combinations try to follow the same conventions as Vim, with the added modifier 
+Key combinations try to follow the same conventions as Vim, with the added modifier
 of `W` that maps to the `SUPER`/`WINDOWS` key.
 
 Switching mode is made possibile using designated leader key combinations:
@@ -182,7 +182,7 @@ return Config
 the previous mapping will be translated to:
 
 ~~~lua
-{ key = "Enter", mods = "ALT", action = act.ToggleFullScreen } 
+{ key = "Enter", mods = "ALT", action = act.ToggleFullScreen }
 ~~~
 
 <!--{{{1 DEFAULT KEYMAPS-->
