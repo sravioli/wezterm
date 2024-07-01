@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [4.0.5](https://github.com/sravioli//compare/55f272029d7d9369a738d1ea01a1bceb7734dd52..4.0.5) - 2024-07-01
+
+- - -
+
 ## [4.0.4](https://github.com/sravioli//compare/28f3f4caa47a4a2f9c440b8e83527e2e4ca00ecf..4.0.4) - 2024-07-01
 
 - - -
