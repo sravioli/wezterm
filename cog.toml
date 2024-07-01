@@ -8,7 +8,7 @@ from_latest_tag = true
 # Set a tag prefix value for cocogitto. For instance if you have a `v` as a tag
 # prefix, cocogitto will generate version starting with `v` and commands like
 # `cog changelog` will pick only those versions.
-tag_prefix = "v"
+tag_prefix = ""
 
 # Type: `Array<String>` (optional)
 # A list of glob patterns to allow bumping only on matching branches.
