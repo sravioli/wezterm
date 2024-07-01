@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [4.1.0](https://github.com/sravioli//compare/9222ba36fa40e458dd5ff5cf6b719045c3c90504..4.1.0) - 2024-07-01
+#### Bug Fixes
+- do not automatically fallback to dark mode - ([5db3d26](https://github.com/sravioli//commit/5db3d260ba1d1d5d7b477246c5f27d5d9a627682)) - sravioli
+- remove `fun.in_windows()` function - ([e181391](https://github.com/sravioli//commit/e181391744a5a3dac1837b12d174f6a4401bc852)) - sravioli
+#### Features
+- **(README)** thanks KevinSilvester! - ([f492b9d](https://github.com/sravioli//commit/f492b9d1a48f36a88e09df3d491e56948ba2a7a3)) - sravioli
+- **(utils:fun)** add function to determine platform - ([55847ed](https://github.com/sravioli//commit/55847edd50715003e6fdd0a6695cff3ff29351b0)) - sravioli
+- add KevinSilvester gpu picker - ([70a5a8d](https://github.com/sravioli//commit/70a5a8df8ce5cc424f374b73c8356b8ec7f10230)) - sravioli
+#### Style
+- change all occurences of 'WezTerm' to 'Wezterm' - ([9222ba3](https://github.com/sravioli//commit/9222ba36fa40e458dd5ff5cf6b719045c3c90504)) - sravioli
+
+- - -
+
 ## [4.0.5](https://github.com/sravioli//compare/55f272029d7d9369a738d1ea01a1bceb7734dd52..4.0.5) - 2024-07-01
 
 - - -
