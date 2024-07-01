@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [4.0.1](https://github.com/sravioli/wezterm/compare/12048c2a19d1b7878838039bf480866cffb5fcb1..4.0.1) - 2024-07-01
+#### Bug Fixes
+- **(events:update-status)** increase padding for status-bar - ([259a6b2](https://github.com/sravioli/wezterm/commit/259a6b20b707ac481dcfe3fa7faf43d676c95e6b)) - sravioli
+- update battery icons (fixes #2) - ([405e918](https://github.com/sravioli/wezterm/commit/405e91842ca5173ab28cc35c57ce005325551c55)) - [@sravioli](https://github.com/sravioli)
+- remove README repetitions - ([05b8162](https://github.com/sravioli/wezterm/commit/05b816256d047fd704338015ead1f47672cd560d)) - [@sravioli](https://github.com/sravioli)
+#### Features
+- **(utils)** improve is_windows function - ([8cd6247](https://github.com/sravioli/wezterm/commit/8cd624721f2608c27f1da67147807c073b9563b1)) - sravioli
+#### Hotfixes
+- display correctly the status-bar showcase - ([12048c2](https://github.com/sravioli/wezterm/commit/12048c2a19d1b7878838039bf480866cffb5fcb1)) - [@sravioli](https://github.com/sravioli)
+#### Miscellaneous Chores
+- remove line ending whitespace - ([c1a9f33](https://github.com/sravioli/wezterm/commit/c1a9f33ac251d70a62e473260bf028e681cb9f28)) - sravioli
+- format with stylua - ([b69abb3](https://github.com/sravioli/wezterm/commit/b69abb302ac3eadd5b2535927d542a6bdbfe09a1)) - sravioli
+- remove unused asset - ([ae00027](https://github.com/sravioli/wezterm/commit/ae00027dcfa8a9b6a3978edf27cd6f26e8c4669d)) - sravioli
+
+- - -
+
 ## [4.0.0](https://github.com/sravioli/wezterm/compare/2a1412cd060a7047feeea4d2e4efd702384e87f7..4.0.0) - 2024-05-16
 #### Features
 - **(events)** add command palette entry to rename tab - ([560bd59](https://github.com/sravioli/wezterm/commit/560bd59c1e46f9ef52324d627cb2db69b5eca8b0)) - sravioli
