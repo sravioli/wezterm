@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [4.0.2](https://github.com/sravioli//compare/017d5d39052c2510a491df990a50604a2ffbd2b1..4.0.2) - 2024-07-01
+#### Bug Fixes
+- **(cocogitto)** remove tag prefix - ([6a42bfa](https://github.com/sravioli//commit/6a42bfa10fa3541548221a96edbe2bed1c15e051)) - sravioli
+- **(cog)** update username - ([570babc](https://github.com/sravioli//commit/570babc3b229737ed612d5e38d71ca7cd79afca6)) - sravioli
+- **(colors)** change kanagawa-lotus tab bar backround colors - ([81b1819](https://github.com/sravioli//commit/81b18197633b38982c3afdbb9236af2e7fdea269)) - sravioli
+- **(config:general)** remove default program for Alpine - ([a28e46d](https://github.com/sravioli//commit/a28e46d48df48a86a297acac4311be59c1cad22e)) - [@sravioli](https://github.com/sravioli)
+- **(events:format-tab-title)** don't render in fancy bar and with no bar, nil check icons - ([5438969](https://github.com/sravioli//commit/5438969db37e87caeebdfd5e2fa420ee60cb2b12)) - [@sravioli](https://github.com/sravioli)
+- **(events:update-status)** increase padding for status-bar - ([396a15e](https://github.com/sravioli//commit/396a15e8817ebf531b0e9e1a9b7400aaea7779dc)) - sravioli
+- **(events:update-status)** increase padding for status-bar - ([3e6bf9c](https://github.com/sravioli//commit/3e6bf9c915e578df85bb154e9dcd93653d356c0e)) - sravioli
+- **(events:update-status)** add fancy tab bar support - ([4047afc](https://github.com/sravioli//commit/4047afcdbb0e12285f9a101566805bfb90456075)) - [@sravioli](https://github.com/sravioli)
+- **(events:update-status)** check usable width with `<=` instead of `<` - ([fb8651c](https://github.com/sravioli//commit/fb8651cc632d3c5d758358a2a17aefd76dabe407)) - [@sravioli](https://github.com/sravioli)
+- **(events:update-stauts)** display correct battery percentage, add padding - ([bf42e1b](https://github.com/sravioli//commit/bf42e1b1978cd729b1a5ded630e004563b8b3236)) - sravioli
+- **(mappings)** change leader key - ([88adc01](https://github.com/sravioli//commit/88adc0100afcfa1c124c15f15815326ae42e59e8)) - sravioli
+- **(mappings:default)** change leader key - ([c6940cf](https://github.com/sravioli//commit/c6940cf7084c2cb1df620556dd13fb579366cc12)) - [@sravioli](https://github.com/sravioli)
+- **(mappings:default)** change leader key - ([d96ff2f](https://github.com/sravioli//commit/d96ff2f46fc8854348a79a1fa28a015af71ae1cf)) - [@sravioli](https://github.com/sravioli)
+- **(mappings:modes)** change config initialization - ([911af0a](https://github.com/sravioli//commit/911af0a2829a458f73920257982f039766ec4a2d)) - [@sravioli](https://github.com/sravioli)
+- **(utils:fun)** correctly retrieve the user home directory - ([77f53de](https://github.com/sravioli//commit/77f53de1da29800b1dd17bdf21fff1465038ff13)) - sravioli
+- **(utils:fun)** make `tbl_merge()` take a list of strings - ([196e915](https://github.com/sravioli//commit/196e915b65032234470bf660051b2ab81757b74b)) - [@sravioli](https://github.com/sravioli)
+- remove README repetitions - ([e1a665a](https://github.com/sravioli//commit/e1a665af160083eab31d5dcead01bd3f9da93d25)) - [@sravioli](https://github.com/sravioli)
+- update icons.luafixes issue with battery.ico if computer reports "Full" instead of charging or discharging. Issue #2 in main repo. - ([45fbf19](https://github.com/sravioli//commit/45fbf19f72828ce8e74037e233f5f9b91c074395)) - Adam K
+- embed showcase video - ([017d5d3](https://github.com/sravioli//commit/017d5d39052c2510a491df990a50604a2ffbd2b1)) - [@sravioli](https://github.com/sravioli)
+#### Features
+- **(config:font)** add linux support - ([6eb2499](https://github.com/sravioli//commit/6eb2499a83d8a05669621da21665f443a3f3a71f)) - sravioli
+- **(config:general)** add linux support - ([0ddfe3d](https://github.com/sravioli//commit/0ddfe3d63586dd8c6e1af8d891163c50e0901378)) - sravioli
+- **(events)** add command palette entry to rename tab - ([7e0331e](https://github.com/sravioli//commit/7e0331ef486598fcd94688192fef16f57d90b4bc)) - sravioli
+- **(events:format-window-title)** check for nvim and cmd - ([d3a5e9e](https://github.com/sravioli//commit/d3a5e9e5f5f2b78ea2512a60137b7e89ec3294c7)) - [@sravioli](https://github.com/sravioli)
+- **(events:lock-interface)** add event to lock the interface - ([494f5f9](https://github.com/sravioli//commit/494f5f936a29b5a1880959f8ed5c1f82af3b30b4)) - sravioli
+- **(events:update-status)** make status-bar truly flexible, add padding - ([16695c5](https://github.com/sravioli//commit/16695c5bf07d1efdc2ef2fb463f289899200f8a7)) - sravioli
+- **(events:update-status)** display real battery level - ([ad89081](https://github.com/sravioli//commit/ad890817f031718a5a6cddae1c72747ff15bd7a4)) - sravioli
+- **(mappings)** add lock mode - ([7d4fa6b](https://github.com/sravioli//commit/7d4fa6bb5d8050f8632f7022f133f737c3058cca)) - sravioli
+- **(mappings:default)** add mapping for quick window navigation - ([16763f9](https://github.com/sravioli//commit/16763f929dcb30458b6c12f1745fa93c243e7c0e)) - [@sravioli](https://github.com/sravioli)
+- **(utils)** improve is_windows function - ([8bc3bb9](https://github.com/sravioli//commit/8bc3bb9cba91168668621c5ffa41c6491c944cac)) - sravioli
+- **(utils)** improve is_windows function - ([ba8ddb1](https://github.com/sravioli//commit/ba8ddb1812a6d248f4984019b6ed8dc3c0f4d36d)) - sravioli
+- **(utils)** add path shortener function - ([88bca6b](https://github.com/sravioli//commit/88bca6b1db9494f4d8b9f07b3abe681af639d345)) - sravioli
+- **(utils:fun)** add linux support, uppercase first letter of hostname - ([c4d1856](https://github.com/sravioli//commit/c4d18560482b4debe0267b442729d2067fad23ed)) - sravioli
+- **(wezterm.lua)** load new event - ([44e2043](https://github.com/sravioli//commit/44e204367db52214eb09e1e87cd4158d3cb91196)) - sravioli
+- **(wezterm.lua)** source new event - ([70181bb](https://github.com/sravioli//commit/70181bb0f567f80c6617d9cfd3cc8a26552d161e)) - sravioli
+- **(wezterm.lua)** load new config - ([9cc1a97](https://github.com/sravioli//commit/9cc1a971772f70323b1f4c4849aaaa000a0f44c0)) - [@sravioli](https://github.com/sravioli)
+- rewrite and update README - ([cdcfaa8](https://github.com/sravioli//commit/cdcfaa8018d6ee632ac0d1c831b5f6d9e7c392ea)) - sravioli
+- merge config in config and mappings folder - ([4dace64](https://github.com/sravioli//commit/4dace64f1d2fc7d7353153ef959d3aa9a52f3456)) - [@sravioli](https://github.com/sravioli)
+#### Hotfixes
+- **(config)** remove RESIZE decoration, not working under wayland - ([14845f1](https://github.com/sravioli//commit/14845f133bea85e99fd374ea2937898e92630da0)) - sravioli
+- **(config:general)** typo in wsl domains - ([8588bbc](https://github.com/sravioli//commit/8588bbc7e2c01c9dcc65eba45ba58d93af0d7532)) - [@sravioli](https://github.com/sravioli)
+- **(utils)** add is_windows function, fixes #1 - ([5313598](https://github.com/sravioli//commit/53135983af7f7f4bd3db86f6579dd7bf9f28a053)) - [@sravioli](https://github.com/sravioli)
+- display correctly the status-bar showcase - ([8f292c7](https://github.com/sravioli//commit/8f292c7a227e59d44a67db79265cc38a93a308db)) - [@sravioli](https://github.com/sravioli)
+- correctly call is_windows() as a function - ([f06414a](https://github.com/sravioli//commit/f06414a2777508f849d7e292b04cea7240dfed8c)) - sravioli
+#### Refactoring
+- **(utils:wcwidth)** rewrite portions of the wcwidth file - ([bbf92cb](https://github.com/sravioli//commit/bbf92cb116590053d4993784fd6b70003382e649)) - [@sravioli](https://github.com/sravioli)
+
+- - -
+
 ## [4.0.1](https://github.com/sravioli/wezterm/compare/12048c2a19d1b7878838039bf480866cffb5fcb1..4.0.1) - 2024-07-01
 #### Bug Fixes
 - **(events:update-status)** increase padding for status-bar - ([259a6b2](https://github.com/sravioli/wezterm/commit/259a6b20b707ac481dcfe3fa7faf43d676c95e6b)) - sravioli
