@@ -1,4 +1,4 @@
-local wez = require "wezterm" ---@class WezTerm
+local wez = require "wezterm" ---@class Wezterm
 local act = wez.action
 
 local fun = require "utils.fun" ---@class Fun

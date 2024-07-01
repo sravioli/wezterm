@@ -1,4 +1,4 @@
-local wez = require "wezterm" ---@class WezTerm
+local wez = require "wezterm" ---@class Wezterm
 local wcwidth, utf8 = require "utils.wcwidth", require "utf8"
 local insert = table.insert
 

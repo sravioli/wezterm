@@ -1,7 +1,7 @@
 ---@class Config
 local Config = {}
 
----@class WezTerm
+---@class Wezterm
 local wez = require "wezterm"
 
 function Config:new()

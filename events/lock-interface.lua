@@ -1,4 +1,4 @@
-local wez = require "wezterm" ---@class WezTerm
+local wez = require "wezterm" ---@class Wezterm
 
 wez.on("lock-interface", function(window, pane)
   local overrides = window:get_config_overrides() or {}

@@ -1,4 +1,4 @@
----@class WezTerm
+---@class Wezterm
 local wez = require "wezterm"
 
 ---@class Fun

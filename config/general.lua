@@ -1,4 +1,4 @@
----@class WezTerm
+---@class Wezterm
 local wez = require "wezterm"
 
 local icons = require "utils.icons" ---@class Icons

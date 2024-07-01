@@ -1,4 +1,4 @@
-local wez = require "wezterm" ---@class WezTerm
+local wez = require "wezterm" ---@class Wezterm
 local fun = require "utils.fun" ---@class Fun
 local icons = require "utils.icons" ---@class Icons
 local tabicons = icons.Separators.TabBar ---@class TabBarIcons

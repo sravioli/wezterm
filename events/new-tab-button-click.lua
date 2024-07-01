@@ -1,4 +1,4 @@
----@class WezTerm
+---@class Wezterm
 local wez = require "wezterm"
 
 wez.on("new-tab-button-click", function(window, pane, button, default_action)
