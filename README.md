@@ -49,6 +49,8 @@ immediate feedback on the terminal's operational state.
 Search, window and copy mode feature vim-like keymaps.
 
 <!--{{{1 MODES KEYMAPS -->
+
+<!-- {{{2 COPY MODE-->
 <details>
   <summary><strong>copy-mode</strong></summary>
 
@@ -90,25 +92,27 @@ Search, window and copy mode feature vim-like keymaps.
   | `y`           | Copy selection and exit                  |
 
 </details>
+<!-- }}}  -->
 
+<!-- {{{2 SEARCH MODE -->
 <details>
   <summary><strong>search-mode</strong></summary>
 
-  | Key           | Action                   |
-  | ------------- | ------------------------ |
-  | `<ESC>`/`<q>` | Exit search mode         |
-  | `<CR>`        | Jump to prior match      |
-  | `<C-n>`       | Jump to next match       |
-  | `<C-N>`       | Jump to prior match      |
-  | `<C-r>`       | Cycle match type         |
-  | `<C-u>`       | Clear search pattern     |
-  | `<PageUp>`    | Jump to prior match page |
-  | `<PageDown>`  | Jump to next match page  |
-  | `<UpArrow>`   | Jump to prior match      |
-  | `<DownArrow>` | Jump to next match       |
+  | Key                   | Action                   |
+  | --------------------- | ------------------------ |
+  | `<ESC>`/`<q>`         | Exit search mode         |
+  | `<CR>`                | Jump to prior match      |
+  | `<C-n>`/`<DownArrow>` | Jump to next match       |
+  | `<C-N>`/`<UpArrow>`   | Jump to prior match      |
+  | `<C-r>`               | Cycle match type         |
+  | `<C-u>`               | Clear search pattern     |
+  | `<PageUp>`            | Jump to prior match page |
+  | `<PageDown>`          | Jump to next match page  |
 
 </details>
+<!-- }}} -->
 
+<!-- FONT MODE {{{2 -->
 <details>
   <summary><strong>font-mode</strong></summary>
 
@@ -120,33 +124,32 @@ Search, window and copy mode feature vim-like keymaps.
   | `0`           | Reset font size    |
 
 </details>
+<!-- }}} -->
 
+<!-- WINDOW MODE {{{2 -->
 <details>
   <summary><strong>window-mode</strong></summary>
 
-  | Key           | Action                        |
-  | --------------| ----------------------------- |
-  | `<ESC>`/`<q>` | Exit window mode              |
-  | `p`           | Pick pane                     |
-  | `x`           | Swap with active pane         |
-  | `q`           | Close current pane            |
-  | `o`           | Toggle pane zoom state        |
-  | `v`           | Split horizontal              |
-  | `s`           | Split vertical                |
-  | `<LeftArrow>` | Activate pane to the left     |
-  | `<DownArrow>` | Activate pane below           |
-  | `<UpArrow>`   | Activate pane above           |
-  | `<RightArrow>`| Activate pane to the right    |
-  | `h`           | Activate pane to the left     |
-  | `j`           | Activate pane below           |
-  | `k`           | Activate pane above           |
-  | `l`           | Activate pane to the right    |
-  | `<`           | Adjust pane size to the left  |
-  | `<S->>`       | Adjust pane size to the right |
-  | `+`           | Adjust pane size upwards      |
-  | `-`           | Adjust pane size downwards    |
+  | Key               | Action                        |
+  | ----------------- | ----------------------------- |
+  | `<ESC>`/`<q>`     | Exit window mode              |
+  | `p`               | Pick pane                     |
+  | `x`               | Swap with active pane         |
+  | `q`               | Close current pane            |
+  | `o`               | Toggle pane zoom state        |
+  | `v`               | Split horizontal              |
+  | `s`               | Split vertical                |
+  | `h`/`<LeftArrow>` | Activate pane to the left     |
+  | `j`/`<DownArrow>` | Activate pane below           |
+  | `k`/`<UpArrow>`   | Activate pane above           |
+  | `l`/`<RightArrow>`| Activate pane to the right    |
+  | `<`               | Adjust pane size to the left  |
+  | `>`               | Adjust pane size to the right |
+  | `+`               | Adjust pane size upwards      |
+  | `-`               | Adjust pane size downwards    |
 
 </details>
+<!-- }}} -->
 <!--}}}-->
 
 ### Vim-style keymaps
@@ -252,3 +255,5 @@ Special thanks to [@Wez](https://www.github.com/wez) (of course), to
 [lua-wcwidth](https://github.com/aperezdc/lua-wcwidth) and to
 [@KevinSilvester](https://github.com/KevinSilvester) for his implementation of an
 auto picker for a GPU adapter.
+
+<!-- vim: set fdm=marker fdl=1 -->
