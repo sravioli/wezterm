@@ -93,7 +93,7 @@ post_bump_hooks = [ "git push origin {{version}}", "git push" ]
 
   # Type: `string` (optional)
   # Name of the repository on the remote git platform.
-  repository = ""
+  repository = "wezterm"
 
   # Type: `string` (optional)
   # Owner of the repository on the remote git platform.
