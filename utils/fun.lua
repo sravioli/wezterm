@@ -7,9 +7,29 @@ local insert = table.insert
 local M = {}
 
 ---Checks on which target triple wezterm was built on.
----@return boolean is_windows
-M.is_windows = function()
+---@return boolean is_win
+M.is_win = function()
   return string.find(wez.target_triple, "windows") ~= nil
+end
+
+---@class Platform
+---@field os string The operating system name ("windows", "linux", "mac", or "unknown").
+---@field is_win boolean Whether the platform is Windows.
+---@field is_linux boolean Whether the platform is Linux.
+---@field is_mac boolean Whether the platform is Mac.
+---
+---Determines the platform based on the target triple.
+---@return Platform platform
+M.platform = function()
+  local triple = wez.target_triple
+  local is_win = triple:find "windows" ~= nil
+  local is_linux = triple:find "linux" ~= nil
+  local is_mac = triple:find "apple" ~= nil
+  local os = is_win and "windows"
+    or is_linux and "linux"
+    or "is_mac" and "mac"
+    or "unknown"
+  return { os = os, is_win = is_win, is_linux = is_linux, is_mac = is_mac }
 end
 
 ---User home directory
@@ -123,7 +143,7 @@ M.get_cwd_hostname = function(pane, search_git_root_instead)
     hostname = hostname:gsub("^%l", string.upper)
   end
 
-  if M.is_windows() then
+  if M.platform().is_win then
     cwd = cwd:gsub("/" .. M.home .. "(.-)$", "~%1")
   else
     cwd = cwd:gsub(M.home .. "(.-)$", "~%1")
@@ -348,7 +368,7 @@ end
 ---@param path string
 ---@param len any
 M.pathshortener = function(path, len)
-  local path_separator = M.is_windows() and "\\" or "/"
+  local path_separator = M.platform().is_win and "\\" or "/"
   local splitted_path = M.split(path, path_separator)
   local short_path = ""
   for _, dir in ipairs(splitted_path) do
