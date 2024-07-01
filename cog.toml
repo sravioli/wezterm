@@ -36,11 +36,11 @@ skip_ci = "[skip ci]"
 
 # Type: `boolean: false` (optional)
 # Allows to perform bump even if there are untracked or uncommited changes.
-skip_untracked = false
+# skip_untracked = false
 
 # Type: `boolean: false` (optional)
 # Disable changelog generation when bumping.
-disable_changelog = false
+# disable_changelog = false
 
 # Type: `boolean: false` (optional)
 # Cocogitto will not create a bump commit and will instead tag the latest commit.
