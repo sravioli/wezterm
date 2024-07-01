@@ -32,7 +32,7 @@ post_bump_hooks = [ "git push origin {{version}}", "git push" ]
 # Type: `String` (optional)
 # A "skip-ci" string to add to the commits when using the bump or commit commands.
 # Default value is `[skip ci]`.
-skip_ci = "[skip ci]"
+# skip_ci = "[skip ci]"
 
 # Type: `boolean: false` (optional)
 # Allows to perform bump even if there are untracked or uncommited changes.
