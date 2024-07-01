@@ -44,7 +44,7 @@ skip_ci = "[skip ci]"
 
 # Type: `boolean: false` (optional)
 # Cocogitto will not create a bump commit and will instead tag the latest commit.
-disable_bump_commit = false
+# disable_bump_commit = false
 
 # Type: `Hashmap<String, BumpProfile>` (optional)
 # Add additional pre-bump and post-bump hooks profile. a profile can be used with
