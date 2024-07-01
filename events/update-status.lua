@@ -10,7 +10,7 @@ local icons = require "utils.icons"
 ---@class Layout
 local StatusBar = require "utils.layout"
 
-local strwidth = fun.is_windows() and string.len or fun.strwidth
+local strwidth = fun.platform().is_win and string.len or fun.strwidth
 
 -- luacheck: push ignore 561
 wez.on("update-status", function(window, pane)

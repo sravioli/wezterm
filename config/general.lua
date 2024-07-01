@@ -1,13 +1,11 @@
----@class Wezterm
-local wez = require "wezterm"
-
 local icons = require "utils.icons" ---@class Icons
 local fun = require "utils.fun" ---@class Fun
+local platform = fun.platform()
 
 ---@class Config
 local Config = {}
 
-if fun.is_windows() then
+if platform.is_win then
   Config.default_prog =
     { "pwsh", "-NoLogo", "-ExecutionPolicy", "RemoteSigned", "-NoProfileLoadTime" }
 
