@@ -1,25 +1,109 @@
-# A list of glob patterns describing branches on which semver bump are allowed
-branch_whitelist = ["main"]
+# ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~   General ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~
+
+# Type: `boolean: false` (optional)
+# Whether to only consider commits since the latest SemVer tag.
+from_latest_tag = true
+
+# Type: `string` (optional)
+# Set a tag prefix value for cocogitto. For instance if you have a `v` as a tag
+# prefix, cocogitto will generate version starting with `v` and commands like
+# `cog changelog` will pick only those versions.
+tag_prefix = "v"
+
+# Type: `Array<String>` (optional)
+# A list of glob patterns to allow bumping only on matching branches.
+branch_whitelist = [ "main" ]
+
+# Type: `boolean: false` (optional)
+# Whether to ignore or to lint merge commits.
 ignore_merge_commits = true
-pre_bump_hooks = []
-post_bump_hooks = [
-  # "markdownlint-cli2 --fix ./CHANGELOG.md",
-  "git push",
-  "git push origin {{version}}",
-]
 
+
+# ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~  Bump Config ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~
+
+# Type: `Array<String>` (optional)
+# An array of command to execute before a version bump.
+pre_bump_hooks = [  ]
+
+# Type: `Array<String>` (optional)
+# An array of command to execute after a version bump.
+post_bump_hooks = [ "git push origin {{version}}", "git push" ]
+
+# Type: `String` (optional)
+# A "skip-ci" string to add to the commits when using the bump or commit commands.
+# Default value is `[skip ci]`.
+skip_ci = "[skip ci]"
+
+# Type: `boolean: false` (optional)
+# Allows to perform bump even if there are untracked or uncommited changes.
+skip_untracked = false
+
+# Type: `boolean: false` (optional)
+# Disable changelog generation when bumping.
+disable_changelog = false
+
+# Type: `boolean: false` (optional)
+# Cocogitto will not create a bump commit and will instead tag the latest commit.
+disable_bump_commit = false
+
+# Type: `Hashmap<String, BumpProfile>` (optional)
+# Add additional pre-bump and post-bump hooks profile. a profile can be used with
+# the `cog bump --hook-profile <profile_name>` flag.
+[bump_profiles]
+
+
+# ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~  Commit Types ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~
+# Type: `Hashmap<String, CommitType>` (optional)
+# Extend the allowed commit types, creating a new cog commit command, and allowing
+# generation of changelog entries for the given type. Can also be used to override
+# the default commit types.
+#
+# FIELDS:
+# - `changelog_title` [string]: change changelog title for the given commit type.
+# - `omit_from_changelog` [boolean: false] (optional): Do not generate changelog
+#   entries for the given commit type.
+# - `bump_patch` [boolean: false] (optional): Commits of this type will bump the
+#   patch version of a tag.
+# - `bump_minor` [boolean: false] (optional):  Commits of this type will bump the
+#   minor version of a tag.
 [commit_types]
-hotfix = { changelog_title = "Hotfixes" }
-release = { changelog_title = "Releases" }
+  chore   = { changelog_title = "Misc", omit_from_changelog = true }
+  hotfix  = { changelog_title = "Hotfixes" }
+  release = { changelog_title = "Releases" }
 
+
+# ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~   Changelog ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~
 [changelog]
-path = "CHANGELOG.md"
-template = "remote"
-remote = "github.com"
-repository = "wezterm"
-owner = "sravioli"
-authors = [{ username = "sravioli", signature = "Simone Fidanza" }]
+  # Type: `string: "CHANGELOG.md"` (optional)
+  # Path the repository markdown changelog.
+  path = "CHANGELOG.md"
 
-# [bump_profiles]
+  # Type: `string: "default"` (optional)
+  # Name of the builtin template to use for changelog generation or path to a custom
+  # template. Note that remote, repository and owner are mandatory if the `"remote"`
+  # built-in template us used or if your custom template make use of those variables.
+  #
+  # Built-in templates : `default`, `remote`, `full_hash`
+  template = "remote"
 
-# [packages]
+  # Type: `string` (optional)
+  # Domain name of the git platform hosting the repository, used for Markdown link
+  # generation in changelogs. when provided repository and owner are also required.
+  remote = "github.com"
+
+  # Type: `string` (optional)
+  # Name of the repository on the remote git platform.
+  repository = ""
+
+  # Type: `string` (optional)
+  # Owner of the repository on the remote git platform.
+  owner = "sravioli"
+
+  # Type: `Array<Author>` (optional)
+  # A list of commit authors with their git signature and git platform username
+  # to generate Markdown links in changelogs.
+  authors = [ { signature = "Simone Fidanza", username = "sravioli" } ]
+
+
+[packages]
+
