@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [4.0.3](https://github.com/sravioli//compare/96aaed2d091a8dc74dab9912fc409d84d837b094..4.0.3) - 2024-07-01
+
+- - -
+
 ## [4.0.2](https://github.com/sravioli//compare/017d5d39052c2510a491df990a50604a2ffbd2b1..4.0.2) - 2024-07-01
 #### Bug Fixes
 - **(cocogitto)** remove tag prefix - ([6a42bfa](https://github.com/sravioli//commit/6a42bfa10fa3541548221a96edbe2bed1c15e051)) - sravioli
