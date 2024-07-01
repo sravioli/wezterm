@@ -6,12 +6,6 @@ local insert = table.insert
 ---@class Fun
 local M = {}
 
----Checks on which target triple wezterm was built on.
----@return boolean is_win
-M.is_win = function()
-  return string.find(wez.target_triple, "windows") ~= nil
-end
-
 ---@class Platform
 ---@field os string The operating system name ("windows", "linux", "mac", or "unknown").
 ---@field is_win boolean Whether the platform is Windows.
