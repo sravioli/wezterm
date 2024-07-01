@@ -247,6 +247,8 @@ bold-italics.
 
 ### Thanks
 
-Special thanks to [@Wez](https://www.github.com/wez) (of course) and to
+Special thanks to [@Wez](https://www.github.com/wez) (of course), to
 [@apredezdc](https://github.com/aperezdc/) for
-[lua-wcwidth](https://github.com/aperezdc/lua-wcwidth)
+[lua-wcwidth](https://github.com/aperezdc/lua-wcwidth) and to
+[@KevinSilvester](https://github.com/KevinSilvester) for his implementation of an
+auto picker for a GPU adapter.
