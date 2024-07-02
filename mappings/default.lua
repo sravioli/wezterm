@@ -41,6 +41,7 @@ local keys = {
   ["<C-M-l>"] = act.ActivatePaneDirection "Right",
 
   ---key tables
+  ["<leader>h"] = act.ActivateKeyTable { name = "help_mode", one_shot = true },
   ["<leader>w"] = act.ActivateKeyTable { name = "window_mode", one_shot = false },
   ["<leader>f"] = act.ActivateKeyTable { name = "font_mode", one_shot = false },
   ["<leader>c"] = act.ActivateCopyMode,

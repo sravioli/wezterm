@@ -97,6 +97,8 @@ local key_tables = {
     ["<C-g>"] = "PopKeyTable",
   },
   -- }}}
+
+  help_mode = {},
 }
 
 Config.key_tables = {}
