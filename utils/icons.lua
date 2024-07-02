@@ -13,6 +13,7 @@ M.Separators = {
   StatusBar = {
     left = wez.nerdfonts.pl_left_hard_divider,
     right = wez.nerdfonts.pl_right_hard_divider,
+    modal = wez.nerdfonts.ple_forwardslash_separator,
   },
 
   ---@class TabBarIcons: string, string, string
@@ -90,4 +91,3 @@ M.Numbers = {
 }
 
 return M
-
