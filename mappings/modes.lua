@@ -10,7 +10,6 @@ local key_tables = {
   -- {{{1 COPY MODE (copy_mode)
   copy_mode = {
     ["<ESC>"] = act.CopyMode "Close",
-    ["<q>"] = act.CopyMode "Close",
     ["<Tab>"] = act.CopyMode "MoveForwardWord",
     ["<S-Tab>"] = act.CopyMode "MoveBackwardWord",
     ["<CR>"] = act.CopyMode "MoveToStartOfNextLine",
@@ -54,8 +53,6 @@ local key_tables = {
   -- {{{1 SEARCH MODE (search_mode)
   search_mode = {
     ["<ESC>"] = act.CopyMode "Close",
-    ["<q>"] = act.CopyMode "Close",
-    ["<CR>"] = act.CopyMode "PriorMatch",
     ["<C-n>"] = act.CopyMode "NextMatch",
     ["<C-N>"] = act.CopyMode "PriorMatch",
     ["<C-r>"] = act.CopyMode "CycleMatchType",
@@ -113,4 +110,3 @@ for mode, key_table in pairs(key_tables) do
 end
 
 return Config
-
