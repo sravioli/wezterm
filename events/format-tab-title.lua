@@ -1,7 +1,14 @@
-local wez = require "wezterm" ---@class Wezterm
-local fun = require "utils.fun" ---@class Fun
-local icons = require "utils.icons" ---@class Icons
-local tabicons = icons.Separators.TabBar ---@class TabBarIcons
+---@class Wezterm
+local wez = require "wezterm"
+
+---@class Fun
+local fun = require "utils.fun"
+
+---@class Icons
+local icons = require "utils.icons"
+
+---@class TabBarIcons
+local tabicons = icons.Separators.TabBar
 
 wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   if config.use_fancy_tab_bar or not config.enable_tab_bar then
@@ -95,4 +102,3 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
 
   return TabTitle
 end)
-
