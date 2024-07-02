@@ -5,7 +5,7 @@ local fun = require "utils.fun" ---@class Fun
 local Config = {}
 
 Config.disable_default_key_bindings = true
-Config.leader = { key = "\\", mods = "ALT", timeout_milliseconds = 1000 }
+Config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
 
 local keys = {
   ["<C-Tab>"] = act.ActivateTabRelative(1),
@@ -57,4 +57,3 @@ for lhs, rhs in pairs(keys) do
 end
 
 return Config
-
