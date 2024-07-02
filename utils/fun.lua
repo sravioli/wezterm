@@ -264,7 +264,7 @@ end
 
 ---Map an action using (n)vim-like syntax
 ---@param lhs string keymap
----@param rhs function|string `wezterm.action.<action>`
+---@param rhs string|table `wezterm.action.<action>`
 ---@param tbl table table to insert keys to
 M.map = function(lhs, rhs, tbl)
   ---Inserts the keymap in the table
@@ -374,7 +374,6 @@ M.pathshortener = function(path, len)
       .. (short_dir == "." and dir:sub(1, len + 1) or short_dir)
       .. path_separator
   end
-  wez.log_info(short_path)
 end
 
 return M
