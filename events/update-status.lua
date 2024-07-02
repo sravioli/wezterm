@@ -15,13 +15,7 @@ local strwidth = fun.platform().is_win and string.len or fun.strwidth
 -- luacheck: push ignore 561
 wez.on("update-status", function(window, pane)
   local theme = require("colors")[fun.get_scheme()]
-  local modes = {
-    copy_mode = { text = " 󰆏 COPY ", bg = theme.brights[3] },
-    search_mode = { text = " 󰍉 SEARCH ", bg = theme.brights[4] },
-    window_mode = { text = " 󱂬 WINDOW ", bg = theme.ansi[6] },
-    font_mode = { text = " 󰛖 FONT ", bg = theme.indexed[16] or theme.ansi[8] },
-    lock_mode = { text = "  LOCK ", bg = theme.ansi[8] },
-  }
+  local modes = require "utils.modes_list"
 
   local bg = theme.ansi[5]
   local mode_indicator_width = 0
