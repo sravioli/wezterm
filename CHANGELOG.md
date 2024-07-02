@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [5.0.0](https://github.com/sravioli/wezterm/compare/fc631022c60027a0461db747782d4c936fb47350..5.0.0) - 2024-07-02
+#### Bug Fixes
+- **(README)** streamline key tables by removing dupes - ([112a55a](https://github.com/sravioli/wezterm/commit/112a55a3a507c8f3c04f8752972e0d6ac160635b)) - sravioli
+- **(mappings:default)** CHANGE LEADER TO `C-Space` - ([894a104](https://github.com/sravioli/wezterm/commit/894a104e23ad0cce08f8dd9285526325e1072b49)) - sravioli
+- **(mappings:modes)** remove redundant keymaps - ([0d805e3](https://github.com/sravioli/wezterm/commit/0d805e3f96099c8784e5f01431fd13aa15353fdb)) - sravioli
+#### Features
+- **(events:update-status)** add flexible modal prompts when invoking key tables - ([6976650](https://github.com/sravioli/wezterm/commit/69766500cab51b80507d96e39a02b380be4993dc)) - sravioli
+- **(mappings)** add help mode key table - ([116c743](https://github.com/sravioli/wezterm/commit/116c743349acc75dcd3f9a6d7e83e2afb65da008)) - sravioli
+- **(utils:icon)** add separator for modal prompt - ([9142bd3](https://github.com/sravioli/wezterm/commit/9142bd3243eb1d6a0c2eed6974103c5ac925af30)) - sravioli
+- **(utils:modes_list)** move modes list, add keymap list and descr - ([8b32196](https://github.com/sravioli/wezterm/commit/8b3219688bc36d877cac548e7acc78631a52c6f5)) - sravioli
+- document the new modal prompts in the README - ([83f9f82](https://github.com/sravioli/wezterm/commit/83f9f82f8f27dfcd4406085249ce5accc16fef40)) - sravioli
+#### Hotfixes
+- **(cocogitto)** add the remote name - ([fc63102](https://github.com/sravioli/wezterm/commit/fc631022c60027a0461db747782d4c936fb47350)) - sravioli
+
+- - -
+
 ## [4.1.0](https://github.com/sravioli//compare/9222ba36fa40e458dd5ff5cf6b719045c3c90504..4.1.0) - 2024-07-01
 #### Bug Fixes
 - do not automatically fallback to dark mode - ([5db3d26](https://github.com/sravioli//commit/5db3d260ba1d1d5d7b477246c5f27d5d9a627682)) - sravioli
