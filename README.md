@@ -2,6 +2,22 @@
 
 ![configuration showcase](./.github/assets/config-showcase.png)
 
+## Getting started
+
+- **Requirements**:
+  - [Wezterm _**nightly**_](https://wezfurlong.org/wezterm/installation.html)
+  - [Fira Code NerdFont](https://www.nerdfonts.com).
+  - [Monaspace Radon](https://github.com/githubnext/monaspace/releases/latest)
+  - [Monaspace Krypton](https://github.com/githubnext/monaspace/releases/latest)
+
+- **Steps**
+
+  ~~~sh
+  git clone https://github.com/sravioli/wezterm.git ~/.config/wezterm
+  ~~~
+
+  and you're done.
+
 ## Features
 
 ### Flexible status-bar
@@ -25,28 +41,41 @@ Compare to stock Wezterm:
 
 ![stock wezterm status-bar](./.github/assets/stock-wezterm-status-bar.png)
 
-### Mode indicator
+### Mode indicator with modal prompts
 
-![showcase window mode](./.github/assets/window-mode-showcase.png)
+![showcase help mode prompts](./.github/assets/prompts-help-showcase.png)
 
-![showcase search mode](./.github/assets/search-mode-showcase.png)
+![showcase window mode prompts](./.github/assets/prompts-window-showcase.png)
 
-![showcase copy mode](./.github/assets/copy-mode-showcase.png)
+![showcase search mode prompts](./.github/assets/prompts-search-showcase.png)
 
-![showcase font mode](./.github/assets/font-mode-showcase.png)
+![showcase copy mode prompts](./.github/assets/prompts-copy-showcase.png)
+
+![showcase font mode prompts](./.github/assets/prompts-font-showcase.png)
 
 The mode indicator highlights the current operational mode of the terminal, such
-as copy mode, search mode, window mode or font mode.  Each mode is represented by
-a distinct label and background color, providing a clear visual cue.  The mode
-indicator is positioned on the left side of the status-bar.
+as copy mode, search mode, window mode, font mode or help (normal) mode.  Each
+mode is represented by a distinct label and background color, providing a clear
+visual cue.  The mode indicator is positioned on the left side of the status-bar.
+
+The modal prompts enhance the user interface by displaying context-specific key
+mappings in the status bar.  When a mode is activated, it shows a series of
+prompts to guide the user on available commands. Each prompt includes a key and
+its description, styled colors and fonts to improve readability and user
+experience.
 
 The mode indicator supports customization through the [`modes`
-table](./events/update-status.lua), which defines the text label and background
-color for each mode.  The configuration listens for changes in the active key
-table and updates the mode indicator accordingly. This feature provides
-immediate feedback on the terminal's operational state.
+table](./utils/modes_list.lua), which defines the text label, background color
+and mappings prompt and descriptions for each mode.  The configuration listens
+for changes in the active key table and updates the mode indicator accordingly.
 
-Search, window and copy mode feature vim-like keymaps.
+As for the status-bar, the prompt length gets calculated to ensure it fits within
+the available space, then each prompt is formatted with a key (or list of keys)
+enclosed in angle brackets (`<key>`) and followed by its description in
+italicized text.
+
+Feeling lost?  Type `<leader>h` (or activate any mode) to have a look at the
+prompts!
 
 <!--{{{1 MODES KEYMAPS -->
 
@@ -54,42 +83,42 @@ Search, window and copy mode feature vim-like keymaps.
 <details>
   <summary><strong>copy-mode</strong></summary>
 
-  | Key           | Action                                   |
-  | ------------- | ---------------------------------------- |
-  | `<ESC>`/`<q>` | Exit copy mode                           |
-  | `<Tab>`       | Jump word forward                        |
-  | `<S-Tab>`     | Jump word backward                       |
-  | `<CR>`        | Jump to start of next line               |
-  | `<Space>`     | Set selection mode to cell               |
-  | `0`           | Jump to start of line                    |
-  | `$`           | Jump to end of line content              |
-  | `^`           | Jump to start of line content            |
-  | `,`           | Jump again backward                      |
-  | `;`           | Jump again                               |
-  | `F`           | Jump backward (prev char off)            |
-  | `f`           | Jump forward (prev char off)             |
-  | `T`           | Jump backward (prev char on)             |
-  | `t`           | Jump forward (prev char on)              |
-  | `G`           | Jump to scrollback bottom                |
-  | `g`           | Jump to scrollback top                   |
-  | `h`           | Move left                                |
-  | `j`           | Move down                                |
-  | `k`           | Move up                                  |
-  | `l`           | Move right                               |
-  | `H`           | Jump to viewport top                     |
-  | `L`           | Jump to viewport bottom                  |
-  | `M`           | Jump to viewport middle                  |
-  | `V`           | Set selection mode to line               |
-  | `v`           | Set selection mode to cell               |
-  | `<C-v>`       | Set selection mode to block              |
-  | `O`           | Jump to selection other end (horizontal) |
-  | `o`           | Jump to selection other end              |
-  | `b`           | Jump backward word                       |
-  | `e`           | Jump forward word end                    |
-  | `w`           | Jump forward word                        |
-  | `<C-d>`       | Move by page down                        |
-  | `<C-u>`       | Move by page up                          |
-  | `y`           | Copy selection and exit                  |
+  | Key       | Action                                   |
+  | --------- | ---------------------------------------- |
+  | `<ESC>`   | Exit copy mode                           |
+  | `<Tab>`   | Jump word forward                        |
+  | `<S-Tab>` | Jump word backward                       |
+  | `<CR>`    | Jump to start of next line               |
+  | `<Space>` | Set selection mode to cell               |
+  | `0`       | Jump to start of line                    |
+  | `$`       | Jump to end of line content              |
+  | `^`       | Jump to start of line content            |
+  | `,`       | Jump again backward                      |
+  | `;`       | Jump again                               |
+  | `F`       | Jump backward (prev char off)            |
+  | `f`       | Jump forward (prev char off)             |
+  | `T`       | Jump backward (prev char on)             |
+  | `t`       | Jump forward (prev char on)              |
+  | `G`       | Jump to scrollback bottom                |
+  | `g`       | Jump to scrollback top                   |
+  | `h`       | Move left                                |
+  | `j`       | Move down                                |
+  | `k`       | Move up                                  |
+  | `l`       | Move right                               |
+  | `H`       | Jump to viewport top                     |
+  | `L`       | Jump to viewport bottom                  |
+  | `M`       | Jump to viewport middle                  |
+  | `V`       | Set selection mode to line               |
+  | `v`       | Set selection mode to cell               |
+  | `<C-v>`   | Set selection mode to block              |
+  | `O`       | Jump to selection other end (horizontal) |
+  | `o`       | Jump to selection other end              |
+  | `b`       | Jump backward word                       |
+  | `e`       | Jump forward word end                    |
+  | `w`       | Jump forward word                        |
+  | `<C-d>`   | Move by page down                        |
+  | `<C-u>`   | Move by page up                          |
+  | `y`       | Copy selection and exit                  |
 
 </details>
 <!-- }}}  -->
@@ -100,7 +129,7 @@ Search, window and copy mode feature vim-like keymaps.
 
   | Key                   | Action                   |
   | --------------------- | ------------------------ |
-  | `<ESC>`/`<q>`         | Exit search mode         |
+  | `<ESC>`               | Exit search mode         |
   | `<CR>`                | Jump to prior match      |
   | `<C-n>`/`<DownArrow>` | Jump to next match       |
   | `<C-N>`/`<UpArrow>`   | Jump to prior match      |
@@ -118,7 +147,7 @@ Search, window and copy mode feature vim-like keymaps.
 
   | Key           | Action             |
   | ------------- | ------------------ |
-  | `<ESC>`/`<q>` | Exit font mode     |
+  | `<ESC>`       | Exit font mode     |
   | `+`           | Increase font size |
   | `-`           | Decrease font size |
   | `0`           | Reset font size    |
@@ -132,7 +161,7 @@ Search, window and copy mode feature vim-like keymaps.
 
   | Key               | Action                        |
   | ----------------- | ----------------------------- |
-  | `<ESC>`/`<q>`     | Exit window mode              |
+  | `<ESC>`           | Exit window mode              |
   | `p`               | Pick pane                     |
   | `x`               | Swap with active pane         |
   | `q`               | Close current pane            |
@@ -222,8 +251,8 @@ the previous mapping will be translated to:
   | `<C-M-l>`       | Activate Pane Direction (Right)           |
   | `<leader>w`     | Activate Window Mode                      |
   | `<leader>f`     | Activate Font Mode                        |
-  | `<C-g>`         | Activate Lock Mode                        |
   | `<leader>c`     | Activate Copy Mode                        |
+  | `<leader>h`     | Activate Help Mode                        |
   | `<leader>s`     | Search Current Selection or Empty String  |
   | `<S-F1>`        | Activate Tab 1                            |
   | `<S-F2>`        | Activate Tab 2                            |
@@ -250,10 +279,12 @@ bold-italics.
 
 ### Thanks
 
-Special thanks to [@Wez](https://www.github.com/wez) (of course), to
-[@apredezdc](https://github.com/aperezdc/) for
-[lua-wcwidth](https://github.com/aperezdc/lua-wcwidth) and to
-[@KevinSilvester](https://github.com/KevinSilvester) for his implementation of an
-auto picker for a GPU adapter.
+- [@Wez](https://www.github.com/wez) of course, for the awesome terminal.
+- [@apredezdc](https://github.com/aperezdc/) for it's implementation of
+  [lua-wcwidth](https://github.com/aperezdc/lua-wcwidth).
+- [@KevinSilvester](https://github.com/KevinSilvester) for his GPU adapter auto picker.
+- [@twilsoft](https://github.com/twilsoft) inspired the modal prompts with their
+  [wezmode](https://github.com/twilsoft/wezmode) project.
+- [@akthe-at](https://github.com/akthe-at) for his contribution to the project.
 
 <!-- vim: set fdm=marker fdl=1 -->
