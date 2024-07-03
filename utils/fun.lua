@@ -358,7 +358,7 @@ M.strwidth = function(str, num)
   return cells
 end
 
----comment
+---Shorten the given path
 ---@param path string
 ---@param len any
 M.pathshortener = function(path, len)
@@ -374,6 +374,18 @@ M.pathshortener = function(path, len)
       .. (short_dir == "." and dir:sub(1, len + 1) or short_dir)
       .. path_separator
   end
+end
+
+---Returns a padded string and ensures that it's not shorter than 2 chars.
+---@param s string input string
+---@param padding? integer left/right padding. defaults to 1
+---@return string s the padded string
+M.pad = function(s, padding)
+  s = type(s) ~= "string" and tostring(s) or s
+  padding = padding or 1
+
+  local pad = (" "):rep(padding)
+  return ("%s%s%s"):format(pad, s, pad)
 end
 
 return M
