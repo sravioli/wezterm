@@ -104,6 +104,7 @@ local key_tables = {
   },
   -- }}}
 
+  -- {{{1 HELP MODE (help_mode)
   help_mode = {
     { "<ESC>", "PopKeyTable", "exit" },
     { "<C-Tab>", act.ActivateTabRelative(1), "next tab" },
@@ -156,6 +157,7 @@ local key_tables = {
     { "<leader>c", act.ActivateCopyMode, "copy mode" },
     { "<leader>s", act.Search "CurrentSelectionOrEmptyString", "search mode" },
   },
+  -- }}}
 }
 
 Config.key_tables = {}
