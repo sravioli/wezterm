@@ -15,7 +15,7 @@ local strwidth = fun.platform().is_win and string.len or fun.strwidth
 -- luacheck: push ignore 561
 wez.on("update-status", function(window, pane)
   local theme = require("colors")[window:effective_config().color_scheme]
-  local modes = require "utils.modes_list"
+  local modes = require "utils.modes-list"
 
   local bg = theme.ansi[5]
   local mode_indicator_width = 0
@@ -54,30 +54,40 @@ wez.on("update-status", function(window, pane)
   --~ {{{2 MODAL PROMPTS
   if name and modes[name] then
     local mode = modes[name]
-    local mode_bg, key_fg, txt_fg = theme.tab_bar.background, mode.bg, theme.foreground
+    local prompt_bg, map_fg, txt_fg = theme.tab_bar.background, mode.bg, theme.foreground
     local sep = icons.Separators.StatusBar.modal
 
-    for idx, descr in pairs(mode.mappings) do
-      local mode_prompt_len = strwidth(descr[1] .. descr[2]) + 7
+    local key_tbl = require("mappings.modes")[2][name]
+    for idx, map_tbl in ipairs(key_tbl) do
+      local map, desc = map_tbl[1], map_tbl[3]
+      if map:find "%b<>" then
+        map = map:gsub("(%b<>)", function(str)
+          return str:sub(2, -2)
+        end)
+      end
 
-      if usable_width > 0 then
-        RightStatus:push(mode_bg, txt_fg, "<", { "Bold" })
-        RightStatus:push(mode_bg, key_fg, descr[1])
-        RightStatus:push(mode_bg, txt_fg, ">")
-        RightStatus:push(mode_bg, txt_fg, " " .. descr[2] .. " ", { "Normal", "Italic" })
+      local prompt_len = strwidth(map .. desc) + mode.pad
+      if usable_width > 0 and desc ~= "" then
+        RightStatus:push(prompt_bg, txt_fg, "<", { "Bold" })
+        RightStatus:push(prompt_bg, map_fg, map)
+        RightStatus:push(prompt_bg, txt_fg, ">")
+        RightStatus:push(prompt_bg, txt_fg, fun.pad(desc), { "Normal", "Italic" })
 
-        -- add separator only if it's not the last item and there's enough space
-        local next_prompt = mode.mappings[idx]
-        local next_prompt_len = strwidth(next_prompt[1] .. next_prompt[2]) + 4
-        if idx < #mode.mappings and usable_width - next_prompt_len > 0 then
-          RightStatus:push(mode_bg, theme.brights[1], sep .. " ", { "NoItalic" })
+        ---add separator only if it's not the last item and there's enough space
+        local next_prompt = key_tbl[idx]
+        local next_prompt_len = strwidth(next_prompt[1] .. next_prompt[3]) + 4
+        if idx < #key_tbl and usable_width - next_prompt_len > 0 then
+          RightStatus:push(prompt_bg, theme.brights[1], sep .. " ", { "NoItalic" })
+        elseif usable_width - next_prompt_len <= 0 then
+          RightStatus:push(prompt_bg, theme.brights[1], sep .. " ...", { "NoItalic" })
         end
       end
 
-      usable_width = usable_width - mode_prompt_len
+      usable_width = usable_width - prompt_len
     end
+
     window:set_right_status(wez.format(RightStatus))
-    return
+    return ---return early to not render status bar
   end
   --~ }}}
 
@@ -127,7 +137,7 @@ wez.on("update-status", function(window, pane)
     end
 
     ---use the cell that fits best, otherwise set it to an empty one
-    cell_to_use = not used_cell and "" or " " .. cell_to_use .. " "
+    cell_to_use = not used_cell and "" or fun.pad(cell_to_use)
 
     ---push the cell
     RightStatus:push(colors[i], theme.tab_bar.background, cell_to_use, { "Bold" })
