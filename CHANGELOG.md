@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [5.1.0](https://github.com/sravioli/wezterm/compare/4c1e5280db288cdbc5b9ad41830ebd93b09ea871..5.1.0) - 2024-07-03
+#### Bug Fixes
+- **(utils:modes-list)** rename file, remove mappings table, add padding - ([e7fa846](https://github.com/sravioli/wezterm/commit/e7fa846adbfff32e8c8c483f5e94ca0b93647147)) - sravioli
+- get current scheme from config - ([2e11c6b](https://github.com/sravioli/wezterm/commit/2e11c6b496bfbde0fc13e644c15f4f27a40fc18f)) - sravioli
+#### Features
+- **(events:update-status)** change the source of mappings table - ([eb19548](https://github.com/sravioli/wezterm/commit/eb195481f88e17e4885c10019c22df08c82d53f1)) - sravioli
+- **(utils:fun)** add padding function - ([adff13f](https://github.com/sravioli/wezterm/commit/adff13fbe1785eb51eb4b18f4ad07a0d08b2f377)) - sravioli
+- change mapping definition, add descriptions - ([fd46ab9](https://github.com/sravioli/wezterm/commit/fd46ab9b335a51076fae86fadf75d54bafcb9b26)) - sravioli
+#### Hotfixes
+- **(readme)** change leader key value, fix file name - ([06b09ac](https://github.com/sravioli/wezterm/commit/06b09ac710bb19690e22d49a9ca2becc53376ea0)) - sravioli
+- add missing asset - ([4c1e528](https://github.com/sravioli/wezterm/commit/4c1e5280db288cdbc5b9ad41830ebd93b09ea871)) - sravioli
+#### Refactoring
+- **(utils:layout)** move insert declaration - ([7520197](https://github.com/sravioli/wezterm/commit/75201977f714f656091b1c90f43f2160f3d4d2e7)) - sravioli
+
+- - -
+
 ## [5.0.0](https://github.com/sravioli/wezterm/compare/fc631022c60027a0461db747782d4c936fb47350..5.0.0) - 2024-07-02
 #### Bug Fixes
 - **(README)** streamline key tables by removing dupes - ([112a55a](https://github.com/sravioli/wezterm/commit/112a55a3a507c8f3c04f8752972e0d6ac160635b)) - sravioli
