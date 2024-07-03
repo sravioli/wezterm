@@ -65,7 +65,7 @@ its description, styled colors and fonts to improve readability and user
 experience.
 
 The mode indicator supports customization through the [`modes`
-table](./utils/modes_list.lua), which defines the text label, background color
+table](./utils/modes-list.lua), which defines the text label, background color
 and mappings prompt and descriptions for each mode.  The configuration listens
 for changes in the active key table and updates the mode indicator accordingly.
 
@@ -185,7 +185,7 @@ prompts!
 
 The config defines custom key bindings, inspired by Vim's keymap system.
 
-The `<leader>` (`LEADER` for wezterm) key is `<M-\>` (Alt + Backspace).
+The `<leader>` (`LEADER` for wezterm) key is `<C-Space>` (Ctrl + Space).
 
 Key combinations try to follow the same conventions as Vim, with the added modifier
 of `W` that maps to the `SUPER`/`WINDOWS` key.
