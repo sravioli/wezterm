@@ -1,5 +1,5 @@
-local icons = require "utils.icons" ---@class Icons
 local fun = require "utils.fun" ---@class Fun
+local icons = require "utils.icons" ---@class Icons
 local platform = fun.platform()
 
 ---@class Config

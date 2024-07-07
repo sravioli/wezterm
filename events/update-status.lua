@@ -1,5 +1,5 @@
 ---@class Wezterm
-local wez = require "wezterm"
+local wt = require "wezterm"
 
 ---@class Fun
 local fun = require "utils.fun"
@@ -13,7 +13,7 @@ local StatusBar = require "utils.layout"
 local strwidth = fun.platform().is_win and string.len or fun.strwidth
 
 -- luacheck: push ignore 561
-wez.on("update-status", function(window, pane)
+wt.on("update-status", function(window, pane)
   local theme = require("colors")[window:effective_config().color_scheme]
   local modes = require "utils.modes-list"
 
@@ -29,7 +29,7 @@ wez.on("update-status", function(window, pane)
     LeftStatus:push(bg, theme.background, txt, { "Bold" })
   end
 
-  window:set_left_status(wez.format(LeftStatus))
+  window:set_left_status(wt.format(LeftStatus))
   -- }}}
 
   -- {{{1 RIGHT STATUS
@@ -86,16 +86,16 @@ wez.on("update-status", function(window, pane)
       usable_width = usable_width - prompt_len
     end
 
-    window:set_right_status(wez.format(RightStatus))
+    window:set_right_status(wt.format(RightStatus))
     return ---return early to not render status bar
   end
   --~ }}}
 
   --~ {{{2 STATUS BAR
-  bg = wez.color.parse(bg)
+  bg = wt.color.parse(bg)
   local colors = { bg:darken(0.15), bg, bg:lighten(0.15), bg:lighten(0.25) }
 
-  local battery = wez.battery_info()[1]
+  local battery = wt.battery_info()[1]
   battery.charge = battery.state_of_charge * 100
   battery.lvl_round = fun.toint(fun.mround(battery.charge, 10))
   battery.ico = icons.Battery[battery.state][tostring(battery.lvl_round)]
@@ -107,7 +107,7 @@ wez.on("update-status", function(window, pane)
   local status_bar_cells = {
     { cwd, fun.pathshortener(cwd, 4), fun.pathshortener(cwd, 1) },
     { hostname, hostname:sub(1, 1) },
-    { wez.strftime "%a %b %-d %H:%M", wez.strftime "%d/%m %R", wez.strftime "%R" },
+    { wt.strftime "%a %b %-d %H:%M", wt.strftime "%d/%m %R", wt.strftime "%R" },
     { battery.full, battery.lvl .. "%", battery.ico },
   }
 
@@ -146,7 +146,7 @@ wez.on("update-status", function(window, pane)
     usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 2 -- padding
   end
 
-  window:set_right_status(wez.format(RightStatus))
+  window:set_right_status(wt.format(RightStatus))
   --~ }}}
   -- }}}
 end)

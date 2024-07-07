@@ -1,5 +1,5 @@
 ---@class Wezterm
-local wez = require "wezterm"
+local wt = require "wezterm"
 ---@class Platform
 local platform = require("utils.fun").platform()
 
@@ -38,7 +38,7 @@ GpuAdapters.AVAILABLE_BACKENDS = {
 }
 
 ---@type WeztermGPUAdapter[]
-GpuAdapters.ENUMERATED_GPUS = wez.gui.enumerate_gpus()
+GpuAdapters.ENUMERATED_GPUS = wt.gui.enumerate_gpus()
 
 ---@return GpuAdapters
 ---@private
@@ -99,14 +99,14 @@ function GpuAdapters:pick_best()
   end
 
   if not adapters_options then
-    wez.log_error "No GPU adapters found. Using Default Adapter."
+    wt.log_error "No GPU adapters found. Using Default Adapter."
     return nil
   end
 
   local adapter_choice = adapters_options[self.__preferred_backend]
 
   if not adapter_choice then
-    wez.log_error "Preferred backend not available. Using Default Adapter."
+    wt.log_error "Preferred backend not available. Using Default Adapter."
     return nil
   end
 
@@ -122,14 +122,14 @@ function GpuAdapters:pick_manual(backend, device_type)
   local adapters_options = self[device_type]
 
   if not adapters_options then
-    wez.log_error "No GPU adapters found. Using Default Adapter."
+    wt.log_error "No GPU adapters found. Using Default Adapter."
     return nil
   end
 
   local adapter_choice = adapters_options[backend]
 
   if not adapter_choice then
-    wez.log_error "Preferred backend not available. Using Default Adapter."
+    wt.log_error "Preferred backend not available. Using Default Adapter."
     return nil
   end
 

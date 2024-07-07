@@ -1,5 +1,5 @@
 ---@class Wezterm
-local wez = require "wezterm"
+local wt = require "wezterm"
 
 ---@class Fun
 local fun = require "utils.fun"
@@ -10,7 +10,7 @@ local icons = require "utils.icons"
 ---@class TabBarIcons
 local tabicons = icons.Separators.TabBar
 
-wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
+wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   if config.use_fancy_tab_bar or not config.enable_tab_bar then
     return
   end
@@ -68,7 +68,7 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     ---instead of truncating the whole title, truncate to length the cwd to ensure that the
     ---right parenthesis always closes.
     if max_width == config.tab_max_width then
-      cwd = wez.truncate_right(cwd, max_width - 14) .. "..."
+      cwd = wt.truncate_right(cwd, max_width - 14) .. "..."
     end
 
     title = ("%s ( %s)"):format(icons.Vim, cwd)
@@ -78,7 +78,7 @@ wez.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   ---truncate the tab title when it overflows the maximum available space, then concatenate
   ---some dots to indicate the occurred truncation
   if is_truncation_needed and max_width == config.tab_max_width then
-    title = wez.truncate_right(title, max_width - 8) .. "..."
+    title = wt.truncate_right(title, max_width - 8) .. "..."
   end
 
   ---add the either the leftmost element or the normal left separator. This is done to

@@ -1,5 +1,5 @@
 ---@class Wezterm
-local wez = require "wezterm"
+local wt = require "wezterm"
 
 ---@class Config
 local Config = {}
@@ -8,7 +8,7 @@ Config.adjust_window_size_when_changing_font_size = false
 Config.allow_square_glyphs_to_overflow_width = "WhenFollowedBySpace"
 Config.anti_alias_custom_block_glyphs = true
 
-Config.font = wez.font_with_fallback {
+Config.font = wt.font_with_fallback {
   {
     family = "FiraCode Nerd Font",
     weight = "Regular",
@@ -68,7 +68,7 @@ Config.font_rules = {
   {
     intensity = "Normal",
     italic = true,
-    font = wez.font_with_fallback {
+    font = wt.font_with_fallback {
       {
         family = "Monaspace Radon Var",
         style = "Normal",
@@ -82,7 +82,7 @@ Config.font_rules = {
   {
     intensity = "Bold",
     italic = true,
-    font = wez.font_with_fallback {
+    font = wt.font_with_fallback {
       {
         family = "Monaspace Krypton Var",
         style = "Italic",
