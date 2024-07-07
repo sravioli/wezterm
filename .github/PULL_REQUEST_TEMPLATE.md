@@ -19,7 +19,7 @@ _Put an `x` in the boxes that apply_
 _Put an `x` in the boxes that apply. You can also fill these out after creating
 the PR. If you're unsure about any of them, don't hesitate to ask._
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/sravioli/wezterm/blob/main/CONTRIBUTING.md)
+- [ ] I have read the [CONTRIBUTING](https://github.com/sravioli/wezterm/blob/main/.github/CONTRIBUTING.md)
   doc
 - [ ] I have added the necessary documentation (if appropriate)
 
