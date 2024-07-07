@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [5.1.1](https://github.com/sravioli/wezterm/compare/2c59e48069895b1cf8ab053382bfd7dad5dd12d0..5.1.1) - 2024-07-07
+#### Bug Fixes
+- **(config:font)** disable font stretch for italics - ([41d54cd](https://github.com/sravioli/wezterm/commit/41d54cd3e9ccdf2fc43760cb50d45c7c8148757a)) - sravioli
+- **(utils:fun)** rename wez to wt - ([1a61d2e](https://github.com/sravioli/wezterm/commit/1a61d2e516b5bbaaaa32353d5be27eaeab39887a)) - sravioli
+- rename wez to wt - ([64974e8](https://github.com/sravioli/wezterm/commit/64974e8b0d78f115c9b349197efcf0e78f32ff62)) - sravioli
+- improve contributing body - ([4425de2](https://github.com/sravioli/wezterm/commit/4425de2b308a64e8eb7e5c8fba5260f9092bb9e6)) - sravioli
+#### Features
+- **(utils:config)** add documentation and logging - ([c81fc41](https://github.com/sravioli/wezterm/commit/c81fc418ed59139c6fd61bbfe98401b77bd30280)) - sravioli
+- add documentation and logging - ([7140548](https://github.com/sravioli/wezterm/commit/7140548088b89d1d0048857c2054ca9efd51d2cf)) - sravioli
+#### Hotfixes
+- incorrect path to contributing file from pr template - ([2bf6875](https://github.com/sravioli/wezterm/commit/2bf68750f5c8b18fdaa24c4bed53257ad19b2ecf)) - sravioli
+#### Style
+- **(mapping:modes)** add vim folds - ([2c59e48](https://github.com/sravioli/wezterm/commit/2c59e48069895b1cf8ab053382bfd7dad5dd12d0)) - sravioli
+
+- - -
+
 ## [5.1.0](https://github.com/sravioli/wezterm/compare/4c1e5280db288cdbc5b9ad41830ebd93b09ea871..5.1.0) - 2024-07-03
 #### Bug Fixes
 - **(utils:modes-list)** rename file, remove mappings table, add padding - ([e7fa846](https://github.com/sravioli/wezterm/commit/e7fa846adbfff32e8c8c483f5e94ca0b93647147)) - sravioli
