@@ -1,4 +1,4 @@
-local wez = require "wezterm" ---@class Wezterm
+local wt = require "wezterm" ---@class Wezterm
 local wcwidth, utf8 = require "utils.wcwidth", require "utf8"
 local insert = table.insert
 
@@ -15,7 +15,7 @@ local M = {}
 ---Determines the platform based on the target triple.
 ---@return Platform platform
 M.platform = function()
-  local triple = wez.target_triple
+  local triple = wt.target_triple
   local is_win = triple:find "windows" ~= nil
   local is_linux = triple:find "linux" ~= nil
   local is_mac = triple:find "apple" ~= nil
@@ -28,7 +28,7 @@ end
 
 ---User home directory
 ---@return string home path to the suer home directory.
-M.home = (os.getenv "USERPROFILE" or os.getenv "HOME" or wez.home_dir or ""):gsub(
+M.home = (os.getenv "USERPROFILE" or os.getenv "HOME" or wt.home_dir or ""):gsub(
   "\\",
   "/"
 )
@@ -111,7 +111,7 @@ M.get_cwd_hostname = function(pane, search_git_root_instead)
     if type(cwd_uri) == "userdata" then
       ---newer wezterm versions have a URL object, making it easier
       cwd = cwd_uri.file_path
-      hostname = cwd_uri.host or wez.hostname()
+      hostname = cwd_uri.host or wt.hostname()
     else
       ---older version, 20230712-072601-f4abf8fd or earlier, which doesn't have the URL object
       cwd_uri = cwd_uri:sub(8)
@@ -132,7 +132,7 @@ M.get_cwd_hostname = function(pane, search_git_root_instead)
       hostname = hostname:sub(1, dot - 1)
     end
     if hostname == "" then
-      hostname = wez.hostname()
+      hostname = wt.hostname()
     end
     hostname = hostname:gsub("^%l", string.upper)
   end
@@ -179,7 +179,7 @@ end
 ---Returns the colorscheme name absed on the system appearance
 ---@return '"kanagawa-wave"'|'"kanagawa-lotus"' colorscheme name of the colorscheme
 M.get_scheme = function()
-  if (wez.gui and wez.gui.get_appearance() or ""):find "Dark" then
+  if (wt.gui and wt.gui.get_appearance() or ""):find "Dark" then
     return "kanagawa-wave"
   end
   return "kanagawa-lotus"
@@ -308,7 +308,7 @@ M.map = function(lhs, rhs, tbl)
 
     local k = keys[#keys]
     if modifiers[k] then
-      wez.log_error "keymap cannot end with modifier!"
+      wt.log_error "keymap cannot end with modifier!"
       return
     else
       table.remove(keys, #keys)
