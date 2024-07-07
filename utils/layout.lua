@@ -79,4 +79,12 @@ function Layout:push(background, foreground, text, attributes)
   return self
 end
 
+---Clears all elements from the layout.
+---
+---@return Layout self The cleared layout instance.
+function Layout:clear()
+  self.layout = {}
+  return self
+end
+
 return Layout
