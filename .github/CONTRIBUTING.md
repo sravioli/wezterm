@@ -1,7 +1,7 @@
-# Contributing to wezterm
+# Contributing to my wezterm config
 
-First off, thank you for considering contributing to wezterm! It's people like
-you who make it a great project.
+First off, thank you for considering contributing to my wezterm config! It's
+people like you who make it a great project.
 
 ## How to Contribute
 
