@@ -73,7 +73,7 @@ Config.font_rules = {
         family = "Monaspace Radon Var",
         style = "Normal",
         weight = "Regular",
-        stretch = "Expanded",
+        stretch = "Normal",
         harfbuzz_features = monaspace_features,
       },
       { family = "Symbols Nerd Font" },
