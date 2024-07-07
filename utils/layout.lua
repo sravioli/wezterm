@@ -1,17 +1,29 @@
+---@module "utils.layout"
+---@author sravioli
+---@license GNU-GPLv3.0
+
+local wt = require "wezterm" ---@class Wezterm
+
 ---@class Layout
 local Layout = {}
 
 local insert = table.insert
 
 ---Creates a new instance of the Layout class.
----@return Layout instance newly created class instance.
+---
+---Initializes a new Layout object with an empty layout table.
+---
+---@return Layout layout newly created class instance.
 function Layout:new()
   return setmetatable({ layout = {} }, { __index = self })
 end
 
 ---Add elements to the layout table.
 ---
----the following attributes are supported:
+---Adds text elements to the layout with specified background and foreground colors, as
+---well as optional attributes such as underline style, intensity, and italic style.
+---
+---The following attributes are supported:
 ---
 ---```lua
 ---local attributes = {
@@ -56,6 +68,8 @@ function Layout:push(background, foreground, text, attributes)
     for _, attribute in ipairs(attributes) do
       if attribute_mappings[attribute] then
         insert(self, { Attribute = attribute_mappings[attribute] })
+      else
+        wt.log_error("Layout: Attribute '" .. attribute .. "' is non-existant")
       end
     end
   end
