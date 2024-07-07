@@ -7,7 +7,7 @@ column_width = 90
 # Line endings type. Possible options: `Unix` (LF) or `Windows` (CRLF)
 #
 # (default: `Unix`)
-line_endings = "Windows"
+line_endings = "Unix"
 
 # Indent type. Possible options: `Tabs` or `Spaces`
 #
@@ -70,4 +70,4 @@ collapse_simple_statement = "Never"
 #
 # Requires sorting is off by default.
 [sort_requires]
-  enabled = false
+  enabled = true
