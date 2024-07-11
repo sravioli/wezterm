@@ -5,7 +5,7 @@
 local wt = require "wezterm" ---@class Wezterm
 
 ---@class Layout
-local Layout = {}
+local M = {}
 
 local insert = table.insert
 
@@ -14,7 +14,7 @@ local insert = table.insert
 ---Initializes a new Layout object with an empty layout table.
 ---
 ---@return Layout layout newly created class instance.
-function Layout:new()
+function M:new()
   return setmetatable({ layout = {} }, { __index = self })
 end
 
@@ -45,7 +45,7 @@ end
 ---@param text string text to be added.
 ---@param attributes? table list of attributes to be added.
 ---@return Layout self The updated layout instance.
-function Layout:push(background, foreground, text, attributes)
+function M:push(background, foreground, text, attributes)
   self = self or {}
   insert(self, { Background = { Color = background } })
   insert(self, { Foreground = { Color = foreground } })
@@ -82,9 +82,9 @@ end
 ---Clears all elements from the layout.
 ---
 ---@return Layout self The cleared layout instance.
-function Layout:clear()
+function M:clear()
   self.layout = {}
   return self
 end
 
-return Layout
+return M
