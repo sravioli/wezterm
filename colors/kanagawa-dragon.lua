@@ -56,12 +56,12 @@ return {
 
     active_tab = {
       bg_color = "#8992a7",
-      fg_color = "#181616",
+      fg_color = "#0d0c0c",
     },
 
     inactive_tab = {
       bg_color = "#737c73",
-      fg_color = "#181616",
+      fg_color = "#0d0c0c",
     },
 
     inactive_tab_hover = {
@@ -72,14 +72,13 @@ return {
 
     new_tab = {
       bg_color = "#737c73",
-      fg_color = "#282727",
+      fg_color = "#0d0c0c",
     },
 
     new_tab_hover = {
       bg_color = "#223249",
-      fg_color = "#737c73",
+      fg_color = "#0d0c0c",
       italic = true,
     },
   },
 }
-
