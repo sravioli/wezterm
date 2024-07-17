@@ -1,11 +1,9 @@
----@class Wezterm
-local wt = require "wezterm"
+local StatusBar = require "utils.class.layout" --[[@class Layout]]
 
 ---@class Fun
 local fun = require "utils.fun"
 
----@class Icons
-local icons = require "utils.icons"
+local Icon = require "utils.class.icon" --[[@class Icons]]
 
 ---@class Layout
 local StatusBar = require "utils.layout"
@@ -14,8 +12,25 @@ local strwidth = fun.platform().is_win and string.len or fun.strwidth
 
 -- luacheck: push ignore 561
 wt.on("update-status", function(window, pane)
-  local theme = require("colors")[window:effective_config().color_scheme]
-  local modes = require "utils.modes-list"
+  local Config = window:effective_config() --[[@class Config]]
+
+  local Overrides = window:get_config_overrides() or {} --[[@class Config]]
+  local theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
+
+  local modes = {
+    search_mode = { i = "󰍉", txt = "SEARCH", bg = theme.brights[4], pad = 7 },
+    window_mode = { i = "󱂬", txt = "WINDOW", bg = theme.ansi[6], pad = 8 },
+    copy_mode = { i = "󰆏", txt = "COPY", bg = theme.brights[3], pad = 8 },
+    font_mode = {
+      i = "󰛖",
+      txt = "FONT",
+      bg = theme.indexed[16] or theme.ansi[8],
+      pad = 7,
+    },
+    lock_mode = { i = "", txt = "LOCK", bg = theme.ansi[8], pad = 0 },
+    help_mode = { i = "󰞋", txt = "NORMAL", bg = theme.ansi[5], pad = 9 },
+    pick_mode = { i = "󰢷", txt = "PICK", bg = theme.ansi[2], pad = 9 },
+  }
 
   local bg = theme.ansi[5]
   local mode_indicator_width = 0
@@ -24,9 +39,9 @@ wt.on("update-status", function(window, pane)
   local LeftStatus = StatusBar:new() ---@class Layout
   local name = window:active_key_table()
   if name and modes[name] then
-    local txt = modes[name].text or ""
-    mode_indicator_width, bg = strwidth(txt) + 2, modes[name].bg
-    LeftStatus:push(bg, theme.background, txt, { "Bold" })
+    local txt, ico = modes[name].txt or "", modes[name].i or ""
+    mode_indicator_width, bg = strwidth(txt) + 2 + strwidth(ico), modes[name].bg
+    LeftStatus:push(bg, theme.background, fun.pad(ico .. " " .. txt, 1), { "Bold" })
   end
 
   window:set_left_status(wt.format(LeftStatus))
@@ -55,7 +70,7 @@ wt.on("update-status", function(window, pane)
   if name and modes[name] then
     local mode = modes[name]
     local prompt_bg, map_fg, txt_fg = theme.tab_bar.background, mode.bg, theme.foreground
-    local sep = icons.Separators.StatusBar.modal
+    local sep = Icon.Sep.sb.modal
 
     local key_tbl = require("mappings.modes")[2][name]
     for idx, map_tbl in ipairs(key_tbl) do
@@ -98,7 +113,7 @@ wt.on("update-status", function(window, pane)
   local battery = wt.battery_info()[1]
   battery.charge = battery.state_of_charge * 100
   battery.lvl_round = fun.toint(fun.mround(battery.charge, 10))
-  battery.ico = icons.Battery[battery.state][tostring(battery.lvl_round)]
+  battery.ico = Icon.Bat[battery.state][tostring(battery.lvl_round)]
   battery.lvl = tonumber(math.floor(battery.charge + 0.5))
   battery.full = ("%s %i%%"):format(battery.ico, battery.lvl)
 
@@ -118,7 +133,7 @@ wt.on("update-status", function(window, pane)
   for i, cell_group in ipairs(status_bar_cells) do
     local cell_bg = colors[i]
     local cell_fg = i == 1 and last_fg or colors[i - 1]
-    local sep = icons.Separators.StatusBar.right
+    local sep = Icon.Sep.sb.right
 
     ---add each cell separator
     RightStatus:push(cell_fg, cell_bg, sep)
