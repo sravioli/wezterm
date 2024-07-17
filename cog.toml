@@ -12,7 +12,7 @@ tag_prefix = ""
 
 # Type: `Array<String>` (optional)
 # A list of glob patterns to allow bumping only on matching branches.
-branch_whitelist = [ "main" ]
+branch_whitelist = ["main"]
 
 # Type: `boolean: false` (optional)
 # Whether to ignore or to lint merge commits.
@@ -23,11 +23,11 @@ ignore_merge_commits = true
 
 # Type: `Array<String>` (optional)
 # An array of command to execute before a version bump.
-pre_bump_hooks = [  ]
+pre_bump_hooks = []
 
 # Type: `Array<String>` (optional)
 # An array of command to execute after a version bump.
-post_bump_hooks = [ "git push origin {{version}}", "git push" ]
+post_bump_hooks = ["git push origin {{version}}", "git push"]
 
 # Type: `String` (optional)
 # A "skip-ci" string to add to the commits when using the bump or commit commands.
@@ -67,43 +67,42 @@ post_bump_hooks = [ "git push origin {{version}}", "git push" ]
 # - `bump_minor` [boolean: false] (optional):  Commits of this type will bump the
 #   minor version of a tag.
 [commit_types]
-  chore   = { changelog_title = "Misc", omit_from_changelog = true }
-  hotfix  = { changelog_title = "Hotfixes" }
-  release = { changelog_title = "Releases" }
+chore = { changelog_title = "Misc", omit_from_changelog = true }
+hotfix = { changelog_title = "Hotfixes" }
+release = { changelog_title = "Releases" }
 
 
 # ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~   Changelog ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~ ~~
 [changelog]
-  # Type: `string: "CHANGELOG.md"` (optional)
-  # Path the repository markdown changelog.
-  path = "CHANGELOG.md"
+# Type: `string: "CHANGELOG.md"` (optional)
+# Path the repository markdown changelog.
+path = "CHANGELOG.md"
 
-  # Type: `string: "default"` (optional)
-  # Name of the builtin template to use for changelog generation or path to a custom
-  # template. Note that remote, repository and owner are mandatory if the `"remote"`
-  # built-in template us used or if your custom template make use of those variables.
-  #
-  # Built-in templates : `default`, `remote`, `full_hash`
-  template = "remote"
+# Type: `string: "default"` (optional)
+# Name of the builtin template to use for changelog generation or path to a custom
+# template. Note that remote, repository and owner are mandatory if the `"remote"`
+# built-in template us used or if your custom template make use of those variables.
+#
+# Built-in templates : `default`, `remote`, `full_hash`
+template = "remote"
 
-  # Type: `string` (optional)
-  # Domain name of the git platform hosting the repository, used for Markdown link
-  # generation in changelogs. when provided repository and owner are also required.
-  remote = "github.com"
+# Type: `string` (optional)
+# Domain name of the git platform hosting the repository, used for Markdown link
+# generation in changelogs. when provided repository and owner are also required.
+remote = "github.com"
 
-  # Type: `string` (optional)
-  # Name of the repository on the remote git platform.
-  repository = "wezterm"
+# Type: `string` (optional)
+# Name of the repository on the remote git platform.
+repository = "wezterm"
 
-  # Type: `string` (optional)
-  # Owner of the repository on the remote git platform.
-  owner = "sravioli"
+# Type: `string` (optional)
+# Owner of the repository on the remote git platform.
+owner = "sravioli"
 
-  # Type: `Array<Author>` (optional)
-  # A list of commit authors with their git signature and git platform username
-  # to generate Markdown links in changelogs.
-  authors = [ { signature = "Simone Fidanza", username = "sravioli" } ]
+# Type: `Array<Author>` (optional)
+# A list of commit authors with their git signature and git platform username
+# to generate Markdown links in changelogs.
+authors = [{ signature = "Simone Fidanza", username = "sravioli" }]
 
 
 [packages]
-

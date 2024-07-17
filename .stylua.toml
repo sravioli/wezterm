@@ -70,4 +70,4 @@ collapse_simple_statement = "Never"
 #
 # Requires sorting is off by default.
 [sort_requires]
-  enabled = true
+enabled = true
