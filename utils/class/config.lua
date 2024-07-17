@@ -1,14 +1,18 @@
+---@diagnostic disable: undefined-field
+
 ---Config module for managing Wezterm configurations.
 ---This module provides functionality to initialize and modify Wezterm configuration
 ---settings using a simple API.
 ---
----@module "utils.config"
+---@module "utils.class.config"
+---@author sravioli
+---@license GNU-GPLv3
 
 ---@class Config
 local M = {}
 
----@class Wezterm
 local wt = require "wezterm"
+local log_info, log_warn, log_error = wt.log_info, wt.log_warn, wt.log_error
 
 ---Initializes a new Config object.
 ---Creates a new Wezterm configuration object. If `wez.config_builder` is available,
@@ -21,9 +25,9 @@ function M:new()
   if wt.config_builder then
     self.config = wt.config_builder()
     self.config:set_strict_mode(true)
-    wt.log_info "Config: using config builder"
+    log_info "Config: using config builder"
   else
-    wt.log_error "Config: builder unavailable!"
+    log_error "Config: builder unavailable!"
   end
 
   self = setmetatable(self.config, { __index = M })
@@ -49,7 +53,7 @@ function M:add(spec)
 
   for key, value in pairs(spec) do
     if self.config[key] == spec[key] then
-      wt.log_warn("Config: found dupe: ", { old = self.config[key], new = spec[key] })
+      log_warn("Config: found dupe: ", { old = self.config[key], new = spec[key] })
     end
     self.config[key] = value
   end

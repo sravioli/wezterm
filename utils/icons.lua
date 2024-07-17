@@ -37,13 +37,14 @@ M.Bash = wt.nerdfonts.md_bash
 
 M.Git = wt.nerdfonts.md_git
 
----@class BatteryIcons: table, table
+---@class Icons.Battery: table, table
 ---@field charging table Icons for charging battery in increments of 10
 ---@field normal   table Icons for non-charging battery in increments of 10
 M.Battery = {
   Full = {
     ["100"] = wt.nerdfonts.md_battery,
   },
+
   Charging = {
     ["00"] = wt.nerdfonts.md_battery_alert,
     ["10"] = wt.nerdfonts.md_battery_charging_10,
