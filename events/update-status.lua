@@ -1,20 +1,18 @@
-local StatusBar = require "utils.class.layout" --[[@class Layout]]
+local wt = require "wezterm"
 
----@class Fun
-local fun = require "utils.fun"
+local Utils = require "utils"
+local StatusBar = Utils.class.layout
+local Icon = Utils.class.icon
+local fs, mt, str = Utils.fn.fs, Utils.fn.mt, Utils.fn.str
 
-local Icon = require "utils.class.icon" --[[@class Icons]]
-
----@class Layout
-local StatusBar = require "utils.layout"
-
-local strwidth = fun.platform().is_win and string.len or fun.strwidth
+local wt_format, strftime = wt.format, wt.strftime
+local strwidth = fs.platform().is_win and string.len or str.strwidth
 
 -- luacheck: push ignore 561
 wt.on("update-status", function(window, pane)
-  local Config = window:effective_config() --[[@class Config]]
+  local Config = window:effective_config()
 
-  local Overrides = window:get_config_overrides() or {} --[[@class Config]]
+  local Overrides = window:get_config_overrides() or {}
   local theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
 
   local modes = {
@@ -36,29 +34,30 @@ wt.on("update-status", function(window, pane)
   local mode_indicator_width = 0
 
   -- {{{1 LEFT STATUS
-  local LeftStatus = StatusBar:new() ---@class Layout
+
+  local LeftStatus = StatusBar:new()
   local name = window:active_key_table()
   if name and modes[name] then
     local txt, ico = modes[name].txt or "", modes[name].i or ""
     mode_indicator_width, bg = strwidth(txt) + 2 + strwidth(ico), modes[name].bg
-    LeftStatus:push(bg, theme.background, fun.pad(ico .. " " .. txt, 1), { "Bold" })
+    LeftStatus:push(bg, theme.background, str.pad(ico .. " " .. txt, 1), { "Bold" })
   end
 
-  window:set_left_status(wt.format(LeftStatus))
+  window:set_left_status(wt_format(LeftStatus))
   -- }}}
 
   -- {{{1 RIGHT STATUS
-  local RightStatus = StatusBar:new() ---@class Layout
+
+  local RightStatus = StatusBar:new()
 
   --~~ {{{2 Calculate the used width by the tabs
   local MuxWindow = window:mux_window()
   local tab_bar_width = 0
-  for _, MuxTab in ipairs(MuxWindow:tabs()) do
-    local tab_title = MuxTab:panes()[1]:get_title()
+  for i = 1, #MuxWindow:tabs() do
+    local tab_title = MuxWindow:tabs()[i]:panes()[1]:get_title()
     tab_bar_width = tab_bar_width + strwidth(tab_title) + 2
   end
 
-  local Config = MuxWindow:gui_window():effective_config() ---@class Config
   local has_button = Config.show_new_tab_button_in_tab_bar
   local new_tab_button = has_button and Config.tab_bar_style.new_tab or ""
   tab_bar_width = tab_bar_width + mode_indicator_width + strwidth(new_tab_button) + 2
@@ -73,11 +72,12 @@ wt.on("update-status", function(window, pane)
     local sep = Icon.Sep.sb.modal
 
     local key_tbl = require("mappings.modes")[2][name]
-    for idx, map_tbl in ipairs(key_tbl) do
+    for idx = 1, #key_tbl do
+      local map_tbl = key_tbl[idx]
       local map, desc = map_tbl[1], map_tbl[3]
       if map:find "%b<>" then
-        map = map:gsub("(%b<>)", function(str)
-          return str:sub(2, -2)
+        map = map:gsub("(%b<>)", function(s)
+          return s:sub(2, -2)
         end)
       end
 
@@ -86,22 +86,20 @@ wt.on("update-status", function(window, pane)
         RightStatus:push(prompt_bg, txt_fg, "<", { "Bold" })
         RightStatus:push(prompt_bg, map_fg, map)
         RightStatus:push(prompt_bg, txt_fg, ">")
-        RightStatus:push(prompt_bg, txt_fg, fun.pad(desc), { "Normal", "Italic" })
+        RightStatus:push(prompt_bg, txt_fg, str.pad(desc), { "Normal", "Italic" })
 
         ---add separator only if it's not the last item and there's enough space
         local next_prompt = key_tbl[idx]
         local next_prompt_len = strwidth(next_prompt[1] .. next_prompt[3]) + 4
         if idx < #key_tbl and usable_width - next_prompt_len > 0 then
           RightStatus:push(prompt_bg, theme.brights[1], sep .. " ", { "NoItalic" })
-        elseif usable_width - next_prompt_len <= 0 then
-          RightStatus:push(prompt_bg, theme.brights[1], sep .. " ...", { "NoItalic" })
         end
       end
 
       usable_width = usable_width - prompt_len
     end
 
-    window:set_right_status(wt.format(RightStatus))
+    window:set_right_status(wt_format(RightStatus))
     return ---return early to not render status bar
   end
   --~ }}}
@@ -112,17 +110,17 @@ wt.on("update-status", function(window, pane)
 
   local battery = wt.battery_info()[1]
   battery.charge = battery.state_of_charge * 100
-  battery.lvl_round = fun.toint(fun.mround(battery.charge, 10))
+  battery.lvl_round = mt.toint(mt.mround(battery.charge, 10))
   battery.ico = Icon.Bat[battery.state][tostring(battery.lvl_round)]
   battery.lvl = tonumber(math.floor(battery.charge + 0.5))
   battery.full = ("%s %i%%"):format(battery.ico, battery.lvl)
 
-  local cwd, hostname = fun.get_cwd_hostname(pane, true)
+  local cwd, hostname = fs.get_cwd_hostname(pane, true)
 
   local status_bar_cells = {
-    { cwd, fun.pathshortener(cwd, 4), fun.pathshortener(cwd, 1) },
+    { cwd, fs.pathshortener(cwd, 4), fs.pathshortener(cwd, 1) },
     { hostname, hostname:sub(1, 1) },
-    { wt.strftime "%a %b %-d %H:%M", wt.strftime "%d/%m %R", wt.strftime "%R" },
+    { strftime "%a %b %-d %H:%M", strftime "%d/%m %R", strftime "%R" },
     { battery.full, battery.lvl .. "%", battery.ico },
   }
 
@@ -130,9 +128,9 @@ wt.on("update-status", function(window, pane)
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
   ---push each cell and the separator
-  for i, cell_group in ipairs(status_bar_cells) do
-    local cell_bg = colors[i]
-    local cell_fg = i == 1 and last_fg or colors[i - 1]
+  for i = 1, #status_bar_cells do
+    local cell_group = status_bar_cells[i]
+    local cell_bg, cell_fg = colors[i], i == 1 and last_fg or colors[i - 1]
     local sep = Icon.Sep.sb.right
 
     ---add each cell separator
@@ -142,8 +140,8 @@ wt.on("update-status", function(window, pane)
     local cell_to_use, used_cell = cell_group[1], false
 
     ---try to use the longest cell of the list, then fallback to a shorter one
-    for _, cell in ipairs(cell_group) do
-      -- local cell_width = strwidth(cell) + strwidth(sep)
+    for j = 1, #cell_group do
+      local cell = cell_group[j]
       local cell_width = 0
       if usable_width >= cell_width then
         cell_to_use, used_cell = cell, true
@@ -152,7 +150,7 @@ wt.on("update-status", function(window, pane)
     end
 
     ---use the cell that fits best, otherwise set it to an empty one
-    cell_to_use = not used_cell and "" or fun.pad(cell_to_use)
+    cell_to_use = not used_cell and "" or str.pad(cell_to_use)
 
     ---push the cell
     RightStatus:push(colors[i], theme.tab_bar.background, cell_to_use, { "Bold" })
@@ -161,7 +159,7 @@ wt.on("update-status", function(window, pane)
     usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 2 -- padding
   end
 
-  window:set_right_status(wt.format(RightStatus))
+  window:set_right_status(wt_format(RightStatus))
   --~ }}}
   -- }}}
 end)
