@@ -151,10 +151,10 @@ local key_tables = {
   -- }}}
 
   -- {{{1 PICK MODE (pick_mode)
-  -- pick_mode = {
-  --   { "<ESC>", "PopKeyTable", "exit" },
-  --   { "t", require("picker.theme"):pick(), "theme picker" },
-  -- }, -- }}}
+  pick_mode = {
+    { "<ESC>", "PopKeyTable", "exit" },
+    { "t", require("picker.theme"):pick(), "theme picker" },
+  }, -- }}}
 }
 
 Config.key_tables = {}
