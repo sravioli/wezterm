@@ -95,12 +95,6 @@ local key_tables = {
     { "-", act.AdjustPaneSize { "Down", 2 }, "resize bot" },
   }, -- }}}
 
-  -- {{{1 LOCK MODE (lock_mode)
-  lock_mode = {
-    { "<C-g>", "PopKeyTable", "" },
-  },
-  -- }}}
-
   -- {{{1 HELP MODE (help_mode)
   help_mode = {
     { "<ESC>", "PopKeyTable", "exit" },
