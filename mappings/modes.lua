@@ -1,9 +1,8 @@
-local wez = require "wezterm" ---@class Wezterm
-local act = wez.action
+local wt = require "wezterm"
+local act = wt.action
 
-local fun = require "utils.fun" ---@class Fun
+local key = require("utils.fn").key
 
----@class Config
 local Config = {}
 
 local key_tables = {
@@ -14,9 +13,7 @@ local key_tables = {
       "y",
       act.Multiple {
         { CopyTo = "ClipboardAndPrimarySelection" },
-        {
-          CopyMode = "Close",
-        },
+        { CopyMode = "Close" },
       },
       "copy selection",
     },
@@ -164,7 +161,7 @@ Config.key_tables = {}
 for mode, mode_table in pairs(key_tables) do
   Config.key_tables[mode] = {}
   for _, map_tbl in ipairs(mode_table) do
-    fun.map(map_tbl[1], map_tbl[2], Config.key_tables[mode])
+    key.map(map_tbl[1], map_tbl[2], Config.key_tables[mode])
   end
 end
 
