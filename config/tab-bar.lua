@@ -1,4 +1,3 @@
----@class Config
 local Config = {}
 
 Config.enable_tab_bar = true
