@@ -1,7 +1,6 @@
----@class Wezterm
 local wt = require "wezterm"
----@class Platform
-local platform = require("utils.fun").platform()
+
+local platform = require("utils.fn").fs.platform() --[[@class Platform]]
 
 ---see: https://github.com/KevinSilvester/wezterm-config
 
