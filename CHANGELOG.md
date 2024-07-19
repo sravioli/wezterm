@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [5.2.1](https://github.com/sravioli/wezterm/compare/778e44ff4c56b6a85833451d005a085a8da216d5..5.2.1) - 2024-07-19
+#### Hotfixes
+- **(mappings)** enable the theme picker - ([778e44f](https://github.com/sravioli/wezterm/commit/778e44ff4c56b6a85833451d005a085a8da216d5)) - sravioli
+
+- - -
+
 ## [5.2.0](https://github.com/sravioli/wezterm/compare/710aa39c85cd4574b40cf6e7b6ebaa81aea74276..5.2.0) - 2024-07-19
 #### Bug Fixes
 - **(colors:kanagawa-dragon)** tab bar now has the same color - ([8d964b2](https://github.com/sravioli/wezterm/commit/8d964b2603059077c9574feed501a3e716fd5d7a)) - sravioli
