@@ -1,8 +1,7 @@
----@class Wezterm
+---@diagnostic disable: undefined-field
+
 local wt = require "wezterm"
 local act = wt.action
-
-local config = wt.config_builder()
 
 wt.on("augment-command-palette", function(_, _)
   return {
@@ -21,5 +20,3 @@ wt.on("augment-command-palette", function(_, _)
     },
   }
 end)
-
-return config
