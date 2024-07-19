@@ -1,7 +1,8 @@
----@class Wezterm
-local wt = require "wezterm"
+---@diagnostic disable: undefined-field
 
----@class Config
+local wt = require "wezterm"
+local fs = require("utils.fn").fs
+
 local Config = {}
 
 Config.adjust_window_size_when_changing_font_size = false
@@ -51,7 +52,7 @@ Config.font = wt.font_with_fallback {
   { family = "LegacyComputing" },
 }
 
-if require("utils.fun").platform().is_win then
+if fs.platform().is_win then
   Config.font_size = 9.5
 else
   Config.font_size = 10.5
