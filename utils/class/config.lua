@@ -8,8 +8,10 @@
 ---@author sravioli
 ---@license GNU-GPLv3
 
----@class Config
+---@class Utils.Class.Config
 local M = {}
+
+---@alias Config Utils.Class.Config
 
 local wt = require "wezterm"
 local log_info, log_warn, log_error = wt.log_info, wt.log_warn, wt.log_error
