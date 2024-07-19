@@ -57,6 +57,7 @@ local mappings = {
   },
   { "<leader>c", act.ActivateCopyMode, "copy mode" },
   { "<leader>s", act.Search "CurrentSelectionOrEmptyString", "search mode" },
+  -- { "<leader>p", act.ActivateKeyTable { name = "pick_mode" }, "pick mode" },
 }
 
 for i = 1, 24 do

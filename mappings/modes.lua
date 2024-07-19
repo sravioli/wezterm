@@ -149,6 +149,12 @@ local key_tables = {
     { "<leader>s", act.Search "CurrentSelectionOrEmptyString", "search mode" },
   },
   -- }}}
+
+  -- {{{1 PICK MODE (pick_mode)
+  -- pick_mode = {
+  --   { "<ESC>", "PopKeyTable", "exit" },
+  --   { "t", require("picker.theme"):pick(), "theme picker" },
+  -- }, -- }}}
 }
 
 Config.key_tables = {}
