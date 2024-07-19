@@ -7,7 +7,7 @@
 ---@license GNU-GPLv3.0
 
 local wt = require "wezterm"
-local log_info, _, log_error = wt.log_info, wt.log_warn, wt.log_error
+local log_info, log_error = wt.log_info, wt.log_error
 local wt_format = wt.format
 
 local attribute_mappings = {
@@ -25,8 +25,11 @@ local attribute_mappings = {
   NoItalic = { Italic = false },
 }
 
----@class Layout
+---@class Utils.Class.Layout
 local M = {}
+
+---@diagnostic disable-next-line: duplicate-doc-alias
+---@alias Layout Utils.Class.Layout
 
 ---Creates a new instance of the Layout class.
 ---
@@ -34,7 +37,6 @@ local M = {}
 ---
 ---@return Layout layout newly created class instance.
 function M:new()
-  log_info "Creating new layout object"
   return setmetatable({ layout = {} }, { __index = self })
 end
 
@@ -92,7 +94,6 @@ end
 ---@return Layout self The cleared layout instance.
 function M:clear()
   self.layout = {}
-  log_info "Successfully cleared the Layout"
   return self
 end
 
