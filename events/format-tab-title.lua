@@ -1,10 +1,7 @@
----@class Wezterm
+---@diagnostic disable: undefined-field
+
 local wt = require "wezterm"
-
----@class Fun
-local fun = require "utils.fun"
-
----@class Icons
+local fs = require("utils.fn").fs
 local Icon = require "utils.class.icon"
 local tabicons = Icon.Sep.tb
 
@@ -13,7 +10,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     return
   end
 
-  local theme = require("colors")[config.color_scheme]
+  local theme = config.color_schemes[config.color_scheme]
   local bg = theme.tab_bar.background
   local fg
 
@@ -27,7 +24,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     fg = theme.ansi[5]
     attributes = { "Bold" }
   elseif hover then
-    fg = theme.selection_bg
+    fg = theme.tab_bar.inactive_tab_hover.bg_color
   else
     fg = theme.brights[1]
   end
@@ -57,7 +54,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   if proc == "nvim" then
     ---full title truncation is not necessary since the dir name will be truncated
     is_truncation_needed = false
-    local cwd = fun.basename(pane.current_working_dir.file_path)
+    local cwd = fs.basename(pane.current_working_dir.file_path)
 
     ---instead of truncating the whole title, truncate to length the cwd to ensure that the
     ---right parenthesis always closes.
@@ -68,7 +65,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     title = ("%s ( %s)"):format(Icon.Progs[proc], cwd)
   end
 
-  title = title:gsub(fun.basename(fun.home), "󰋜 ")
+  title = title:gsub(fs.basename(fs.home()), "󰋜 ")
 
   ---truncate the tab title when it overflows the maximum available space, then concatenate
   ---some dots to indicate the occurred truncation
