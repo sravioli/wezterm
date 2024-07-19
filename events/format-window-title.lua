@@ -1,5 +1,5 @@
-local fun = require "utils.functions" ---@class UtilityFunctions
-local wt = require "wezterm" ---@class Wezterm
+local wt = require "wezterm"
+local fs = require("utils.fn").fs
 
 wt.on("format-window-title", function(tab, pane, tabs, _, _)
   local zoomed = ""
@@ -13,14 +13,14 @@ wt.on("format-window-title", function(tab, pane, tabs, _, _)
   end
 
   ---tab title
-  local title = fun.basename(pane.title):gsub("%.exe%s?$", "")
+  local title = fs.basename(pane.title):gsub("%.exe%s?$", "")
 
   local proc = pane.foreground_process_name
   if proc:find "nvim" then
     proc = proc:sub(proc:find "nvim")
   end
   if proc == "nvim" or title == "cmd" then
-    local cwd, _ = fun.basename(pane.current_working_dir.file_path)
+    local cwd, _ = fs.basename(pane.current_working_dir.file_path)
     title = ("Neovim (dir: %s)"):format(cwd)
   end
 
