@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [5.2.0](https://github.com/sravioli/wezterm/compare/710aa39c85cd4574b40cf6e7b6ebaa81aea74276..5.2.0) - 2024-07-19
+#### Bug Fixes
+- **(colors:kanagawa-dragon)** tab bar now has the same color - ([8d964b2](https://github.com/sravioli/wezterm/commit/8d964b2603059077c9574feed501a3e716fd5d7a)) - sravioli
+- **(config:gpu)** extract battery info to variable - ([9b25d7a](https://github.com/sravioli/wezterm/commit/9b25d7a22a3ff0ae6503a2d7cb1de268c360b8e0)) - sravioli
+- **(events:augment-command-palette)** rm useless config variable - ([1b7e943](https://github.com/sravioli/wezterm/commit/1b7e943acde72d1a132a0a8efbfab4cf3662291a)) - sravioli
+- **(events:format-tab-title)** update to new fn file, get theme dynamically - ([7e27b83](https://github.com/sravioli/wezterm/commit/7e27b83b51dc1dfc83f9310e9910f4f76d45d1a2)) - sravioli
+- **(events:format-window-title)** update to new fn file - ([7dbdb40](https://github.com/sravioli/wezterm/commit/7dbdb4058c6dfe9b35902435d2b0971e91cf2335)) - sravioli
+- **(events:lock-interface)** remove useless lock event - ([6b20383](https://github.com/sravioli/wezterm/commit/6b203838ce2aad4e48715df0634dcfb8a51735b5)) - sravioli
+- **(events:update-status)** update to new fn file, don't use ipairs - ([424ca5d](https://github.com/sravioli/wezterm/commit/424ca5d5345edda43a69340b2300286716cb006b)) - sravioli
+- **(mappings:default)** update to new fn file - ([bfa37c2](https://github.com/sravioli/wezterm/commit/bfa37c285708b58f4d4c7ddc0d9bba95b690ebc8)) - sravioli
+- **(mappings:init.lua)** update to new fn file - ([67e8cd4](https://github.com/sravioli/wezterm/commit/67e8cd44eb259d5c94c24dba5a68d6e8643e4d26)) - sravioli
+- **(mappings:modes)** rm lock interface keymap - ([136c524](https://github.com/sravioli/wezterm/commit/136c524e476c08f477a3691c85af6b3cb42d732d)) - sravioli
+- **(mappings:modes)** update to new fn file - ([b670ac3](https://github.com/sravioli/wezterm/commit/b670ac384a8a8d582c4b09d64d337463242f4025)) - sravioli
+- **(utils:class)** update icons class name - ([d97ed99](https://github.com/sravioli/wezterm/commit/d97ed99612ad2583ddad27523d2cdf241f526c1c)) - sravioli
+- **(utils:class)** rm useless logs, change class name - ([77e9249](https://github.com/sravioli/wezterm/commit/77e92492d7f752990ed3d979eeafbf1382a151aa)) - sravioli
+- **(utils:class)** change config class name - ([51ad0bd](https://github.com/sravioli/wezterm/commit/51ad0bd8a199588b3555b08b74d642498201472d)) - sravioli
+- **(utils:fn)** change `fun.lua` to `fn.lua`, divide by classes - ([507007b](https://github.com/sravioli/wezterm/commit/507007b44b033aa928c392bcf5fae1b0ee36ab8a)) - sravioli
+- **(utils:gpu_adapter)** update to new fn file - ([fdd6d47](https://github.com/sravioli/wezterm/commit/fdd6d47e5be73be9afcbc6b2858dfd55c1f9add7)) - sravioli
+- **(utils:icons)** move to class folder - ([197ae1e](https://github.com/sravioli/wezterm/commit/197ae1e84a0bf87e1ea3dadb488013252befc91b)) - sravioli
+- **(utils:modes-list)** remove separate file for mode list - ([393a9c7](https://github.com/sravioli/wezterm/commit/393a9c7763e8e47566d5f257c18476688d70f8bb)) - sravioli
+- **(wezterm.lua)** rm spacing - ([b875d14](https://github.com/sravioli/wezterm/commit/b875d142e4502122c3567496df0468067c94af28)) - sravioli
+- rm .luarc.json - ([a6e4950](https://github.com/sravioli/wezterm/commit/a6e4950f7546c5975c2acbb19d85c65bce365d8d)) - sravioli
+#### Features
+- **(config:appearance)** adapt to new fn file - ([cd4dc5a](https://github.com/sravioli/wezterm/commit/cd4dc5a8c25bc9ec99fd0b1fb6ca34f9e1082e03)) - sravioli
+- **(config:font)** adapt to new fn file - ([24725a2](https://github.com/sravioli/wezterm/commit/24725a29ebb6755e2c68a414d583642ab25abf28)) - sravioli
+- **(config:general)** adapt to new fn file - ([0df811e](https://github.com/sravioli/wezterm/commit/0df811e03c4907024358265d7a5970afd2826a19)) - sravioli
+- **(config:general)** add spacing between imports - ([3986aa5](https://github.com/sravioli/wezterm/commit/3986aa569a08d4945eb63a9dc7756fc5b8e1d26c)) - sravioli
+- **(config:gpu)** switch to low power mode when battery is low - ([cb21880](https://github.com/sravioli/wezterm/commit/cb21880b74524762b2195ec4397a77382e9528b8)) - sravioli
+- **(config:init.lua)** adapt to new fn file - ([a34f96b](https://github.com/sravioli/wezterm/commit/a34f96bb7c299e2257b07b473122c02b6737a775)) - sravioli
+- **(picker:theme)** implement a theme picker - ([694a1c8](https://github.com/sravioli/wezterm/commit/694a1c8267198b4914a81f617c99664aff9f348f)) - sravioli
+- **(utils:class)** move utility classes to separate folder - ([641e83c](https://github.com/sravioli/wezterm/commit/641e83c9e4ad3710cc910de7d93fae1e46e31e23)) - sravioli
+- **(utils:layout)** add clear method for Layout - ([710aa39](https://github.com/sravioli/wezterm/commit/710aa39c85cd4574b40cf6e7b6ebaa81aea74276)) - sravioli
+
+- - -
+
 ## [5.1.1](https://github.com/sravioli/wezterm/compare/2c59e48069895b1cf8ab053382bfd7dad5dd12d0..5.1.1) - 2024-07-07
 #### Bug Fixes
 - **(config:font)** disable font stretch for italics - ([41d54cd](https://github.com/sravioli/wezterm/commit/41d54cd3e9ccdf2fc43760cb50d45c7c8148757a)) - sravioli
