@@ -1,10 +1,11 @@
----@class Config
+local color = require("utils.fn").color
+
 local Config = {}
 
-local scheme = require("utils.fun").get_scheme()
-local theme = require("colors")[scheme]
-Config.color_schemes = require "colors"
-Config.color_scheme = scheme
+Config.color_schemes = color.get_schemes()
+Config.color_scheme = color.get_scheme()
+
+local theme = Config.color_schemes[Config.color_scheme]
 
 Config.background = {
   {
@@ -80,13 +81,6 @@ Config.skip_close_confirmation_for_processes_named = {
 Config.window_close_confirmation = "AlwaysPrompt"
 
 ---new tab button
-Config.tab_bar_style = {}
-for _, tab_button in ipairs { "new_tab", "new_tab_hover" } do
-  Config.tab_bar_style[tab_button] = require("wezterm").format {
-    { Text = require("utils.icons").Separators.TabBar.right },
-    { Text = " + " },
-    { Text = require("utils.icons").Separators.TabBar.left },
-  }
-end
+color.set_tab_button(Config, theme)
 
 return Config
