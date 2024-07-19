@@ -1,19 +1,15 @@
-local fun = require "utils.fun" ---@class Fun
+local Icons = require "utils.class.icon"
+local fs = require("utils.fn").fs
 
-local icons = require "utils.icons" ---@class Icons
-
-local platform = fun.platform()
-
----@class Config
 local Config = {}
 
-if platform.is_win then
+if fs.platform().is_win then
   Config.default_prog =
     { "pwsh", "-NoLogo", "-ExecutionPolicy", "RemoteSigned", "-NoProfileLoadTime" }
 
   Config.launch_menu = {
     {
-      label = icons.Pwsh .. " PowerShell V7",
+      label = Icons.Progs["pwsh.exe"] .. " PowerShell V7",
       args = {
         "pwsh",
         "-NoLogo",
@@ -23,9 +19,13 @@ if platform.is_win then
       },
       cwd = "~",
     },
-    { label = icons.Pwsh .. " PowerShell V5", args = { "powershell" }, cwd = "~" },
+    {
+      label = Icons.Progs["pwsh.exe"] .. " PowerShell V5",
+      args = { "powershell" },
+      cwd = "~",
+    },
     { label = "Command Prompt", args = { "cmd.exe" }, cwd = "~" },
-    { label = icons.Git .. " Git bash", args = { "sh", "-l" }, cwd = "~" },
+    { label = Icons.Progs["git"] .. " Git bash", args = { "sh", "-l" }, cwd = "~" },
   }
 
   -- ref: https://wezfurlong.org/wezterm/config/lua/WslDomain.html
@@ -46,7 +46,7 @@ if platform.is_win then
   }
 end
 
-Config.default_cwd = fun.home
+Config.default_cwd = fs.home()
 
 -- ref: https://wezfurlong.org/wezterm/config/lua/SshDomain.html
 Config.ssh_domains = {}
