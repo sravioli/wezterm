@@ -1,8 +1,11 @@
 ---@diagnostic disable: undefined-field
 
 local wt = require "wezterm"
-local fs = require("utils.fn").fs
-local Icon = require "utils.class.icon"
+
+local Utils = require "utils"
+
+local fs = Utils.fn.fs
+local Icon = Utils.class.icon
 local tabicons = Icon.Sep.tb
 
 wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
@@ -10,11 +13,12 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     return
   end
 
-  local theme = config.color_schemes[config.color_scheme]
+  -- local theme = Utils.fn.color.get_schemes()[config.color_scheme]
+  local theme = require "colors.kanagawa-wave"
   local bg = theme.tab_bar.background
   local fg
 
-  local Title = require("utils.class.layout"):new() ---@class Layout
+  local Title = Utils.class.layout:new() ---@class Layout
 
   local pane, tab_idx = tab.active_pane, tab.tab_index
   local attributes = {}
