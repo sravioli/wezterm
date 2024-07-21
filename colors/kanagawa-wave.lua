@@ -55,7 +55,7 @@ return {
     background = "#16161D",
 
     active_tab = {
-      bg_color = "#957FB8",
+      bg_color = "#7E9CD8",
       fg_color = "#1F1F28",
     },
 
