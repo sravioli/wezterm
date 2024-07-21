@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [5.2.2](https://github.com/sravioli/wezterm/compare/caf9a2be4b599cbf0bff2d9419ed2cc44d364786..5.2.2) - 2024-07-21
+#### Bug Fixes
+- **(colors:kanagawa-wave)** change active tab bg color - ([ab7881e](https://github.com/sravioli/wezterm/commit/ab7881ee1774d7bf948d6959f8d48a9b3116d1fb)) - sravioli
+- **(config:appearance)** enable resize decorations only on windows - ([249f2e5](https://github.com/sravioli/wezterm/commit/249f2e50b5ad8b68f79e1f956a732c80ff4052cc)) - sravioli
+- **(events:format-tab-title)** update to new utils - ([fb86efa](https://github.com/sravioli/wezterm/commit/fb86efa02dbce3f843227e9dd6253deb539a04bc)) - sravioli
+- **(utils:fn)** usa local variable to cache colorschemes - ([55d9aa7](https://github.com/sravioli/wezterm/commit/55d9aa782e77f3cdb93e398b59b59f35f606d535)) - sravioli
+- **(utils:fn)** cache colorscheme values - ([caf9a2b](https://github.com/sravioli/wezterm/commit/caf9a2be4b599cbf0bff2d9419ed2cc44d364786)) - sravioli
+- **(wezterm.lua)** disable format-tab-title event due to performance - ([0bce154](https://github.com/sravioli/wezterm/commit/0bce154266db69b5f3159323f0372763c9bf0b18)) - sravioli
+#### Features
+- **(picker:theme)** add color palettes to themes - ([42a01fe](https://github.com/sravioli/wezterm/commit/42a01fe7557f9ea38b6f98bc628bd1af122445bb)) - sravioli
+
+- - -
+
 ## [5.2.1](https://github.com/sravioli/wezterm/compare/778e44ff4c56b6a85833451d005a085a8da216d5..5.2.1) - 2024-07-19
 #### Hotfixes
 - **(mappings)** enable the theme picker - ([778e44f](https://github.com/sravioli/wezterm/commit/778e44ff4c56b6a85833451d005a085a8da216d5)) - sravioli
