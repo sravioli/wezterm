@@ -211,6 +211,41 @@ M.fs.pathshortener = function(path, len)
   return short_path
 end
 
+---Reads the contents of a directory and returns a list of filenames.
+---This function constructs a command to list files in the specified directory.
+---The command differs based on the operating system:
+---  - On Windows, it uses `dir %s /b` to list directories.
+---  - On Unix-like systems, it uses `find %s -maxdepth 1 -type f` to list only files.
+---The command is executed using `io.popen`, and the output is processed to extract filenames.
+---
+---@param directory string The absolute path to the directory to read.
+---@return table|nil files filenames (abs path) in the specified directory. nil if not accessible.
+---
+---@usage
+---local directory = "/path/to/your/directory"
+---local files = M.fs.read_dir(directory)
+---for _, file in ipairs(files) do
+---  print(file)
+---end
+M.fs.read_dir = function(directory)
+  local is_win = M.fs.platform().is_win
+  local cmd = (is_win and "dir %s /b" or "find %s -maxdepth 1 -type f"):format(directory)
+
+  local handle = io.popen(cmd)
+  if not handle then
+    return
+  end
+  local result = handle:read "*a"
+  handle:close()
+
+  local files = {}
+  for file in result:gmatch "[^\r\n]+" do
+    files[#files + 1] = file
+  end
+
+  return files
+end
+
 -- }}}
 
 -- {{{1 Utils.Fn.Maths
