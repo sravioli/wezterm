@@ -506,20 +506,21 @@ end
 ---@class Utils.Fn.Color
 M.color = {}
 
+M.color.schemes = nil
+
 ---Merge color schemes from multiple sources
 ---@return table colorschemes Full colorschemes table
 M.color.get_schemes = function()
-  local colorschemes = {}
-  local function add_schemes(schemes)
-    for scheme_name, colors in pairs(schemes) do
-      colorschemes[scheme_name] = colors
-    end
+  if M.color.schemes then
+    return M.color.schemes
   end
 
-  add_schemes(require("wezterm").color.get_builtin_schemes())
-  add_schemes(require "colors")
+  M.color.schemes = wt.color.get_builtin_schemes()
+  for name, colors in pairs(require "colors") do
+    M.color.schemes[name] = colors
+  end
 
-  return colorschemes
+  return M.color.schemes
 end
 
 ---Returns the colorscheme name absed on the system appearance
