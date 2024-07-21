@@ -1,4 +1,6 @@
-local color = require("utils.fn").color
+local Utils = require "utils"
+local color = Utils.fn.color
+local fs = Utils.fn.fs
 
 local Config = {}
 
@@ -58,7 +60,9 @@ Config.visual_bell = {
 
 ---window appearance
 Config.window_padding = { left = 2, right = 2, top = 2, bottom = 1 }
---Config.window_decorations = "RESIZE"
+if fs.platform().is_win then
+  Config.window_decorations = "RESIZE"
+end
 Config.integrated_title_button_alignment = "Right"
 Config.integrated_title_button_style = "Windows"
 Config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
