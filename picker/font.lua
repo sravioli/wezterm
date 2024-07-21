@@ -1,7 +1,6 @@
 ---@diagnostic disable: undefined-field
 
 local wt = require "wezterm"
-local log_info = wt.log_info
 
 local FontPicker = require("picker.generic"):init()
 FontPicker.title = "Font Picker"
@@ -37,38 +36,41 @@ local available_fonts = {
 local register_fonts = function(opts)
   for _, v in ipairs(opts or {}) do
     local name = v.name or v.mod
-    table.insert(FontPicker.choices, { label = name, id = name })
+    FontPicker.choices[name] = v
   end
+end
+
+FontPicker.select = function(config, name)
+  local font = FontPicker.choices[name]
+  require(font.mod)(config, font.opts)
 end
 
 register_fonts(available_fonts)
 
-FontPicker.action = function(window, _, id, label)
-  if not id and not label then
-    return log_info "Font picking cancelled"
-  end
-  log_info("Applying Font: ", id)
-
-  local font
-  for _, choice in ipairs(FontPicker.choices) do
-    if choice.id == id then
-      font = choice
-      break
+FontPicker.pick = function()
+  return wt.action_callback(function(window, pane)
+    local choices = {}
+    for k, _ in pairs(FontPicker.choices) do
+      table.insert(choices, { label = k })
     end
-  end
+    table.sort(choices, function(a, b)
+      return a.label < b.label
+    end)
 
-  if not font then
-    return log_info("Font not found: ", id)
-  end
-
-  require(font.mod)(window:effective_config(), font.opts)
-
-  ---@class Config
-  local Overrides = {
-    font = id,
-  }
-
-  window:set_config_overrides(Overrides)
+    window:perform_action(
+      wt.action.InputSelector {
+        action = wt.action_callback(function(window, _, _, label)
+          local overrides = window:get_config_overrides() or {}
+          FontPicker.select(overrides, label)
+          window:set_config_overrides(overrides)
+        end),
+        title = FontPicker.title,
+        choices = choices,
+        fuzzy = FontPicker.fuzzy,
+      },
+      pane
+    )
+  end)
 end
 
 return FontPicker
