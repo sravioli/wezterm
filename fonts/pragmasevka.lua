@@ -3,11 +3,13 @@ local wt = require "wezterm"
 local monaspace_features =
   { "dlig", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
 
-return function(config, _)
+local M = {}
+
+M.apply = function(config, _)
   config.font = wt.font_with_fallback {
     {
-      family = "D2CodingLigature Nerd Font",
-      weight = "Regular",
+      family = "Pragmasevka Nerd Font",
+      weight = "Medium",
       harfbuzz_features = {
         -- "cv01", ---styles: a
         -- "cv02", ---styles: g
@@ -48,7 +50,6 @@ return function(config, _)
   }
 
   config.font_size = 12.0
-  config.cell_width = 1.0
   config.font_rules = {
     {
       intensity = "Normal",
@@ -82,3 +83,5 @@ return function(config, _)
     },
   }
 end
+
+return M

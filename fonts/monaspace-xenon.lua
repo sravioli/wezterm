@@ -1,12 +1,11 @@
 local wt = require "wezterm"
 
-local monaspace_features =
-  { "dlig", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
+local M = {}
 
-return function(config, _)
+M.apply = function(config, _)
   config.font = wt.font_with_fallback {
     {
-      family = "CommitMonoAK",
+      family = "Monaspace Xenon",
       weight = "Regular",
       harfbuzz_features = {
         -- "cv01", ---styles: a
@@ -52,32 +51,19 @@ return function(config, _)
     {
       intensity = "Normal",
       italic = true,
-      font = wt.font_with_fallback {
-        {
-          family = "Monaspace Radon", --"Monaspace Radon Var",
-          -- family = "CommitMonoAK", --"Monaspace Krypton Var",
-          style = "Normal",
-          weight = "Regular",
-          stretch = "Expanded",
-          harfbuzz_features = monaspace_features,
-        },
-        { family = "Symbols Nerd Font" },
-      },
+      font = wt.font("Monaspace Radon", { weight = "Regular" }),
+    },
+    {
+      intensity = "Bold",
+      italic = false,
+      font = wt.font("Monaspace Neon", { weight = "ExtraBold" }),
     },
     {
       intensity = "Bold",
       italic = true,
-      font = wt.font_with_fallback {
-        {
-          family = "Monaspace Krypton Var", --"Monaspace Krypton Var",
-          -- family = "CommitMonoAK", --"Monaspace Krypton Var",
-          style = "Italic",
-          weight = "Black",
-          harfbuzz_features = monaspace_features,
-          scale = 1.1,
-        },
-        { family = "Symbols Nerd Font" },
-      },
+      font = wt.font("Monaspace Radon", { weight = "ExtraBold" }),
     },
   }
 end
+
+return M

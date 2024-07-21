@@ -3,7 +3,9 @@ local wt = require "wezterm"
 local monaspace_features =
   { "dlig", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
 
-return function(config, _)
+local M = {}
+
+M.apply = function(config, _)
   config.font = wt.font_with_fallback {
     {
       family = "JetBrainsMono Nerd Font",
@@ -48,3 +50,5 @@ return function(config, _)
     },
   }
 end
+
+return M

@@ -1,9 +1,11 @@
 local wt = require "wezterm"
 
-return function(config, _)
+local M = {}
+
+M.apply = function(config, _)
   config.font = wt.font_with_fallback {
     {
-      family = "UbuntuMono Nerd Font",
+      family = "Monaspace Argon",
       weight = "Regular",
       harfbuzz_features = {
         -- "cv01", ---styles: a
@@ -44,8 +46,7 @@ return function(config, _)
     { family = "LegacyComputing" },
   }
 
-  config.font_size = 13.0
-  config.cell_width = 0.9
+  config.font_size = 12.0
   config.font_rules = {
     {
       intensity = "Normal",
@@ -64,3 +65,5 @@ return function(config, _)
     },
   }
 end
+
+return M

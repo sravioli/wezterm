@@ -1,9 +1,11 @@
 local wt = require "wezterm"
 
-return function(config, _)
+local M = {}
+
+M.apply = function(config, _)
   config.font = wt.font_with_fallback {
     {
-      family = "Monaspace Radon",
+      family = "Monaspace Neon",
       weight = "Regular",
       harfbuzz_features = {
         -- "cv01", ---styles: a
@@ -63,3 +65,5 @@ return function(config, _)
     },
   }
 end
+
+return M
