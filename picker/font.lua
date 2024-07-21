@@ -12,6 +12,7 @@ FontPicker.fuzzy_description = "Fuzzy find the font you want..."
 --TODO: Going to redesign this so that it setups a table automatically based on
 --the fonts folder and a person won't have to manually map them.
 local available_fonts = {
+  { name = "Reset to Default", mod = "fonts.font-reset" },
   { name = "Maple Mono", mod = "fonts.font-maple" },
   { name = "JetBrainsMono Nerd Font", mod = "fonts.font-jetbrains" },
   { name = "ComicShannsMono Nerd Font", mod = "fonts.font-commicshanns" },
