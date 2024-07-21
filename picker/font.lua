@@ -28,31 +28,16 @@ table.sort(FontPicker.choices, function(a, b)
   return (a.label == "reset") or (b.label ~= "reset" and a.label < b.label)
 end)
 
+FontPicker.action = function(window, _, id, label)
+  if not id and not label then
+    return wt.log_info "Font picking cancelled"
+  end
+  wt.log_info("Applying font: ", label)
 
-FontPicker.pick = function()
-  return wt.action_callback(function(window, pane)
-    local choices = {}
-    for k, _ in pairs(FontPicker.choices) do
-      table.insert(choices, { label = k })
-    end
-    table.sort(choices, function(a, b)
-      return a.label < b.label
-    end)
+  local Overrides = window:get_config_overrides() or {}
+  require(id).apply(Overrides)
 
-    window:perform_action(
-      wt.action.InputSelector {
-        action = wt.action_callback(function(window, _, _, label)
-          local overrides = window:get_config_overrides() or {}
-          FontPicker.select(overrides, label)
-          window:set_config_overrides(overrides)
-        end),
-        title = FontPicker.title,
-        choices = choices,
-        fuzzy = FontPicker.fuzzy,
-      },
-      pane
-    )
-  end)
+  window:set_config_overrides(Overrides)
 end
 
 return FontPicker
