@@ -2,51 +2,32 @@
 
 local wt = require "wezterm"
 
+local Utils = require "utils"
+local fs = Utils.fn.fs
+
+local font_folder_name = "fonts"
+local dir = wt.config_dir .. fs.path_separator .. font_folder_name
+local files = fs.read_dir(dir)
+if not files then
+  return wt.log_error("Unable to read files from dir:", dir)
+end
+
 local FontPicker = require("picker.generic"):init()
 FontPicker.title = "Font Picker"
-FontPicker.choices = {}
 FontPicker.fuzzy = true
--- FIX: fuzzy description doesn't seem to be implemented yet.
-FontPicker.fuzzy_description = "Fuzzy find the font you want..."
+FontPicker.fuzzy_description = "Searching font: "
 
---TODO: Going to redesign this so that it setups a table automatically based on
---the fonts folder and a person won't have to manually map them.
-local available_fonts = {
-  { name = "Reset to Default", mod = "fonts.font-reset" },
-  { name = "Maple Mono", mod = "fonts.font-maple" },
-  { name = "JetBrainsMono Nerd Font", mod = "fonts.font-jetbrains" },
-  { name = "ComicShannsMono Nerd Font", mod = "fonts.font-commicshanns" },
-  { name = "Hack Nerd Font", mod = "fonts.font-hack" },
-  { name = "Pragmasevka Nerd Font", mod = "fonts.font-pragmasevka" },
-  { name = "Monaspace Neon", mod = "fonts.font-monaspace-neon" },
-  { name = "Monaspace Argon", mod = "fonts.font-monaspace-argon" },
-  { name = "Monaspace Krypton Var", mod = "fonts.font-monaspace-krypton" },
-  { name = "Monaspace Radon", mod = "fonts.font-monaspace-radon" },
-  { name = "Monaspace Xenon", mod = "fonts.font-monaspace-xenon" },
-  { name = "UbuntuMono Nerd Font", mod = "fonts.font-ubuntu" },
-  { name = "CommitMonoAK", mod = "fonts.font-commitmonoak" },
-  { name = "CaskaydiaCove Nerd Font", mod = "fonts.font-caskaydiacove" },
-  { name = "Victor Mono", mod = "fonts.font-victor" },
-  { name = "FiraCode Nerd Font", mod = "fonts.font-firacode" },
-  { name = "DroidSansM Nerd Font", mod = "fonts.font-droidsans" },
-  { name = "D2CodingLigature Nerd Font", mod = "fonts.font-d2coding" },
-  { name = "Cascadia Code PL", mod = "fonts.font-cascadiaPL" },
-  { name = "Cascadia Code Mono NF", mod = "fonts.font-cascadiaNF" },
-}
-
-local register_fonts = function(opts)
-  for _, v in ipairs(opts or {}) do
-    local name = v.name or v.mod
-    FontPicker.choices[name] = v
-  end
+FontPicker.choices = {}
+for i = 1, #files do
+  local file = fs.basename(files[i]):gsub("%.lua", "")
+  FontPicker.choices[#FontPicker.choices + 1] =
+    { label = file, id = font_folder_name .. "." .. file }
 end
 
-FontPicker.select = function(config, name)
-  local font = FontPicker.choices[name]
-  require(font.mod)(config, font.opts)
-end
+table.sort(FontPicker.choices, function(a, b)
+  return (a.label == "reset") or (b.label ~= "reset" and a.label < b.label)
+end)
 
-register_fonts(available_fonts)
 
 FontPicker.pick = function()
   return wt.action_callback(function(window, pane)
