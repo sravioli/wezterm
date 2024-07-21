@@ -32,6 +32,7 @@ function M:pick()
     alphabet = self.alphabet or "1234567890abcdefghilmnopqrstuvwxyz",
     description = self.description
       or "Select an item and press Enter = accept, Esc = cancel, / = filter",
+    fuzzy_description = self.fuzzy_description or "Fuzzy matching: ",
   }
 end
 
