@@ -9,20 +9,43 @@ local log_info, wt_format = wt.log_info, wt.format
 
 local ThemePicker = require("picker.generic"):init()
 ThemePicker.title = "Theme Picker"
-ThemePicker.description = "Write the number you want to choose or press / to search."
+ThemePicker.fuzzy = true
 ThemePicker.choices = {}
 
-local fill_choices = function(choices, schemes)
-  for scheme, colors in pairs(schemes) do
-    if colors.tab_bar then
-      local ChoiceLayout = Layout:new() ---@class Layout
-      ChoiceLayout:push(colors.background, colors.foreground, scheme)
-      choices[#choices + 1] = { label = wt_format(ChoiceLayout), id = scheme }
+local _choices = {}
+local max_len = 0
+for scheme, colors in pairs(color.get_schemes()) do
+  if colors.tab_bar then
+    _choices[scheme] = colors
+    if scheme:len() > max_len then
+      max_len = scheme:len()
     end
   end
 end
 
-fill_choices(ThemePicker.choices, color.get_schemes())
+for scheme, colors in pairs(_choices) do
+  local ChoiceLayout = Layout:new() ---@class Layout
+  ChoiceLayout:push(colors.background, colors.foreground, scheme)
+
+  ChoiceLayout:push("none", "none", (" "):rep(max_len - scheme:len() + 3))
+  for i = 1, #colors.ansi do
+    local bg = colors.ansi[i]
+    ChoiceLayout:push(bg, bg, "  ")
+  end
+
+  ChoiceLayout:push("none", "none", "   ")
+  for i = 1, #colors.brights do
+    local bg = colors.brights[i]
+    ChoiceLayout:push(bg, bg, "  ")
+  end
+
+  ThemePicker.choices[#ThemePicker.choices + 1] =
+    { label = wt_format(ChoiceLayout), id = scheme }
+end
+
+table.sort(ThemePicker.choices, function(a, b)
+  return a.id < b.id
+end)
 
 ThemePicker.action = function(window, _, id, label)
   if not id and not label then
