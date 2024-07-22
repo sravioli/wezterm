@@ -20,8 +20,9 @@ FontPicker.fuzzy_description = "Searching font: "
 FontPicker.choices = {}
 for i = 1, #files do
   local file = fs.basename(files[i]):gsub("%.lua", "")
+  local formatted_label = require(font_folder_name .. "." .. file).formatted_name
   FontPicker.choices[#FontPicker.choices + 1] =
-    { label = file, id = font_folder_name .. "." .. file }
+    { label = formatted_label or file, id = font_folder_name .. "." .. file }
 end
 
 table.sort(FontPicker.choices, function(a, b)

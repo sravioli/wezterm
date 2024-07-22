@@ -6,6 +6,8 @@ local monaspace_features =
 local M = {}
 
 M.apply = function(config, _)
+  M.formatted_name = "JetBrainsMono Nerd Font"
+
   config.font = wt.font_with_fallback {
     {
       family = "JetBrainsMono Nerd Font",
