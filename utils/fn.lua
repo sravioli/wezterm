@@ -46,6 +46,42 @@ M.tbl_merge = function(t1, ...)
   return t1
 end
 
+--~ {{{1
+
+M.dump = function(o)
+  if type(o) == "table" then
+    local s = "{"
+    local entries = {}
+    for k, v in pairs(o) do
+      local key
+      if type(k) == "string" then
+        key = string.format("%q", k)
+      else
+        key = tostring(k)
+      end
+
+      local value
+      if type(v) == "table" then
+        value = M.dump(v)
+      elseif type(v) == "string" then
+        value = string.format("%q", v)
+      else
+        value = tostring(v)
+      end
+      entries[#entries + 1] = "[" .. key .. "]=" .. value
+    end
+    s = s .. table.concat(entries, ",") .. "}"
+    return s
+  else
+    if type(o) == "string" then
+      return string.format("%q", o)
+    else
+      return tostring(o)
+    end
+  end
+end
+--~ }}}
+
 -- {{{1 Utils.Fn.FileSystem
 
 ---@class Utils.Fn.FileSystem
