@@ -247,6 +247,11 @@ M.fs.pathshortener = function(path, len)
   return short_path
 end
 
+M.fs.pathconcat = function(...)
+  local paths = { ... }
+  return table.concat(paths, M.fs.path_separator)
+end
+
 -- }}}
 
 -- {{{1 Utils.Fn.Maths
@@ -541,6 +546,27 @@ end
 
 ---@class Utils.Fn.Color
 M.color = {}
+
+M.color.add_tab_bar = function(colors)
+  colors.tab_bar = {
+    background = colors.cursor_fg or colors.background,
+    active_tab = { bg_color = colors.ansi[5], fg_color = colors.background },
+    inactive_tab = { bg_color = colors.brights[1], fg_color = colors.background },
+    inactive_tab_hover = {
+      bg_color = colors.selection_bg,
+      fg_color = colors.brights[1],
+      italic = true,
+    },
+    new_tab = { bg_color = colors.brights[1], fg_color = colors.background },
+    new_tab_hover = {
+      bg_color = colors.split,
+      fg_color = colors.background,
+      italic = true,
+    },
+  }
+
+  return colors
+end
 
 local colorschemes = nil
 
