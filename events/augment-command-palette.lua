@@ -29,7 +29,7 @@ wt.on("augment-command-palette", function(_, _)
       action = wt.action_callback(function()
         local colorschemes = wt.color.get_builtin_schemes()
         local fname = function(name)
-          return fs.pathconcat("_themes", name .. ".lua")
+          return fs.pathconcat(wt.config_dir, "_themes", name:gsub("%.", "-") .. ".lua")
         end
 
         for name, colors in pairs(colorschemes) do
