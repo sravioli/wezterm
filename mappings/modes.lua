@@ -154,6 +154,8 @@ local key_tables = {
   pick_mode = {
     { "<ESC>", "PopKeyTable", "exit" },
     { "t", require("picker.theme"):pick(), "theme picker" },
+    { "f", require("picker.font"):pick(), "font picker" },
+    { "s", require("picker.font_size"):pick(), "fontsize picker" },
   }, -- }}}
 }
 
