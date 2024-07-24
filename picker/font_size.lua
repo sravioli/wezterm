@@ -22,7 +22,7 @@ for _, size in ipairs(size_options) do
 
   FontSizePicker.choices[#FontSizePicker.choices + 1] = {
     label = label,
-    id = tostring(value), -- Convert id to string
+    id = tostring(value),
   }
 end
 
@@ -37,7 +37,6 @@ FontSizePicker.action = function(window, _, id, label)
   if id == "Reset" then
     Overrides.font_size = nil
   else
-    -- Convert id back to number if it's not "Reset"
     local value = id ~= "Reset" and tonumber(id) or id
     sizes.activate(Overrides, nil, value)
   end
