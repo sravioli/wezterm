@@ -247,6 +247,9 @@ M.fs.pathshortener = function(path, len)
   return short_path
 end
 
+---Concatenates a vararg list of values to a single string
+---@vararg string paths
+---@return string path The concatenated path
 M.fs.pathconcat = function(...)
   local paths = { ... }
   return table.concat(paths, M.fs.path_separator)
