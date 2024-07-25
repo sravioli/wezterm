@@ -46,42 +46,6 @@ M.tbl_merge = function(t1, ...)
   return t1
 end
 
---~ {{{1
-
-M.dump = function(o)
-  if type(o) == "table" then
-    local s = "{"
-    local entries = {}
-    for k, v in pairs(o) do
-      local key
-      if type(k) == "string" then
-        key = string.format("%q", k)
-      else
-        key = tostring(k)
-      end
-
-      local value
-      if type(v) == "table" then
-        value = M.dump(v)
-      elseif type(v) == "string" then
-        value = string.format("%q", v)
-      else
-        value = tostring(v)
-      end
-      entries[#entries + 1] = "[" .. key .. "]=" .. value
-    end
-    s = s .. table.concat(entries, ",") .. "}"
-    return s
-  else
-    if type(o) == "string" then
-      return string.format("%q", o)
-    else
-      return tostring(o)
-    end
-  end
-end
---~ }}}
-
 -- {{{1 Utils.Fn.FileSystem
 
 ---@class Utils.Fn.FileSystem
@@ -253,6 +217,43 @@ end
 M.fs.pathconcat = function(...)
   local paths = { ... }
   return table.concat(paths, M.fs.path_separator)
+end
+
+---Reads the contents of a directory and returns a list of filenames.
+---This function constructs a command to list files in the specified directory.
+---The command differs based on the operating system:
+---  - On Windows, it uses `dir %s /b` to list directories.
+---  - On Unix-like systems, it uses `find %s -maxdepth 1 -type f` to list only files.
+---The command is executed using `io.popen`, and the output is processed to extract filenames.
+---
+---@param directory string The absolute path to the directory to read.
+---@return table|nil files filenames (abs path) in the specified directory. nil if not accessible.
+---
+---@usage
+---local directory = "/path/to/your/directory"
+---local files = M.fs.read_dir(directory)
+---for _, file in ipairs(files) do
+---  print(file)
+---end
+M.fs.read_dir = function(directory)
+  local is_win = M.fs.platform().is_win
+  local cmd = (is_win and "dir %s /b" or "find %s -maxdepth 1 -type f"):format(directory)
+
+  local handle = io.popen(cmd)
+  if not handle then
+    return
+  end
+  local result = handle:read "*a"
+  handle:close()
+
+  local files = {}
+  for file in result:gmatch "[^\r\n]+" do
+    if not file:match "init%.lua$" then
+      files[#files + 1] = file
+    end
+  end
+
+  return files
 end
 
 -- }}}
@@ -550,42 +551,25 @@ end
 ---@class Utils.Fn.Color
 M.color = {}
 
-M.color.add_tab_bar = function(colors)
-  colors.tab_bar = {
-    background = colors.cursor_fg or colors.background,
-    active_tab = { bg_color = colors.ansi[5], fg_color = colors.background },
-    inactive_tab = { bg_color = colors.brights[1], fg_color = colors.background },
-    inactive_tab_hover = {
-      bg_color = colors.selection_bg,
-      fg_color = colors.brights[1],
-      italic = true,
-    },
-    new_tab = { bg_color = colors.brights[1], fg_color = colors.background },
-    new_tab_hover = {
-      bg_color = colors.split,
-      fg_color = colors.background,
-      italic = true,
-    },
-  }
-
-  return colors
-end
-
-local colorschemes = nil
-
----Merge color schemes from multiple sources
----@return table colorschemes Full colorschemes table
+---Retrieves all the customs colorschemes
+---@return table schemes Full colorschemes table
 M.color.get_schemes = function()
-  if colorschemes then
-    return colorschemes
+  local schemes = {}
+
+  local dir = M.fs.pathconcat(wt.config_dir, "pick-lists", "colorschemes")
+  local files = M.fs.read_dir(dir)
+
+  if not files then
+    return wt.log_error(
+      ("Unable to read from directory: '%s'"):format(M.fs.basename(dir))
+    )
   end
 
-  colorschemes = wt.color.get_builtin_schemes()
-  for name, colors in pairs(require "colors") do
-    colorschemes[name] = colors
+  for i = 1, #files do
+    local name = M.fs.basename(files[i]:gsub("%.lua$", ""))
+    schemes[name] = require("pick-lists.colorschemes." .. name).scheme
   end
-
-  return colorschemes
+  return schemes
 end
 
 ---Returns the colorscheme name absed on the system appearance
@@ -641,6 +625,18 @@ M.color.set_tab_button = function(config, theme)
 
     config.tab_bar_style[state] = wt.format(ButtonLayout)
   end
+end
+
+M.color.set_scheme = function(Config, theme, name)
+  Config.color_scheme = name
+  Config.char_select_bg_color = theme.brights[6]
+  Config.char_select_fg_color = theme.background
+  Config.command_palette_bg_color = theme.brights[6]
+  Config.command_palette_fg_color = theme.background
+  Config.background = {
+    { source = { Color = theme.background }, width = "100%", height = "100%" },
+  }
+  M.color.set_tab_button(Config, theme)
 end
 
 -- }}}
