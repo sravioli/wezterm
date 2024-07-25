@@ -14,18 +14,11 @@ wt.on("update-status", function(window, pane)
 
   local Overrides = window:get_config_overrides() or {}
   local theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
-
   local modes = {
     search_mode = { i = "󰍉", txt = "SEARCH", bg = theme.brights[4], pad = 7 },
     window_mode = { i = "󱂬", txt = "WINDOW", bg = theme.ansi[6], pad = 8 },
     copy_mode = { i = "󰆏", txt = "COPY", bg = theme.brights[3], pad = 8 },
-    font_mode = {
-      i = "󰛖",
-      txt = "FONT",
-      bg = theme.indexed[16] or theme.ansi[8],
-      pad = 7,
-    },
-    lock_mode = { i = "", txt = "LOCK", bg = theme.ansi[8], pad = 0 },
+    font_mode = { i = "󰛖", txt = "FONT", bg = theme.ansi[8], pad = 7 },
     help_mode = { i = "󰞋", txt = "NORMAL", bg = theme.ansi[5], pad = 9 },
     pick_mode = { i = "󰢷", txt = "PICK", bg = theme.ansi[2], pad = 9 },
   }
