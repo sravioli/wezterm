@@ -13,8 +13,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     return
   end
 
-  -- local theme = Utils.fn.color.get_schemes()[config.color_scheme]
-  local theme = require "colors.kanagawa-wave"
+  local theme = config.color_schemes[config.color_scheme]
   local bg = theme.tab_bar.background
   local fg
 
