@@ -1,4 +1,10 @@
-return {
+---@class PickList
+local M = {}
+
+local Utils = require "utils"
+local color = Utils.fn.color
+
+M.scheme = {
   foreground = "#DCD7BA",
   background = "#1F1F28",
 
@@ -82,3 +88,14 @@ return {
     },
   },
 }
+
+function M.get()
+  return { id = "kanagawa-wave", label = "Kanagawa Wave" }
+end
+
+function M.activate(Config, callback_opts)
+  local theme = M.scheme
+  color.set_scheme(Config, theme, callback_opts.id)
+end
+
+return M
