@@ -237,7 +237,9 @@ end
 ---end
 M.fs.read_dir = function(directory)
   local is_win = M.fs.platform().is_win
-  local cmd = (is_win and "dir %s /b" or "find %s -maxdepth 1 -type f"):format(directory)
+  local cmd = (is_win and 'cmd /C "dir %s /B /S"' or "find %s -maxdepth 1 -type f"):format(
+    directory
+  )
 
   local handle = io.popen(cmd)
   if not handle then
