@@ -236,28 +236,33 @@ end
 ---  print(file)
 ---end
 M.fs.read_dir = function(directory)
-  local is_win = M.fs.platform().is_win
-  local cmd = (is_win and 'cmd /C "dir %s /B /S"' or "find %s -maxdepth 1 -type f"):format(
-    directory
-  )
-
-  local handle = io.popen(cmd)
-  if not handle then
-    return
+  local filename = "." .. M.fs.basename(directory) .. ".txt"
+  local cmd, tempfile =
+    "find %s -maxdepth 1 -type f > %s", M.fs.pathconcat("/tmp", filename)
+  if M.fs.platform().is_win then
+    cmd, tempfile =
+      'cmd /C "dir %s /B /S > %s"', M.fs.pathconcat(os.getenv "TEMP", filename)
   end
-  local result = handle:read "*a"
-  handle:close()
+  cmd = cmd:format(directory, tempfile)
 
   local files = {}
-  for file in result:gmatch "[^\r\n]+" do
-    if not file:match "init%.lua$" then
-      files[#files + 1] = file
+  local file = io.open(tempfile, "r")
+  if not file then
+    local success, exitcode = os.execute(cmd)
+    if not success then
+      return wt.log_error(
+        "Unable to create temp file, process edited with code:",
+        exitcode
+      )
     end
   end
+  for line in file:lines() do
+    files[#files + 1] = line
+  end
+  file:close()
 
   return files
 end
-
 -- }}}
 
 -- {{{1 Utils.Fn.Maths
