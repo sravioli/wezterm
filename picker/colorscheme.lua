@@ -19,17 +19,17 @@ local ColorschemePicker = Picker.new {
 
       for i = 1, #colors.ansi do
         local bg = colors.ansi[i]
-        ChoiceLayout:push(bg, bg, "  ")
+        ChoiceLayout:push("none", bg, " ")
       end
 
       ChoiceLayout:push("none", "none", "   ")
       for i = 1, #colors.brights do
         local bg = colors.brights[i]
-        ChoiceLayout:push(bg, bg, "  ")
+        ChoiceLayout:push("none", bg, " ")
       end
 
       ChoiceLayout:push("none", "none", (" "):rep(5))
-      ChoiceLayout:push(colors.background, colors.foreground, label)
+      ChoiceLayout:push("none", "white", label)
       __choices[#__choices + 1] = { label = wt.format(ChoiceLayout), id = id }
     end
 
