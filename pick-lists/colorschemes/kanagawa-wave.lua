@@ -5,18 +5,14 @@ local Utils = require "utils"
 local color = Utils.fn.color
 
 M.scheme = {
-  foreground = "#DCD7BA",
   background = "#1F1F28",
-
+  foreground = "#DCD7BA",
   cursor_bg = "#C8C093",
   cursor_fg = "#16161D",
   cursor_border = "#C8C093",
-
   selection_fg = "#DCD7BA",
   selection_bg = "#223249",
-
   scrollbar_thumb = "#223249",
-
   split = "#54546D",
 
   ansi = {
