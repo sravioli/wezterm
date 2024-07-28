@@ -3,11 +3,10 @@ local wt = require "wezterm"
 local Utils = require "utils"
 local Picker = Utils.class.picker
 local Layout = Utils.class.layout
-local fs = Utils.fn.fs
 
 local ColorschemePicker = Picker.new {
   title = "Colorscheme picker",
-  subdir = fs.pathconcat "colorschemes",
+  subdir = "colorschemes",
   fuzzy = true,
 
   make_choices = function(choices)

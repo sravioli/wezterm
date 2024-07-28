@@ -2,11 +2,10 @@ local wt = require "wezterm"
 
 local Utils = require "utils"
 local Picker = Utils.class.picker
-local fs = Utils.fn.fs
 
 local FontSizePicker = Picker.new {
   title = "Font size picker",
-  subdir = fs.pathconcat "font-sizes",
+  subdir = "font-sizes",
   fuzzy = true,
   comp = function(a, b)
     local label = "Reset"
