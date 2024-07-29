@@ -1,12 +1,14 @@
+---@diagnostic disable: undefined-field
+
 ---@module "utils.class.picker"
 ---@author sravioli
 ---@license GNU-GPLv3
 
 local wt = require "wezterm"
-local log_info, log_error = wt.log_info, wt.log_error
+local fs = require("utils").fn.fs
 
-local Utils = require "utils"
-local fs = Utils.fn.fs
+---@diagnostic disable-next-line: undefined-field
+local log_info, log_error, config_dir = wt.log_info, wt.log_error, wt.config_dir
 
 -- {{{1 Meta
 
@@ -84,17 +86,22 @@ local fs = Utils.fn.fs
 
 --~ {{{2 Utils.Class.Picker
 
----@class Utils.Class.Picker
----@field subdir             string path to the module name
----@field title              string defaults to `"Pick a value"`
----@field choices            table defaults to `{}`
----@field __choices?         table defaults to `{}`
----@field fuzzy?             boolean defaults to `false`
----@field alphabet?          string defaults to `"1234567890abcdefghilmnopqrstuvwxyz"`
----@field description?       string defaults to `"Select an item."`
----@field fuzzy_description? string defaults to `"Fuzzy matching: "`
+---@alias Module PickList
+---@alias Choice { id: string, label: string|table }
+---@alias Choice.private { module: Module, value: Choice }
 
----@alias Picker Utils.Class.Picker
+---@class Utils.Class.Picker
+---@field subdir             string  name of the picker module
+---@field title              string  defaults to `"Pick a value"`
+---@field choices            Choice[] defaults to `{}`
+---@field __choices?         Choice.private[] defaults to `{}`
+---@field fuzzy?             boolean defaults to `false`
+---@field alphabet?          string  defaults to `"1234567890abcdefghilmnopqrstuvwxyz"`
+---@field description?       string  defaults to `"Select an item."`
+---@field fuzzy_description? string  defaults to `"Fuzzy matching: "`
+---@field comp?              fun(a, b): boolean function to sort choices
+---@field build?             fun(__choices: Choice.private[], comp: function): Choice[]
+---@field new                fun(opts: Utils.Class.Picker): Utils.Class.Picker
 
 --~ }}}
 
@@ -132,11 +139,10 @@ end
 ---Build the choices table
 ---@param items table
 ---@param comp? fun(a, b): boolean
----@return { id: string|nil, label: string|table|nil } choices
-function h.make_choices(items, comp)
+---@return Choice[] choices
+function h.build(items, comp)
   local choices = {}
   for _, item in pairs(items) do
-    log_info { item = item }
     choices[#choices + 1] = { id = item.value.id, label = item.value.label }
   end
 
@@ -147,24 +153,29 @@ function h.make_choices(items, comp)
   return choices
 end
 
+---Converts a file path to a lua require path
+---@param path string
+---@return string require_path
 function h.path_to_module(path)
-  return path:sub(#wt.config_dir + 2):gsub("%.lua$", ""):gsub(fs.path_separator, ".")
+  return (path:sub(#config_dir + 2):gsub("%.lua$", ""):gsub(fs.path_separator, "."))
 end
 
 -- }}}
 
----@class Picker
+---@class Utils.Class.Picker
 local M = {}
 
 ---Creates a new picker object
----@param opts Picker
----@return Picker Picker
+---@param opts Utils.Class.Picker
+---@return Utils.Class.Picker Picker
 function M.new(opts)
   local self = setmetatable({}, { __index = M })
   self.title = opts.title or "Pick a value"
   self.choices = {}
+  self.__choices = {}
+
   self.comp = opts.comp
-  self.make_choices = opts.make_choices or h.make_choices
+  self.build = opts.build or h.build
 
   ---@diagnostic disable-next-line: undefined-field
   self.action = opts.action or wt.action.Nop
@@ -172,10 +183,12 @@ function M.new(opts)
   self.alphabet = opts.alphabet or "1234567890abcdefghilmnopqrstuvwxyz"
   self.description = opts.description or "Select an item."
   self.fuzzy_description = opts.fuzzy_description or "Fuzzy matching: "
-  self.__choices = {}
 
-  local dir = fs.pathconcat(wt.config_dir, "pick-lists", opts.subdir)
+  local dir = fs.pathconcat(config_dir, "picker", "assets", opts.subdir)
   local paths = fs.read_dir(dir)
+  if not paths then
+    return log_error(("Cannot read files from: '%s'"):format(dir))
+  end
   for i = 1, #paths do
     self:register(h.path_to_module(paths[i]))
   end
@@ -183,10 +196,11 @@ function M.new(opts)
   return self
 end
 
+---Registers the module by requiring it and filling the `__choices` table
+---@param name string the lua require path to the module
 function M:register(name)
+  ---@class PickList
   local module = require(name)
-
-  ---@class PickList.getReturn
   local result = module.get()
 
   if h.is_array(result) then
@@ -203,20 +217,24 @@ function M:register(name)
   end
 end
 
-function M:select(Overrides, callback_opts)
-  local opts = self.__choices[callback_opts.id]
-  if opts then
-    opts.module.activate(Overrides, callback_opts)
-  else
-    log_error(("'%s' is not defined for %s"):format(callback_opts.id, self.title))
+---Activates the selected module
+---@param Overrides table config overrides
+---@param opts PickList.Opts
+---@return nil
+function M:select(Overrides, opts)
+  local choice = self.__choices[opts.id]
+  if not choice then
+    return log_error(("'%s' is not defined for %s"):format(opts.id, self.title))
   end
+
+  choice.module.activate(Overrides, opts)
 end
 
 function M:pick()
   return wt.action_callback(function(window, pane)
     window:perform_action(
       wt.action.InputSelector {
-        action = wt.action_callback(function(inner_window, _inner_pane, id, label)
+        action = wt.action_callback(function(inner_window, _, id, label)
           if not id and not label then
             log_error("Cancelled " .. self.title .. " by user")
           else
@@ -230,7 +248,7 @@ function M:pick()
           end
         end),
         title = self.title,
-        choices = self.make_choices(self.__choices, self.comp),
+        choices = self.build(self.__choices, self.comp),
         fuzzy = self.fuzzy,
         description = self.description,
         fuzzy_description = self.fuzzy_description,
