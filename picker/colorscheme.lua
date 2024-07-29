@@ -1,22 +1,26 @@
-local wt = require "wezterm"
+---@module "picker.colorscheme"
+---@author sravioli
+---@license GNU-GPLv3
+
+---@diagnostic disable: undefined-field
+local wt_format = require("wezterm").format
 
 local Utils = require "utils"
-local Picker = Utils.class.picker
-local Layout = Utils.class.layout
+local Picker, Layout = Utils.class.picker, Utils.class.layout
 
-local ColorschemePicker = Picker.new {
+return Picker.new {
   title = "Colorscheme picker",
   subdir = "colorschemes",
   fuzzy = true,
 
-  make_choices = function(choices)
-    local __choices = {}
-    for _, opts in pairs(choices) do
+  build = function(__choices)
+    local choices = {}
+    for _, opts in pairs(__choices) do
       local id, label = opts.value.id, opts.value.label
       local colors = opts.module.scheme
+      ---@cast label string
 
       local ChoiceLayout = Layout:new() ---@class Layout
-
       for i = 1, #colors.ansi do
         local bg = colors.ansi[i]
         ChoiceLayout:push("none", bg, " ")
@@ -30,15 +34,13 @@ local ColorschemePicker = Picker.new {
 
       ChoiceLayout:push("none", "none", (" "):rep(5))
       ChoiceLayout:push("none", "white", label)
-      __choices[#__choices + 1] = { label = wt.format(ChoiceLayout), id = id }
+      choices[#choices + 1] = { label = wt_format(ChoiceLayout), id = id }
     end
 
-    table.sort(__choices, function(a, b)
+    table.sort(choices, function(a, b)
       return a.id < b.id
     end)
 
-    return __choices
+    return choices
   end,
 }
-
-return ColorschemePicker
