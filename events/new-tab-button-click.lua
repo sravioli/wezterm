@@ -1,3 +1,7 @@
+---@module "events.new-tab-button-click"
+---@author sravioli
+---@license GNU-GPLv3
+
 local wt = require "wezterm"
 
 wt.on("new-tab-button-click", function(window, pane, button, default_action)

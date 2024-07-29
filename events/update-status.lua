@@ -1,3 +1,7 @@
+---@module "events.update-status"
+---@author sravioli
+---@license GNU-GPLv3
+
 local wt = require "wezterm"
 
 local Utils = require "utils"
@@ -5,10 +9,12 @@ local StatusBar = Utils.class.layout
 local Icon = Utils.class.icon
 local fs, mt, str = Utils.fn.fs, Utils.fn.mt, Utils.fn.str
 
+---@diagnostic disable-next-line: undefined-field
 local wt_format, strftime = wt.format, wt.strftime
 local strwidth = fs.platform().is_win and string.len or str.strwidth
 
 -- luacheck: push ignore 561
+---@diagnostic disable-next-line: undefined-field
 wt.on("update-status", function(window, pane)
   local Config = window:effective_config()
 

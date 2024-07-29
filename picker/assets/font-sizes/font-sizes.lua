@@ -1,3 +1,7 @@
+---@module "picker.assets.font-sizes.font-sizes"
+---@author sravioli
+---@license GNU-GPLv3
+
 ---@class PickList
 local M = {}
 

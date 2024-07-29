@@ -1,6 +1,9 @@
-local wt = require "wezterm"
-local act = wt.action
+---@module "mappings.default"
+---@author sravioli
+---@license GNU-GPLv3
 
+---@diagnostic disable-next-line: undefined-field
+local act = require("wezterm").action
 local key = require("utils.fn").key
 
 local Config = {}

@@ -1,8 +1,11 @@
---
--- wcwidth.lua
--- modified by: Simone Fidanza
---
--- original source: <https://github.com/aperezdc/lua-wcwidth>
+---@diagnostic disable: duplicate-index
+
+---wcwidth.lua
+---
+---original source: <https://github.com/aperezdc/lua-wcwidth>
+---@module "utils.wcwidth"
+---@author aperezdc, sravioli
+---@license GNU-GPLv3
 
 -- see: <http://lua-users.org/lists/lua-l/2016-05/msg00297.html>
 -- luacheck: push ignore 314
@@ -20,6 +23,8 @@ if bit then
   rshift, bor = bit.rshift, bit.bor
 end
 local floor = math.floor
+
+---@diagnostic disable-next-line: undefined-field
 local mod = math.mod or function(x, d)
   return x - d * floor(x / d)
 end
@@ -1326,4 +1331,3 @@ return function(rune)
 end
 
 -- vim: fdm=marker fdl=1
-
