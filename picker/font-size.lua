@@ -1,9 +1,10 @@
-local wt = require "wezterm"
+---@module "picker.font-size"
+---@author sravioli
+---@license GNU-GPLv3
 
-local Utils = require "utils"
-local Picker = Utils.class.picker
+local Picker = require("utils").class.picker
 
-local FontSizePicker = Picker.new {
+return Picker.new {
   title = "Font size picker",
   subdir = "font-sizes",
   fuzzy = true,
@@ -12,5 +13,3 @@ local FontSizePicker = Picker.new {
     return (a.label == label) or (b.label ~= label and a.label < b.label)
   end,
 }
-
-return FontSizePicker
