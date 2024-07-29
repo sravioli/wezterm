@@ -236,7 +236,7 @@ end
 ---  print(file)
 ---end
 M.fs.read_dir = function(directory)
-  local filename = "." .. M.fs.basename(directory) .. ".txt"
+  local filename = M.fs.basename(directory) .. ".txt"
   local cmd, tempfile =
     "find %s -maxdepth 1 -type f > %s", M.fs.pathconcat("/tmp", filename)
   if M.fs.platform().is_win then
@@ -249,7 +249,7 @@ M.fs.read_dir = function(directory)
   local file = io.open(tempfile, "r")
   if not file then
     local success, exitcode = os.execute(cmd)
-    if not success then
+    if not success or not file then
       return wt.log_error(
         "Unable to create temp file, process edited with code:",
         exitcode
