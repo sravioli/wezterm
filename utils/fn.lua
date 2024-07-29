@@ -563,7 +563,7 @@ M.color = {}
 M.color.get_schemes = function()
   local schemes = {}
 
-  local dir = M.fs.pathconcat(wt.config_dir, "pick-lists", "colorschemes")
+  local dir = M.fs.pathconcat(wt.config_dir, "picker", "assets", "colorschemes")
   local files = M.fs.read_dir(dir)
 
   if not files then
@@ -574,7 +574,7 @@ M.color.get_schemes = function()
 
   for i = 1, #files do
     local name = M.fs.basename(files[i]:gsub("%.lua$", ""))
-    schemes[name] = require("pick-lists.colorschemes." .. name).scheme
+    schemes[name] = require("picker.assets.colorschemes." .. name).scheme
   end
   return schemes
 end
