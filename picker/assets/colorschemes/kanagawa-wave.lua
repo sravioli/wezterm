@@ -1,3 +1,7 @@
+---@module "picker.assets.colorschemes.kanagawa-wave"
+---@author sravioli
+---@license GNU-GPLv3
+
 ---@class PickList
 local M = {}
 

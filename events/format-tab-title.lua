@@ -1,3 +1,7 @@
+---@module "events.format-tab-title"
+---@author sravioli
+---@license GNU-GPLv3
+
 ---@diagnostic disable: undefined-field
 
 local wt = require "wezterm"

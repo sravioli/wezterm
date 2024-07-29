@@ -1,3 +1,7 @@
+---@module "events.augment-window-title"
+---@author sravioli
+---@license GNU-GPLv3
+
 local wt = require "wezterm"
 local fs = require("utils.fn").fs
 

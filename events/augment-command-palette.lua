@@ -1,5 +1,8 @@
----@diagnostic disable: undefined-field
+---@module "events.augment-command-palette"
+---@author sravioli
+---@license GNU-GPLv3
 
+---@diagnostic disable: undefined-field
 local wt = require "wezterm"
 local act = wt.action
 

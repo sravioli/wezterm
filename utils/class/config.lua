@@ -11,8 +11,6 @@
 ---@class Utils.Class.Config
 local M = {}
 
----@alias Config Utils.Class.Config
-
 local wt = require "wezterm"
 local log_info, log_warn, log_error = wt.log_info, wt.log_warn, wt.log_error
 
@@ -20,7 +18,7 @@ local log_info, log_warn, log_error = wt.log_info, wt.log_warn, wt.log_error
 ---Creates a new Wezterm configuration object. If `wez.config_builder` is available,
 ---it sets the configuration to strict mode.
 ---
----@return Config self A new instance of the Wezterm configuration.
+---@return Utils.Class.Config self A new instance of the Wezterm configuration.
 function M:new()
   self.config = {}
 
@@ -42,7 +40,7 @@ end
 ---its options. If a table is provided, it merges the table directly into the configuration.
 ---
 ---@param spec string|table Module name as a string or a config table.
----@return Config self Modified Config object with the new options.
+---@return Utils.Class.Config self Modified Config object with the new options.
 ---
 ---@usage
 ----- Example usage in wezterm.lua
