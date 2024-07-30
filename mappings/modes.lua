@@ -158,6 +158,7 @@ local key_tables = {
     { "<ESC>", "PopKeyTable", "exit" },
     { "t", require("picker.colorscheme"):pick(), "theme picker" },
     { "s", require("picker.font-size"):pick(), "fontsize picker" },
+    { "f", require("picker.font"):pick(), "font picker" },
   }, -- }}}
 }
 
