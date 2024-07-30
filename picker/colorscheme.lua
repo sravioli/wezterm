@@ -13,11 +13,11 @@ return Picker.new {
   subdir = "colorschemes",
   fuzzy = true,
 
-  build = function(__choices)
+  build = function(__choices, _, opts)
     local choices = {}
-    for _, opts in pairs(__choices) do
-      local id, label = opts.value.id, opts.value.label
-      local colors = opts.module.scheme
+    for _, item in pairs(__choices) do
+      local id, label = item.value.id, item.value.label
+      local colors = item.module.scheme
       ---@cast label string
 
       local ChoiceLayout = Layout:new() ---@class Layout
@@ -32,8 +32,10 @@ return Picker.new {
         ChoiceLayout:push("none", bg, " ")
       end
 
+      local Config = opts.window:effective_config()
+      local fg = Config.color_schemes[Config.color_scheme].foreground
       ChoiceLayout:push("none", "none", (" "):rep(5))
-      ChoiceLayout:push("none", "white", label)
+      ChoiceLayout:push("none", fg, label)
       choices[#choices + 1] = { label = wt_format(ChoiceLayout), id = id }
     end
 
