@@ -231,7 +231,6 @@ M.fs.pathconcat = function(...)
   return table.concat(paths, M.fs.path_separator)
 end
 
-G.dirs_read = {}
 ---Reads the contents of a directory and returns a list of absolute filenames.
 ---@param directory string absolute path to the directory to read.
 ---@return table|nil files list of files present in the directory. nil if not accessible.
@@ -276,6 +275,7 @@ M.fs.read_dir = function(directory)
   file:close()
   os.remove(tempfile)
 
+  G.dirs_read = {}
   G.dirs_read[directory] = files
   return G.dirs_read[directory]
 end
