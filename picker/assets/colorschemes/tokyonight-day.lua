@@ -1,3 +1,4 @@
+---Ported from: https://github.com/folke/tokyonight.nvim
 ---@module "picker.assets.colorschemes.tokyonight-day"
 ---@author sravioli
 ---@license GNU-GPLv3
@@ -5,64 +6,47 @@
 ---@class PickList
 local M = {}
 
-local Utils = require "utils"
-local color = Utils.fn.color
+local color = require("utils").fn.color
 
 M.scheme = {
-  foreground = "#3760bf",
-  background = "#e1e2e7",
-  cursor_bg = "#3760bf",
-  cursor_border = "#3760bf",
-  cursor_fg = "#e1e2e7",
-  selection_bg = "#b7c1e3",
-  selection_fg = "#3760bf",
-  split = "#2e7de9",
-  compose_cursor = "#b15c00",
-  scrollbar_thumb = "#c4c8da",
+  foreground = "#3760BF",
+  background = "#E1E2E7",
+  cursor_bg = "#3760BF",
+  cursor_fg = "#E1E2E7",
+  cursor_border = "#3760BF",
+  selection_bg = "#B7C1E3",
+  selection_fg = "#3760BF",
+  scrollbar_thumb = "#C4C8DA",
+  split = "#2E7DE9",
   ansi = {
-    "#b4b5b9",
-    "#f52a65",
+    "#B4B5B9",
+    "#F52A65",
     "#587539",
-    "#8c6c3e",
-    "#2e7de9",
-    "#9854f1",
+    "#8C6C3E",
+    "#2E7DE9",
+    "#9854F1",
     "#007197",
-    "#6172b0",
+    "#6172B0",
   },
   brights = {
-    "#a1a6c5",
-    "#f52a65",
+    "#A1A6C5",
+    "#F52A65",
     "#587539",
-    "#8c6c3e",
-    "#2e7de9",
-    "#9854f1",
+    "#8C6C3E",
+    "#2E7DE9",
+    "#9854F1",
     "#007197",
-    "#3760bf",
+    "#3760BF",
   },
+  compose_cursor = "#B15C00",
   tab_bar = {
-    inactive_tab_edge = "#d0d5e3",
-    background = "#e1e2e7",
-    active_tab = {
-      fg_color = "#d0d5e3",
-      bg_color = "#2e7de9",
-    },
-    inactive_tab = {
-      fg_color = "#8990b3",
-      bg_color = "#c4c8da",
-    },
-    inactive_tab_hover = {
-      fg_color = "#2e7de9",
-      bg_color = "#c4c8da",
-    },
-    new_tab_hover = {
-      fg_color = "#2e7de9",
-      bg_color = "#e1e2e7",
-      intensity = "Bold",
-    },
-    new_tab = {
-      fg_color = "#2e7de9",
-      bg_color = "#e1e2e7",
-    },
+    background = "#E1E2E7",
+    inactive_tab_edge = "#D0D5E3",
+    active_tab = { fg_color = "#D0D5E3", bg_color = "#2E7DE9" },
+    inactive_tab = { fg_color = "#8990B3", bg_color = "#C4C8DA" },
+    inactive_tab_hover = { fg_color = "#2E7DE9", bg_color = "#C4C8DA" },
+    new_tab = { fg_color = "#2E7DE9", bg_color = "#E1E2E7" },
+    new_tab_hover = { fg_color = "#2E7DE9", bg_color = "#E1E2E7", intensity = "Bold" },
   },
 }
 

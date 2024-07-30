@@ -1,3 +1,4 @@
+---Ported from: https://github.com/neapsix/wezterm
 ---@module "picker.assets.colorschemes.rose-pine-dawn"
 ---@author sravioli
 ---@license GNU-GPLv3
@@ -5,63 +6,57 @@
 ---@class PickList
 local M = {}
 
-local Utils = require "utils"
-local color = Utils.fn.color
+local color = require("utils").fn.color
 
 M.scheme = {
+  background = "#FAF4ED",
   foreground = "#575279",
-  background = "#faf4ed",
-  cursor_bg = "#9893a5",
-  cursor_border = "#9893a5",
+  cursor_bg = "#9893A5",
   cursor_fg = "#575279",
-  selection_bg = "#f2e9e1",
+  cursor_border = "#9893A5",
   selection_fg = "#575279",
-
+  selection_bg = "#F2E9E1",
+  scrollbar_thumb = "#F2E9E1",
+  split = "#9893A5",
   ansi = {
-    "#f2e9de",
-    "#b4637a",
+    "#F2E9DE",
+    "#B4637A",
     "#286983",
-    "#ea9d34",
-    "#56949f",
-    "#907aa9",
-    "#d7827e",
+    "#EA9D34",
+    "#56949F",
+    "#907AA9",
+    "#D7827E",
     "#575279",
   },
-
   brights = {
-    "#6e6a86", -- muted from rose-pine palette
-    "#b4637a",
+    "#6E6A86",
+    "#B4637A",
     "#286983",
-    "#ea9d34",
-    "#56949f",
-    "#907aa9",
-    "#d7827e",
+    "#EA9D34",
+    "#56949F",
+    "#907AA9",
+    "#D7827E",
     "#575279",
   },
-
+  indexed = {},
+  compose_cursor = "#9893A5",
+  copy_mode_active_highlight_bg = { Color = "#F2E9E1" },
+  copy_mode_active_highlight_fg = { Color = "#575279" },
+  copy_mode_inactive_highlight_bg = { Color = "#9893A5" },
+  copy_mode_inactive_highlight_fg = { Color = "#575279" },
+  quick_select_label_bg = { Color = "#B4637A" },
+  quick_select_label_fg = { Color = "#575279" },
+  quick_select_match_bg = { Color = "#EA9D34" },
+  quick_select_match_fg = { Color = "#575279" },
+  visual_bell = "#575279",
   tab_bar = {
-    background = "#faf4ed",
-    active_tab = {
-      bg_color = "#f2e9e1",
-      fg_color = "#575279",
-    },
-    inactive_tab = {
-      bg_color = "#faf4ed",
-      fg_color = "#9893a5",
-    },
-    inactive_tab_hover = {
-      bg_color = "#f2e9e1",
-      fg_color = "#575279",
-    },
-    new_tab = {
-      bg_color = "#faf4ed",
-      fg_color = "#9893a5",
-    },
-    new_tab_hover = {
-      bg_color = "#f2e9e1",
-      fg_color = "#575279",
-    },
-    inactive_tab_edge = "#9893a5",
+    background = "#FAF4ED",
+    inactive_tab_edge = "#9893A5",
+    active_tab = { bg_color = "#F2E9E1", fg_color = "#575279" },
+    inactive_tab = { bg_color = "#FAF4ED", fg_color = "#9893A5" },
+    inactive_tab_hover = { bg_color = "#F2E9E1", fg_color = "#575279" },
+    new_tab = { bg_color = "#FAF4ED", fg_color = "#9893A5" },
+    new_tab_hover = { bg_color = "#F2E9E1", fg_color = "#575279" },
   },
 }
 

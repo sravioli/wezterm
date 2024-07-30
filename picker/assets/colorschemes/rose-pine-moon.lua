@@ -1,3 +1,4 @@
+---Ported from: https://github.com/neapsix/wezterm
 ---@module "picker.assets.colorschemes.rose-pine-moon"
 ---@author sravioli
 ---@license GNU-GPLv3
@@ -5,63 +6,58 @@
 ---@class PickList
 local M = {}
 
-local Utils = require "utils"
-local color = Utils.fn.color
+local color = require("utils").fn.color
 
 M.scheme = {
-  foreground = "#e0def4",
   background = "#232136",
-  cursor_bg = "#59546d",
-  cursor_border = "#59546d",
-  cursor_fg = "#e0def4",
+  foreground = "#E0DEF4",
+  cursor_bg = "#59546D",
+  cursor_fg = "#E0DEF4",
+  cursor_border = "#59546D",
+  selection_fg = "#E0DEF4",
   selection_bg = "#393552",
-  selection_fg = "#e0def4",
-
+  scrollbar_thumb = "#393552",
+  split = "#6E6A86",
   ansi = {
     "#393552",
-    "#eb6f92",
-    "#3e8fb0",
-    "#f6c177",
-    "#9ccfd8",
-    "#c4a7e7",
-    "#ebbcba", -- replacement for rose
-    "#e0def4",
+    "#EB6F92",
+    "#3E8FB0",
+    "#F6C177",
+    "#9CCFD8",
+    "#C4A7E7",
+    "#EBBCBA",
+    "#E0DEF4",
   },
-
   brights = {
-    "#817c9c", -- replacement for muted
-    "#eb6f92",
-    "#3e8fb0",
-    "#f6c177",
-    "#9ccfd8",
-    "#c4a7e7",
-    "#ebbcba", -- replacement for rose
-    "#e0def4",
+    "#817C9C",
+    "#EB6F92",
+    "#3E8FB0",
+    "#F6C177",
+    "#9CCFD8",
+    "#C4A7E7",
+    "#EBBCBA",
+    "#E0DEF4",
   },
+  indexed = {},
 
+  compose_cursor = "#C4A7E7",
+  copy_mode_active_highlight_bg = { Color = "#393552" },
+  copy_mode_active_highlight_fg = { Color = "#E0DEF4" },
+  copy_mode_inactive_highlight_bg = { Color = "#59546D" },
+  copy_mode_inactive_highlight_fg = { Color = "#E0DEF4" },
+  quick_select_label_bg = { Color = "#EB6F92" },
+  quick_select_label_fg = { Color = "#E0DEF4" },
+  quick_select_match_bg = { Color = "#F6C177" },
+  quick_select_match_fg = { Color = "#E0DEF4" },
+  visual_bell = "#E0DEF4",
   tab_bar = {
     background = "#232136",
-    active_tab = {
-      bg_color = "#393552",
-      fg_color = "#e0def4",
-    },
-    inactive_tab = {
-      bg_color = "#232136",
-      fg_color = "#6e6a86",
-    },
-    inactive_tab_hover = {
-      bg_color = "#393552",
-      fg_color = "#e0def4",
-    },
-    new_tab = {
-      bg_color = "#232136",
-      fg_color = "#6e6a86",
-    },
-    new_tab_hover = {
-      bg_color = "#393552",
-      fg_color = "#e0def4",
-    },
-    inactive_tab_edge = "#6e6a86",
+    inactive_tab_edge = "#6E6A86",
+    active_tab = { bg_color = "#393552", fg_color = "#E0DEF4" },
+    inactive_tab = { bg_color = "#232136", fg_color = "#6E6A86" },
+    inactive_tab_hover = { bg_color = "#393552", fg_color = "#E0DEF4" },
+    new_tab = { bg_color = "#232136", fg_color = "#6E6A86" },
+    new_tab_hover = { bg_color = "#393552", fg_color = "#E0DEF4" },
   },
 }
 
