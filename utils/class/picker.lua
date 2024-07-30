@@ -100,7 +100,7 @@ local log_info, log_error, config_dir = wt.log_info, wt.log_error, wt.config_dir
 ---@field description?       string  defaults to `"Select an item."`
 ---@field fuzzy_description? string  defaults to `"Fuzzy matching: "`
 ---@field comp?              fun(a, b): boolean function to sort choices
----@field build?             fun(__choices: Choice.private[], comp: function): Choice[]
+---@field build?             fun(__choices: Choice.private[], comp: function, opts: table): Choice[]
 ---@field new                fun(opts: Utils.Class.Picker): Utils.Class.Picker
 
 --~ }}}
@@ -248,7 +248,7 @@ function M:pick()
           end
         end),
         title = self.title,
-        choices = self.build(self.__choices, self.comp),
+        choices = self.build(self.__choices, self.comp, { window = window, pane = pane }),
         fuzzy = self.fuzzy,
         description = self.description,
         fuzzy_description = self.fuzzy_description,
