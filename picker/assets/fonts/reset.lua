@@ -6,7 +6,7 @@
 local M = {}
 
 M.get = function()
-  return { id = "reset", label = "Restore fonts" }
+  return { id = "reset", label = "Restore fonts to default" }
 end
 
 M.activate = function(Config, _)
