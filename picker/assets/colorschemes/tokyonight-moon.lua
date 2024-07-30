@@ -1,3 +1,4 @@
+---Ported from: https://github.com/folke/tokyonight.nvim
 ---@module "picker.assets.colorschemes.tokyonight-moon"
 ---@author sravioli
 ---@license GNU-GPLv3
@@ -5,64 +6,48 @@
 ---@class PickList
 local M = {}
 
-local Utils = require "utils"
-local color = Utils.fn.color
+local color = require("utils").fn.color
 
 M.scheme = {
-  foreground = "#c8d3f5",
+  foreground = "#C8D3F5",
   background = "#222436",
-  cursor_bg = "#c8d3f5",
-  cursor_border = "#c8d3f5",
+  cursor_bg = "#C8D3F5",
   cursor_fg = "#222436",
-  selection_bg = "#2d3f76",
-  selection_fg = "#c8d3f5",
-  split = "#82aaff",
-  compose_cursor = "#ff966c",
-  scrollbar_thumb = "#2f334d",
+  cursor_border = "#C8D3F5",
+  selection_bg = "#2D3F76",
+  selection_fg = "#C8D3F5",
+  split = "#82AAFF",
+  compose_cursor = "#FF966C",
+  scrollbar_thumb = "#2F334D",
   ansi = {
-    "#1b1d2b",
-    "#ff757f",
-    "#c3e88d",
-    "#ffc777",
-    "#82aaff",
-    "#c099ff",
-    "#86e1fc",
-    "#828bb8",
+    "#1B1D2B",
+    "#FF757F",
+    "#C3E88D",
+    "#FFC777",
+    "#82AAFF",
+    "#C099FF",
+    "#86E1FC",
+    "#828BB8",
   },
   brights = {
-    "#444a73",
-    "#ff757f",
-    "#c3e88d",
-    "#ffc777",
-    "#82aaff",
-    "#c099ff",
-    "#86e1fc",
-    "#c8d3f5",
+    "#444A73",
+    "#FF757F",
+    "#C3E88D",
+    "#FFC777",
+    "#82AAFF",
+    "#C099FF",
+    "#86E1FC",
+    "#C8D3F5",
   },
+  indexed = {},
   tab_bar = {
-    inactive_tab_edge = "#1e2030",
     background = "#222436",
-    active_tab = {
-      fg_color = "#1e2030",
-      bg_color = "#82aaff",
-    },
-    inactive_tab = {
-      fg_color = "#545c7e",
-      bg_color = "#2f334d",
-    },
-    inactive_tab_hover = {
-      fg_color = "#82aaff",
-      bg_color = "#2f334d",
-    },
-    new_tab_hover = {
-      fg_color = "#82aaff",
-      bg_color = "#222436",
-      intensity = "Bold",
-    },
-    new_tab = {
-      fg_color = "#82aaff",
-      bg_color = "#222436",
-    },
+    inactive_tab_edge = "#1E2030",
+    active_tab = { bg_color = "#82AAFF", fg_color = "#1E2030" },
+    inactive_tab = { bg_color = "#2F334D", fg_color = "#545C7E" },
+    inactive_tab_hover = { bg_color = "#2F334D", fg_color = "#82AAFF" },
+    new_tab = { bg_color = "#222436", fg_color = "#82AAFF" },
+    new_tab_hover = { bg_color = "#222436", fg_color = "#82AAFF", intensity = "Bold" },
   },
 }
 

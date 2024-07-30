@@ -1,3 +1,4 @@
+---Ported from: https://github.com/dracula/wezterm
 ---@module "picker.assets.colorschemes.dracula"
 ---@author sravioli
 ---@license GNU-GPLv3
@@ -5,20 +6,18 @@
 ---@class PickList
 local M = {}
 
-local Utils = require "utils"
-local color = Utils.fn.color
+local color = require("utils").fn.color
 
 M.scheme = {
-  background = "#282a36",
-  foreground = "#f8f8f2",
-  cursor_bg = "#f8f8f2",
-  cursor_fg = "#282a36",
-  cursor_border = "#f8f8f2",
-  selection_fg = "none",
+  background = "#282A36",
+  foreground = "#F8F8F2",
+  cursor_bg = "#F8F8F2",
+  cursor_fg = "#282A36",
+  cursor_border = "#F8F8F2",
+  selection_fg = "#F8F8F2", -- Changed "none" to a default color for consistency
   selection_bg = "rgba(68,71,90,0.5)",
-  scrollbar_thumb = "#44475a",
-  split = "#6272a4",
-
+  scrollbar_thumb = "#44475A",
+  split = "#6272A4",
   ansi = {
     "#21222C",
     "#FF5555",
@@ -39,41 +38,17 @@ M.scheme = {
     "#A4FFFF",
     "#FFFFFF",
   },
-
+  indexed = {},
   compose_cursor = "#FFB86C",
-
+  visual_bell = "#44475A",
   tab_bar = {
-    background = "#282a36",
-    active_tab = {
-      bg_color = "#bd93f9",
-      fg_color = "#282a36",
-      intensity = "Normal",
-      underline = "None",
-      italic = false,
-      strikethrough = false,
-    },
-
-    inactive_tab = {
-      bg_color = "#282a36",
-      fg_color = "#f8f8f2",
-    },
-
-    inactive_tab_hover = {
-      bg_color = "#6272a4",
-      fg_color = "#f8f8f2",
-      italic = true,
-    },
-
-    new_tab = {
-      bg_color = "#282a36",
-      fg_color = "#f8f8f2",
-    },
-
-    new_tab_hover = {
-      bg_color = "#ff79c6",
-      fg_color = "#f8f8f2",
-      italic = true,
-    },
+    background = "#282A36",
+    inactive_tab_edge = "#282A36",
+    active_tab = { bg_color = "#BD93F9", fg_color = "#282A36", italic = false },
+    inactive_tab = { bg_color = "#282A36", fg_color = "#F8F8F2" },
+    inactive_tab_hover = { bg_color = "#6272A4", fg_color = "#F8F8F2", italic = true },
+    new_tab = { bg_color = "#282A36", fg_color = "#F8F8F2" },
+    new_tab_hover = { bg_color = "#FF79C6", fg_color = "#F8F8F2", italic = true },
   },
 }
 

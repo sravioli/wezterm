@@ -1,3 +1,4 @@
+---Ported from: https://github.com/catppuccin/wezterm
 ---@module "picker.assets.colorschemes.catppuccin-frappe"
 ---@author sravioli
 ---@license GNU-GPLv3
@@ -5,96 +6,48 @@
 ---@class PickList
 local M = {}
 
-local Utils = require "utils"
-local color = Utils.fn.color
+local color = require("utils").fn.color
 
 M.scheme = {
   background = "#303446",
-  foreground = "#c6d0f5",
-  cursor_bg = "#f2d5cf",
+  foreground = "#C6D0F5",
+  cursor_bg = "#F2D5CF",
   cursor_fg = "#232634",
-  cursor_border = "#f2d5cf",
+  cursor_border = "#F2D5CF",
+  selection_fg = "#C6D0F5",
   selection_bg = "#626880",
-  selection_fg = "#c6d0f5",
   scrollbar_thumb = "#626880",
   split = "#737994",
-  compose_cursor = "#eebebe",
-  visual_bell = "#414559",
-
   ansi = {
-    "#51576d",
-    "#e78284",
-    "#a6d189",
-    "#e5c890",
-    "#8caaee",
-    "#f4b8e4",
-    "#81c8be",
-    "#b5bfe2",
+    "#51576D",
+    "#E78284",
+    "#A6D189",
+    "#E5C890",
+    "#8CAAEE",
+    "#F4B8E4",
+    "#81C8BE",
+    "#B5BFE2",
   },
   brights = {
     "#626880",
-    "#e78284",
-    "#a6d189",
-    "#e5c890",
-    "#8caaee",
-    "#f4b8e4",
-    "#81c8be",
-    "#a5adce",
+    "#E78284",
+    "#A6D189",
+    "#E5C890",
+    "#8CAAEE",
+    "#F4B8E4",
+    "#81C8BE",
+    "#A5ADCE",
   },
-
-  indexed = {
-    [16] = "#ef9f76",
-    [17] = "#f2d5cf",
-  },
-
+  indexed = { [16] = "#EF9F76", [17] = "#F2D5CF" },
+  compose_cursor = "#EEBEBE",
+  visual_bell = "#414559",
   tab_bar = {
     background = "#232634",
-    inactive_tab_edge = "#414559",
-
-    active_tab = {
-      bg_color = "#ca9ee6",
-      fg_color = "#232634",
-      intensity = "Normal",
-      italic = false,
-      strikethrough = false,
-      underline = "None",
-    },
-
-    inactive_tab = {
-      bg_color = "#292c3c",
-      fg_color = "#c6d0f5",
-      intensity = "Normal",
-      italic = false,
-      strikethrough = false,
-      underline = "None",
-    },
-
-    inactive_tab_hover = {
-      bg_color = "#303446",
-      fg_color = "#c6d0f5",
-      intensity = "Normal",
-      italic = false,
-      strikethrough = false,
-      underline = "None",
-    },
-
-    new_tab = {
-      bg_color = "#414559",
-      fg_color = "#c6d0f5",
-      intensity = "Normal",
-      italic = false,
-      strikethrough = false,
-      underline = "None",
-    },
-
-    new_tab_hover = {
-      bg_color = "#51576d",
-      fg_color = "#c6d0f5",
-      intensity = "Normal",
-      italic = false,
-      strikethrough = false,
-      underline = "None",
-    },
+    active_tab = { bg_color = "#CA9EE6", fg_color = "#232634" },
+    inactive_tab = { bg_color = "#292C3C", fg_color = "#C6D0F5" },
+    inactive_tab_hover = { bg_color = "#303446", fg_color = "#C6D0F5", italic = false },
+    new_tab = { bg_color = "#414559", fg_color = "#C6D0F5" },
+    new_tab_hover = { bg_color = "#51576D", fg_color = "#C6D0F5", italic = false },
   },
 }
 
