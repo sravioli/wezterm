@@ -51,7 +51,7 @@ M.scheme = {
 }
 
 function M.get()
-  return { id = "hardhacker", label = "hardhacker" }
+  return { id = "hardhacker", label = "Hardhacker" }
 end
 
 function M.activate(Config, callback_opts)
