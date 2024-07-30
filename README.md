@@ -1,3 +1,7 @@
+> [!NOTE]
+> The project is under heavy refactoring. Switch to `refactor/picker` branch to
+> get the latest features (stuff might break!).
+
 # My wezterm config
 
 ![configuration showcase](./.github/assets/config-showcase.png)
