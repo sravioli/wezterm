@@ -8,6 +8,7 @@
 
 ---@diagnostic disable-next-line: assign-type-mismatch
 local wt = require "wezterm"
+local G = wt.GLOBAL
 
 local wcwidth, codes = require "utils.wcwidth", require("utf8").codes
 local floor, ceil = math.floor, math.ceil
@@ -46,6 +47,19 @@ M.tbl_merge = function(t1, ...)
   return t1
 end
 
+---Memoize the function return value in the given `wezterm.GLOBAL` key
+---@param key string key in which to memoize fn return value
+---@param fn function function to memoize
+---@return function fn function that returns the cached value
+M.gmemoize = function(key, fn)
+  if G[key] == nil then
+    G[key] = fn()
+  end
+  return function()
+    return G[key]
+  end
+end
+
 -- {{{1 Utils.Fn.FileSystem
 
 ---@class Utils.Fn.FileSystem
@@ -70,13 +84,15 @@ M.fs.target_triple = wt.target_triple
 ---Linux, or macOS.
 ---
 ---@return Utils.Fn.FileSystem.Platform platform
-M.fs.platform = function()
+M.fs.platform = M.gmemoize("plaftorm", function()
   local is_win = M.fs.target_triple:find "windows" ~= nil
   local is_linux = M.fs.target_triple:find "linux" ~= nil
   local is_mac = M.fs.target_triple:find "apple" ~= nil
   local os = is_win and "windows" or is_linux and "linux" or is_mac and "mac" or "unknown"
   return { os = os, is_win = is_win, is_linux = is_linux, is_mac = is_mac }
-end
+end)
+
+local is_win = M.fs.platform().is_win
 
 ---Gets the user home directory.
 ---
@@ -84,18 +100,14 @@ end
 ---sources and replaces backslashes with forward slashes.
 ---
 ---@return string home The path to the user home directory.
-M.fs.home = function()
-  local home = (os.getenv "USERPROFILE" or os.getenv "HOME" or wt.home or ""):gsub(
-    "\\",
-    "/"
-  )
-  return home
-end
+M.fs.home = M.gmemoize("home", function()
+  return ((os.getenv "USERPROFILE" or os.getenv "HOME" or wt.home or ""):gsub("\\", "/"))
+end)
 
 ---Path separator based on the platform.
 ---
 ---This variable holds the appropriate path separator character for the current platform.
-M.fs.path_separator = M.fs.platform().is_win and "\\" or "/"
+M.fs.path_separator = is_win and "\\" or "/"
 
 ---Equivalent to POSIX `basename(3)`.
 ---
@@ -174,7 +186,7 @@ M.fs.get_cwd_hostname = function(pane, search_git_root_instead)
     hostname = hostname:gsub("^%l", string.upper)
   end
 
-  if M.fs.platform().is_win then
+  if is_win then
     cwd = cwd:gsub("/" .. M.fs.home() .. "(.-)$", "~%1")
   else
     cwd = cwd:gsub(M.fs.home() .. "(.-)$", "~%1")
