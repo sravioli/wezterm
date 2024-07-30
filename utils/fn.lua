@@ -231,49 +231,53 @@ M.fs.pathconcat = function(...)
   return table.concat(paths, M.fs.path_separator)
 end
 
----Reads the contents of a directory and returns a list of filenames.
----This function constructs a command to list files in the specified directory.
----The command differs based on the operating system:
----  - On Windows, it uses `dir %s /b` to list directories.
----  - On Unix-like systems, it uses `find %s -maxdepth 1 -type f` to list only files.
----The command is executed using `io.popen`, and the output is processed to extract filenames.
----
----@param directory string The absolute path to the directory to read.
----@return table|nil files filenames (abs path) in the specified directory. nil if not accessible.
+G.dirs_read = {}
+---Reads the contents of a directory and returns a list of absolute filenames.
+---@param directory string absolute path to the directory to read.
+---@return table|nil files list of files present in the directory. nil if not accessible.
 ---
 ---@usage
+---~~~lua
 ---local directory = "/path/to/your/directory"
 ---local files = M.fs.read_dir(directory)
 ---for _, file in ipairs(files) do
 ---  print(file)
 ---end
+---~~~
 M.fs.read_dir = function(directory)
+  if G.dirs_read[directory] then
+    return G.dirs_read[directory]
+  end
+
   local filename = M.fs.basename(directory) .. ".txt"
-  local cmd, tempfile =
-    "find %s -maxdepth 1 -type f > %s", M.fs.pathconcat("/tmp", filename)
-  if M.fs.platform().is_win then
-    cmd, tempfile =
-      'cmd /C "dir %s /B /S > %s"', M.fs.pathconcat(os.getenv "TEMP", filename)
+  local cmd = "find %s -maxdepth 1 -type f > %s"
+  local tempfile = M.fs.pathconcat("/tmp", filename)
+  if is_win then
+    cmd = 'cmd /C "dir %s /B /S > %s"'
+    tempfile = M.fs.pathconcat(os.getenv "TEMP", filename)
   end
   cmd = cmd:format(directory, tempfile)
 
+  local success, _, code = os.execute(cmd)
+  if not success then
+    return wt.log_error(
+      ("Error creating '%s' file, process exited with code %s"):format(tempfile, code)
+    )
+  end
+
   local files = {}
-  local file = io.open(tempfile, "r")
+  local file, err = io.open(tempfile, "r")
   if not file then
-    local success, exitcode = os.execute(cmd)
-    if not success or not file then
-      return wt.log_error(
-        "Unable to create temp file, process edited with code:",
-        exitcode
-      )
-    end
+    return wt.log_error(("Error reading file: '%s'"):format(err))
   end
   for line in file:lines() do
     files[#files + 1] = line
   end
   file:close()
+  os.remove(tempfile)
 
-  return files
+  G.dirs_read[directory] = files
+  return G.dirs_read[directory]
 end
 -- }}}
 
