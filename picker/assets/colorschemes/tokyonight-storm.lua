@@ -40,8 +40,8 @@ M.scheme = {
     "#C0CAF5",
   },
   tab_bar = {
-    inactive_tab_edge = "#1F2335",
     background = "#24283B",
+    inactive_tab_edge = "#1F2335",
     active_tab = { fg_color = "#1F2335", bg_color = "#7AA2F7" },
     inactive_tab = { fg_color = "#545C7E", bg_color = "#292E42" },
     inactive_tab_hover = { fg_color = "#7AA2F7", bg_color = "#292E42" },
@@ -51,7 +51,7 @@ M.scheme = {
 }
 
 function M.get()
-  return { id = "tokyostorm-storm", label = "Tokyostorm Storm" }
+  return { id = "tokyonight-storm", label = "Tokyostorm Storm" }
 end
 
 function M.activate(Config, callback_opts)
