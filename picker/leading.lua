@@ -1,11 +1,11 @@
----@module "picker.leadings"
----@author sravioli, akthe-at
+---@module "picker.leading"
+---@author akthe-at
 ---@license GNU-GPLv3
 
 local Picker = require("utils").class.picker
 
 return Picker.new {
-  title = "Font Leadings(line height) Picker",
+  title = "Font leading picker",
   subdir = "leadings",
   fuzzy = false,
   comp = function(a, b)
