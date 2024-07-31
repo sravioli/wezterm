@@ -257,23 +257,26 @@ M.fs.read_dir = function(directory)
   end
   cmd = cmd:format(directory, tempfile)
 
-  local success, _, code = os.execute(cmd)
-  if not success then
-    return wt.log_error(
-      ("Error creating '%s' file, process exited with code %s"):format(tempfile, code)
-    )
-  end
-
   local files = {}
-  local file, err = io.open(tempfile, "r")
-  if not file then
-    return wt.log_error(("Error reading file: '%s'"):format(err))
+  local file = io.open(tempfile, "r")
+  if file then
+    for line in file:lines() do
+      files[#files + 1] = line
+    end
+    file:close()
+  else
+    local success = os.execute(cmd)
+    if not success then
+      return wt.log_error "Unable to create temp file."
+    end
+    file = io.open(tempfile, "r")
+    if file then
+      for line in file:lines() do
+        files[#files + 1] = line
+      end
+      file:close()
+    end
   end
-  for line in file:lines() do
-    files[#files + 1] = line
-  end
-  file:close()
-  os.remove(tempfile)
 
   G.dirs_read = { [directory] = files }
   return G.dirs_read[directory]
