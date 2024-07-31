@@ -232,23 +232,22 @@ end
 
 function M:pick()
   return wt.action_callback(function(window, pane)
+    local opts = { window = window, pane = pane }
     window:perform_action(
       wt.action.InputSelector {
         action = wt.action_callback(function(inner_window, _, id, label)
           if not id and not label then
             log_error("Cancelled " .. self.title .. " by user")
           else
+            local callback_opts = { window = window, pane = pane, id = id, label = label }
             log_info("Applying " .. id .. " from " .. self.title)
             local Overrides = inner_window:get_config_overrides() or {}
-            self:select(
-              Overrides,
-              { window = window, pane = pane, id = id, label = label }
-            )
+            self:select(Overrides, callback_opts)
             window:set_config_overrides(Overrides)
           end
         end),
         title = self.title,
-        choices = self.build(self.__choices, self.comp, { window = window, pane = pane }),
+        choices = self.build(self.__choices, self.comp, opts),
         fuzzy = self.fuzzy,
         description = self.description,
         fuzzy_description = self.fuzzy_description,
