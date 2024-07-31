@@ -244,7 +244,7 @@ end
 ---end
 ---~~~
 M.fs.read_dir = function(directory)
-  if G.dirs_read[directory] then
+  if G.dirs_read and G.dirs_read[directory] then
     return G.dirs_read[directory]
   end
 
@@ -275,8 +275,7 @@ M.fs.read_dir = function(directory)
   file:close()
   os.remove(tempfile)
 
-  G.dirs_read = {}
-  G.dirs_read[directory] = files
+  G.dirs_read = { [directory] = files }
   return G.dirs_read[directory]
 end
 -- }}}
