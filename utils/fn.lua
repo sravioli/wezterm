@@ -49,15 +49,16 @@ end
 
 ---Memoize the function return value in the given `wezterm.GLOBAL` key
 ---@param key string key in which to memoize fn return value
----@param fn function function to memoize
----@return function fn function that returns the cached value
-M.gmemoize = function(key, fn)
+---@param value any function to memoize
+---@return any value function that returns the cached value
+M.gmemoize = function(key, value)
+  local is_fn = type(value) == "function"
   if G[key] == nil then
-    G[key] = fn()
+    G[key] = is_fn and value() or value
   end
-  return function()
+  return is_fn and function()
     return G[key]
-  end
+  end or value
 end
 
 -- {{{1 Utils.Fn.FileSystem
@@ -66,7 +67,7 @@ end
 ---@field private target_triple string
 M.fs = {}
 
-M.fs.target_triple = wt.target_triple
+M.fs.target_triple = M.gmemoize("target_triple", wt.target_triple)
 
 -- {{{2 META
 
@@ -107,7 +108,7 @@ end)
 ---Path separator based on the platform.
 ---
 ---This variable holds the appropriate path separator character for the current platform.
-M.fs.path_separator = is_win and "\\" or "/"
+M.fs.path_separator = M.gmemoize("path_separator", is_win and "\\" or "/")
 
 ---Equivalent to POSIX `basename(3)`.
 ---
@@ -224,7 +225,7 @@ M.fs.pathshortener = function(path, len)
 end
 
 ---Concatenates a vararg list of values to a single string
----@vararg string paths
+---@vararg string
 ---@return string path The concatenated path
 M.fs.pathconcat = function(...)
   local paths = { ... }
@@ -583,7 +584,6 @@ M.color.get_schemes = function()
 
   local dir = M.fs.pathconcat(wt.config_dir, "picker", "assets", "colorschemes")
   local files = M.fs.read_dir(dir)
-
   if not files then
     return wt.log_error(
       ("Unable to read from directory: '%s'"):format(M.fs.basename(dir))
