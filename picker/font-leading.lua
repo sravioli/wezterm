@@ -1,4 +1,4 @@
----@module "picker.leading"
+---@module "picker.font-leading"
 ---@author akthe-at
 ---@license GNU-GPLv3
 
@@ -6,7 +6,7 @@ local Picker = require("utils").class.picker
 
 return Picker.new {
   title = "Font leading picker",
-  subdir = "leadings",
+  subdir = "font-leadings",
   fuzzy = false,
   comp = function(a, b)
     local label = "Reset Line Height to Default"

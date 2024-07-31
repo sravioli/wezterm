@@ -159,7 +159,7 @@ local key_tables = {
     { "t", require("picker.colorscheme"):pick(), "theme picker" },
     { "s", require("picker.font-size"):pick(), "fontsize picker" },
     { "f", require("picker.font"):pick(), "font picker" },
-    { "l", require("picker.leading"):pick(), "line height picker" },
+    { "l", require("picker.font-leading"):pick(), "line height picker" },
   }, -- }}}
 }
 

@@ -39,7 +39,7 @@ wt.on("augment-command-palette", function(_, _)
     {
       brief = "Font leading picker",
       icon = "fa_text_height",
-      action = require("picker.leading"):pick(),
+      action = require("picker.font-leading"):pick(),
     },
   }
 end)

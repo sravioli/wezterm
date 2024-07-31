@@ -1,4 +1,4 @@
----@module "picker.assets.leadings.leadings"
+---@module "picker.assets.font-leadings.font-leadings"
 ---@author akthe-at, sravioli
 ---@license GNU-GPLv3
 
