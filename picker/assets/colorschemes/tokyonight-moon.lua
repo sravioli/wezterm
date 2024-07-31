@@ -16,9 +16,8 @@ M.scheme = {
   cursor_border = "#C8D3F5",
   selection_bg = "#2D3F76",
   selection_fg = "#C8D3F5",
-  split = "#82AAFF",
-  compose_cursor = "#FF966C",
   scrollbar_thumb = "#2F334D",
+  split = "#82AAFF",
   ansi = {
     "#1B1D2B",
     "#FF757F",
@@ -40,6 +39,16 @@ M.scheme = {
     "#C8D3F5",
   },
   indexed = {},
+  compose_cursor = "#FF966C",
+  copy_mode_active_highlight_bg = { Color = "#2D3F76" },
+  copy_mode_active_highlight_fg = { Color = "#C8D3F5" },
+  copy_mode_inactive_highlight_bg = { Color = "#2F334D" },
+  copy_mode_inactive_highlight_fg = { Color = "#C8D3F5" },
+  quick_select_label_bg = { Color = "#FF757F" },
+  quick_select_label_fg = { Color = "#C8D3F5" },
+  quick_select_match_bg = { Color = "#FFC777" },
+  quick_select_match_fg = { Color = "#C8D3F5" },
+  visual_bell = "#2D3F76",
   tab_bar = {
     background = "#222436",
     inactive_tab_edge = "#1E2030",
@@ -50,7 +59,6 @@ M.scheme = {
     new_tab_hover = { bg_color = "#222436", fg_color = "#82AAFF", intensity = "Bold" },
   },
 }
-
 function M.get()
   return { id = "tokyonight-moon", label = "Tokyonight Moon" }
 end

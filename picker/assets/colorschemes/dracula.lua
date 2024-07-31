@@ -14,7 +14,7 @@ M.scheme = {
   cursor_bg = "#F8F8F2",
   cursor_fg = "#282A36",
   cursor_border = "#F8F8F2",
-  selection_fg = "#F8F8F2", -- Changed "none" to a default color for consistency
+  selection_fg = "#F8F8F2",
   selection_bg = "rgba(68,71,90,0.5)",
   scrollbar_thumb = "#44475A",
   split = "#6272A4",
@@ -41,6 +41,14 @@ M.scheme = {
   indexed = {},
   compose_cursor = "#FFB86C",
   visual_bell = "#44475A",
+  copy_mode_active_highlight_bg = { Color = "#44475A" },
+  copy_mode_active_highlight_fg = { Color = "#F8F8F2" },
+  copy_mode_inactive_highlight_bg = { Color = "#21222C" },
+  copy_mode_inactive_highlight_fg = { Color = "#F8F8F2" },
+  quick_select_label_bg = { Color = "#FF5555" },
+  quick_select_label_fg = { Color = "#F8F8F2" },
+  quick_select_match_bg = { Color = "#F1FA8C" },
+  quick_select_match_fg = { Color = "#F8F8F2" },
   tab_bar = {
     background = "#282A36",
     inactive_tab_edge = "#282A36",
