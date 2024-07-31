@@ -1,4 +1,3 @@
----@class Config
 local Config = require("utils.class.config"):new()
 
 require "events.update-status"
