@@ -37,7 +37,9 @@
 
 <>
 
-> [!NOTE] compare to the stock wezterm status bar
+> [!NOTE]
+>
+> Compare to the stock wezterm status bar
 >
 > ![Showcase of the stock wezterm status bar](./imgs/showcase-stock-statusbar.png)
 
