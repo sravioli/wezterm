@@ -276,7 +276,7 @@ italicized text.
   | Key           | Action              |
   | ------------- | ------------------- |
   | `<ESC>`       | Exit pick mode      |
-  | `t`           | colorscheme picker  |
+  | `c`           | colorscheme picker  |
   | `f`           | font picker         |
   | `s`           | font size picker    |
   | `l`           | font leading picker |
