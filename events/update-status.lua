@@ -21,7 +21,7 @@ wt.on("update-status", function(window, pane)
   local Overrides = window:get_config_overrides() or {}
   local theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
   local modes = {
-    search_mode = { i = "󰍉", txt = "SEARCH", bg = theme.brights[4], pad = 7 },
+    search_mode = { i = "󰍉", txt = "SEARCH", bg = theme.brights[4], pad = 10 },
     window_mode = { i = "󱂬", txt = "WINDOW", bg = theme.ansi[6], pad = 8 },
     copy_mode = { i = "󰆏", txt = "COPY", bg = theme.brights[3], pad = 8 },
     font_mode = { i = "󰛖", txt = "FONT", bg = theme.ansi[7], pad = 7 },
@@ -38,11 +38,11 @@ wt.on("update-status", function(window, pane)
   local name = window:active_key_table()
   if name and modes[name] then
     local txt, ico = modes[name].txt or "", modes[name].i or ""
-    mode_indicator_width, bg = strwidth(txt) + 2 + strwidth(ico), modes[name].bg
+    mode_indicator_width, bg = strwidth(txt) + 4 + strwidth(ico), modes[name].bg
     LeftStatus:push(bg, theme.background, str.pad(ico .. " " .. txt, 1), { "Bold" })
   end
 
-  window:set_left_status(wt_format(LeftStatus))
+  window:set_left_status(LeftStatus:format())
   -- }}}
 
   -- {{{1 RIGHT STATUS
@@ -51,18 +51,35 @@ wt.on("update-status", function(window, pane)
 
   --~~ {{{2 Calculate the used width by the tabs
   local MuxWindow = window:mux_window()
-  local tab_bar_width = 0
+  local tab_bar_width = 5
   for i = 1, #MuxWindow:tabs() do
-    local tab_title = MuxWindow:tabs()[i]:panes()[1]:get_title()
-    tab_bar_width = tab_bar_width + strwidth(tab_title) + 2
+    local MuxPane = MuxWindow:tabs()[i]:panes()[1]
+    local tab_title = MuxPane:get_title()
+
+    local process, other = tab_title:match "^(%S+)%s*%-?%s*%s*(.*)$"
+    tab_title = tab_title:gsub("^Copy mode: ", "")
+    if Icon.Progs[process] then
+      tab_title = Icon.Progs[process] .. " " .. (other or "")
+    end
+
+    local proc = MuxPane:get_foreground_process_name()
+    if proc and proc:find "nvim" then
+      proc = proc:sub(proc:find "nvim")
+    end
+    if proc == "nvim" then
+      local cwd = fs.basename(MuxPane:get_current_working_dir().file_path)
+      tab_title = ("%s ( %s)"):format(Icon.Progs[proc], cwd)
+    end
+    tab_title = tab_title:gsub(fs.basename(fs.home()), "󰋜 ")
+
+    tab_bar_width = tab_bar_width + strwidth(tab_title) + 3
   end
 
-  local has_button = Config.show_new_tab_button_in_tab_bar
-  local new_tab_button = has_button and Config.tab_bar_style.new_tab or ""
-  tab_bar_width = tab_bar_width + mode_indicator_width + strwidth(new_tab_button) + 2
+  local new_tab_button = Config.show_new_tab_button_in_tab_bar and 8 or 0
+  tab_bar_width = tab_bar_width + mode_indicator_width + new_tab_button
   --~~ }}}
 
-  local usable_width = pane:get_dimensions().cols - tab_bar_width - 6
+  local usable_width = pane:get_dimensions().cols - tab_bar_width - 2
 
   --~ {{{2 MODAL PROMPTS
   if name and modes[name] then
@@ -89,7 +106,7 @@ wt.on("update-status", function(window, pane)
 
         ---add separator only if it's not the last item and there's enough space
         local next_prompt = key_tbl[idx]
-        local next_prompt_len = strwidth(next_prompt[1] .. next_prompt[3]) + 4
+        local next_prompt_len = strwidth(next_prompt[1] .. next_prompt[3]) + 3
         if idx < #key_tbl and usable_width - next_prompt_len > 0 then
           RightStatus:push(prompt_bg, theme.brights[1], sep .. " ", { "NoItalic" })
         end
@@ -155,10 +172,10 @@ wt.on("update-status", function(window, pane)
     RightStatus:push(colors[i], theme.tab_bar.background, cell_to_use, { "Bold" })
 
     ---update the usable width
-    usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 2 -- padding
+    -- usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 2 -- padding
   end
 
-  window:set_right_status(wt_format(RightStatus))
+  window:set_right_status(RightStatus:format())
   --~ }}}
   -- }}}
 end)
