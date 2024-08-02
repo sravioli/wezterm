@@ -2,9 +2,6 @@
 ---@author sravioli
 ---@license GNU-GPLv3
 
----@diagnostic disable: undefined-field
-local wt_format = require("wezterm").format
-
 local Utils = require "utils"
 local Picker, Layout = Utils.class.picker, Utils.class.layout
 
@@ -12,6 +9,7 @@ return Picker.new {
   title = "Colorscheme picker",
   subdir = "colorschemes",
   fuzzy = true,
+  fuzzy_description = "Matching colorscheme: ",
 
   build = function(__choices, _, opts)
     local choices = {}
@@ -36,7 +34,7 @@ return Picker.new {
       local fg = Config.color_schemes[Config.color_scheme].foreground
       ChoiceLayout:push("none", "none", (" "):rep(5))
       ChoiceLayout:push("none", fg, label)
-      choices[#choices + 1] = { label = wt_format(ChoiceLayout), id = id }
+      choices[#choices + 1] = { label = ChoiceLayout:format(), id = id }
     end
 
     table.sort(choices, function(a, b)
