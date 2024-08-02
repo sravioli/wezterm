@@ -293,8 +293,8 @@ Key combinations try to follow the same conventions as Vim, with the added
 modifier of `W` that maps to the `SUPER`/`WINDOWS` key.
 
 Switching mode is made possibile using designated leader key combinations:
-`<leader>w` for window mode, `<leader>f` for font mode, `<leader>c` for copy mode
-and `<leader>s` for search mode.
+`<leader>w` for window mode, `<leader>f` for font mode, `<leader>c` for copy mode,
+`<leader>p` for pick mode and `<leader>s` for search mode.
 
 Additional adjustments and bindings can be effortlessly incorporated to cater to
 individual preferences and requirements.  Adding or modifing existing keymaps is
@@ -355,6 +355,7 @@ the previous mapping will be translated to:
   | `<leader>f`     | Activate Font Mode                        |
   | `<leader>c`     | Activate Copy Mode                        |
   | `<leader>h`     | Activate Help Mode                        |
+  | `<leader>p`     | Activate Pick Mode                        |
   | `<leader>s`     | Search Current Selection or Empty String  |
   | `<S-F1>`        | Activate Tab 1                            |
   | `<S-F2>`        | Activate Tab 2                            |
