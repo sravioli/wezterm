@@ -648,7 +648,7 @@ M.color.set_tab_button = function(config, theme)
     ButtonLayout:push(sep_bg, style.fg_color, " + ", attributes)
     ButtonLayout:push(sep_bg, sep_fg, sep.left, attributes)
 
-    config.tab_bar_style[state] = wt.format(ButtonLayout)
+    config.tab_bar_style[state] = ButtonLayout:format()
   end
 end
 
