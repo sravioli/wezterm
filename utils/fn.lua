@@ -10,6 +10,8 @@
 local wt = require "wezterm"
 local G = wt.GLOBAL
 
+local Icon = require("utils").class.icon
+
 local wcwidth, codes = require "utils.wcwidth", require("utf8").codes
 local floor, ceil = math.floor, math.ceil
 
@@ -473,6 +475,49 @@ M.str.split = function(s, sep, opts)
     t[#t + 1] = c
   end
   return t
+end
+
+M.str.format_tab_title = function(tab, config, max_width)
+  local pane = tab.active_pane
+
+  local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
+    or tab.active_pane.title
+
+  title = title:gsub("^Copy mode: ", "")
+  local process, other = title:match "^(%S+)%s*%-?%s*%s*(.*)$"
+
+  if Icon.Progs[process] then
+    title = Icon.Progs[process] .. " " .. (other or "")
+  end
+
+  local proc = pane.foreground_process_name
+  if proc:find "nvim" then
+    proc = proc:sub(proc:find "nvim")
+  end
+  local is_truncation_needed = true
+  if proc == "nvim" then
+    ---full title truncation is not necessary since the dir name will be truncated
+    is_truncation_needed = false
+    local cwd = M.fs.basename(pane.current_working_dir.file_path)
+
+    ---instead of truncating the whole title, truncate to length the cwd to ensure that the
+    ---right parenthesis always closes.
+    if max_width == config.tab_max_width then
+      cwd = wt.truncate_right(cwd, max_width - 14) .. "..."
+    end
+
+    title = ("%s ( %s)"):format(Icon.Progs[proc], cwd)
+  end
+
+  title = title:gsub(M.fs.basename(M.fs.home()), "󰋜 ")
+
+  ---truncate the tab title when it overflows the maximum available space, then concatenate
+  ---some dots to indicate the occurred truncation
+  if is_truncation_needed and max_width == config.tab_max_width then
+    title = wt.truncate_right(title, max_width - 8) .. "..."
+  end
+
+  return title
 end
 
 -- }}}
