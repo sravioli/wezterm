@@ -3,6 +3,102 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.0.0](https://github.com/sravioli/wezterm/compare/1ec7b8140eaa487467454decc9090349f3fde4aa..6.0.0) - 2024-08-02
+#### Bug Fixes
+- **(.github)** linebreaks and formatting - ([9c80d09](https://github.com/sravioli/wezterm/commit/9c80d09ea7f445bbcee76f71af6dfea3da798267)) - sravioli
+- **(event:update-status)** get more accurate tab title, update padding - ([898c0bc](https://github.com/sravioli/wezterm/commit/898c0bcfbc35b1a4b427c199e4adc93595f67796)) - sravioli
+- **(events:augment-command-palette)** remove palette action to dump themes - ([bd746fa](https://github.com/sravioli/wezterm/commit/bd746facbcab533d0ea335f955551c0eeebbcc29)) - sravioli
+- **(events:augment-command-palette)** add wezterm config_dir when concatenating path - ([8ace305](https://github.com/sravioli/wezterm/commit/8ace305928ec0fa1be5e18d23cd8f00e854757ea)) - sravioli
+- **(events:format-tab-title)** use format tab title function - ([72e68a2](https://github.com/sravioli/wezterm/commit/72e68a213421bdee1900d2dcc0a98860b5871459)) - sravioli
+- **(events:format-tab-title)** change how theme is retrieved - ([019459c](https://github.com/sravioli/wezterm/commit/019459ca81f15304dbc16ab3c6a6951f44a73174)) - sravioli
+- **(events:update-status)** change font mode bg color - ([5145db3](https://github.com/sravioli/wezterm/commit/5145db399c97cbc5022455a0d569b930645d4930)) - sravioli
+- **(mappings:modes)** set colorscheme picker key to `c`, remove picker from description - ([26be189](https://github.com/sravioli/wezterm/commit/26be1898327c8cd79aa42d917ca522d8151ef184)) - sravioli
+- **(mappings:modes)** typo (rm ) - ([cf92888](https://github.com/sravioli/wezterm/commit/cf92888ed6828f7b150319ddbc9de0a9a8ba2f6b)) - sravioli
+- **(mappings:modes)** typo (rm ) - ([d03ee30](https://github.com/sravioli/wezterm/commit/d03ee30cb6bdaf46f995ba1f5ade26294a799289)) - sravioli
+- **(picker)** rm useless call to pathconcat - ([ff5c326](https://github.com/sravioli/wezterm/commit/ff5c326c4de70caf8d05e6213524f25be64d89a2)) - sravioli
+- **(picker)** reimplement pickers with the new class - ([3aa8422](https://github.com/sravioli/wezterm/commit/3aa8422ccb3b958d3bbff7b8996bcb8a08a3a5ff)) - sravioli
+- **(picker:colorschemes)** correct wrong id for tokyonight storm - ([f0594d4](https://github.com/sravioli/wezterm/commit/f0594d41b0f81178734a5bac4ae25d516d16ec73)) - sravioli
+- **(picker:colorschemes)** capitalize harhacker label - ([c635fe6](https://github.com/sravioli/wezterm/commit/c635fe6d836654295f1af99beeed98c2e6b756b2)) - sravioli
+- **(picker:font)** remove useless requires - ([ca54e5e](https://github.com/sravioli/wezterm/commit/ca54e5e2a4ac26d263a1a4e827442253c8561a5b)) - sravioli
+- **(picker:font-size)** mv `font_size` `font-size` - ([37c6d5d](https://github.com/sravioli/wezterm/commit/37c6d5d502c0e105aa70f73ed06792556415f12b)) - sravioli
+- **(picker:fonts)** use more expressive label for font reset - ([e872032](https://github.com/sravioli/wezterm/commit/e8720327ff9525d1e9a9397fa4611decdec33c03)) - sravioli
+- **(picker:leading)** module path, give credit - ([7b9f6fa](https://github.com/sravioli/wezterm/commit/7b9f6fa9168ff628a26336cd55323bffdfd5bc10)) - sravioli
+- **(readme)** update note block - ([c8e0d4b](https://github.com/sravioli/wezterm/commit/c8e0d4b705e86c421515bf27f6015921d07842dd)) - sravioli
+- **(utils:fn)** use builtin format method to format layout - ([4285301](https://github.com/sravioli/wezterm/commit/428530160c9c5ff0cebfaba1a2005a68faaf0596)) - sravioli
+- **(utils:fn)** nil check dirs_read cache - ([a2cbaff](https://github.com/sravioli/wezterm/commit/a2cbaff8f2f165f98031f108da61c5236693cf61)) - sravioli
+- **(utils:fn)** correctly return early when reading dirs - ([19096b7](https://github.com/sravioli/wezterm/commit/19096b7ffc8cf3214ae5f0472d0e0a55350ae65c)) - sravioli
+- **(utils:fn)** correctly handle file creation, implement caching - ([287ed24](https://github.com/sravioli/wezterm/commit/287ed240b0838e624fc83d8c003cac48c5701f78)) - sravioli
+- **(utils:fn)** rm leading dot from filename, check file - ([9aaec0e](https://github.com/sravioli/wezterm/commit/9aaec0e6e245366a7ac950b4021aa099b6da9011)) - sravioli
+- **(utils:fn)** change read_dir function to pipe to file - ([55eefbe](https://github.com/sravioli/wezterm/commit/55eefbef81b0481220f1fb77f4a6a9ecb9260776)) - sravioli
+- **(utils:fn)** rm useless fn, implement fs and colors utils - ([a4eef08](https://github.com/sravioli/wezterm/commit/a4eef086ab942501d0a2cfbe7c9cda594e645805)) - sravioli
+- **(utils:layout)** correctly format the layout - ([0aa37d4](https://github.com/sravioli/wezterm/commit/0aa37d48c45a3cbc5863670c6ec10928efc14486)) - sravioli
+- **(wezterm.lua)** remove comment - ([65e2d5a](https://github.com/sravioli/wezterm/commit/65e2d5a7d0b317b84702dd9d6ee962cc072c3201)) - sravioli
+- resolve merge conflicts - ([600b2b3](https://github.com/sravioli/wezterm/commit/600b2b3c20e88f3c4f01b4dae4a8a8afe50e5b16)) - sravioli
+- resolve merge conflicts - ([8c98c2f](https://github.com/sravioli/wezterm/commit/8c98c2fae27714d61c034a1cec2c3c9f7b3d0fcd)) - sravioli
+- upload statusbar showcase as gh cdn - ([4d4e27b](https://github.com/sravioli/wezterm/commit/4d4e27b8708880d91888e33fb8ba74f225a5d0ff)) - [@sravioli](https://github.com/sravioli)
+- rename `leading` `font-leading` - ([12d1ff4](https://github.com/sravioli/wezterm/commit/12d1ff48d97fb3e34ba063f66d30a8f9a1ef66a3)) - sravioli
+- rm outdated file - ([d7ea341](https://github.com/sravioli/wezterm/commit/d7ea341c899fb663138ef96bb651a5791ceb4f97)) - sravioli
+- delete useless comments - ([c0e5645](https://github.com/sravioli/wezterm/commit/c0e564546b839fb23f4a74383fdeac1ea7afcd97)) - Adam K
+- delete useless comments - ([f5ee737](https://github.com/sravioli/wezterm/commit/f5ee73776a5b8f88c96af513fb3c87a969f62591)) - Adam K
+- not supposed to be in this branch... - ([c91689b](https://github.com/sravioli/wezterm/commit/c91689b6105b4db1333fa9f7d8459fcbf43cf29f)) - Adam K
+#### Documentation
+- **(utils:fn)** add `pathconcat` documentation - ([4138474](https://github.com/sravioli/wezterm/commit/413847438bb16a86a4d0f184d88c3a0c15154491)) - sravioli
+- cleanup, ignore diagnostics false-positives, add docs - ([21bab7a](https://github.com/sravioli/wezterm/commit/21bab7a8d975aaa38e3d1e11c26be8b4c1cc64c5)) - sravioli
+#### Features
+- **(README)** add refactor notice - ([88e10d5](https://github.com/sravioli/wezterm/commit/88e10d5eef0a180fb3465738b60b845694fa2844)) - sravioli
+- **(colorschemes)** add tokyonight colors - ([5622865](https://github.com/sravioli/wezterm/commit/5622865dd00a07df07c793c565e9d21b9530a562)) - sravioli
+- **(events:augment-command-palette)** add pickers to command palette - ([65e8824](https://github.com/sravioli/wezterm/commit/65e88243a7bb7800eb4ac15412bdcbb1ff12c59b)) - sravioli
+- **(events:augment-command-palette)** add theme builder command - ([aaa7d8c](https://github.com/sravioli/wezterm/commit/aaa7d8cfab0ef702bf0661d302566bef1d587c8c)) - sravioli
+- **(events:update-status)** update modes table - ([7154c09](https://github.com/sravioli/wezterm/commit/7154c09b67a6be5a6d899c6e059d79cac7a9f6bf)) - sravioli
+- **(mappings:modes)** update to new colorscheme picker - ([4936c92](https://github.com/sravioli/wezterm/commit/4936c92e2743bbb1b350bb7775f8ffe155af575d)) - sravioli
+- **(pick-lists:colorschemes)** add dracula & catppuccin variants - ([546e796](https://github.com/sravioli/wezterm/commit/546e7965e99309261d4989549a5f7ce03025504d)) - sravioli
+- **(pick-lists:colorschemes)** add rosé pine variants - ([3536c00](https://github.com/sravioli/wezterm/commit/3536c0032d5f562f07c86504070a82f60816dfb7)) - sravioli
+- **(pick-lists:font-sizes)** move to pick-lists folder, adapt to new picker - ([2e85e44](https://github.com/sravioli/wezterm/commit/2e85e44b9ffda8fe063e54272af0c747dbd0a6e6)) - sravioli
+- **(picker:colorscheme)** update colorscheme picker - ([0ceaa57](https://github.com/sravioli/wezterm/commit/0ceaa57d50a4c82ca119db5ea1b46f8ab46ab183)) - sravioli
+- **(picker:colorscheme)** change color of label - ([22a734f](https://github.com/sravioli/wezterm/commit/22a734f0032b18bb239ce20fdbeef8812d169ccd)) - sravioli
+- **(picker:colorscheme)** streamline colorscheme picker, change var names - ([d3d0546](https://github.com/sravioli/wezterm/commit/d3d05467122660d2f4133497f5869a00bf1071aa)) - sravioli
+- **(picker:colorscheme)** change palette display - ([7c0e242](https://github.com/sravioli/wezterm/commit/7c0e24241edf87273ee3e66e55a26b8b2fa821ef)) - sravioli
+- **(picker:colorschemes)** add colors for missing fields - ([a171b00](https://github.com/sravioli/wezterm/commit/a171b0047cbe590f1c03a340f84aa89b652d0cce)) - sravioli
+- **(picker:colorschemes)** port poimandres theme - ([9f21132](https://github.com/sravioli/wezterm/commit/9f21132280412c334eb026ae0ffa8520f1e5c8f1)) - sravioli
+- **(picker:colorschemes)** port hardhacker theme - ([329451e](https://github.com/sravioli/wezterm/commit/329451e782d3249d15850f7cf397de4657b44aef)) - sravioli
+- **(picker:colorschemes)** port eldritch theme - ([66a00c6](https://github.com/sravioli/wezterm/commit/66a00c6af49709ed11a8f8bbde3e181c4c35a4e0)) - sravioli
+- **(picker:colorschemes)** port bamboo themes - ([0585f5d](https://github.com/sravioli/wezterm/commit/0585f5dba128413da08e753b22873b78058e73f5)) - sravioli
+- **(picker:colorschemes)** port nightfox themes - ([ec9d8f0](https://github.com/sravioli/wezterm/commit/ec9d8f0c4db5632061cfe97a56170df16aa9ba36)) - sravioli
+- **(picker:font)** re-implement font picker - ([f811d5c](https://github.com/sravioli/wezterm/commit/f811d5ccc0a80d526ec3fa27e123b2b1c540735e)) - sravioli
+- **(picker:font-size)** rm useless require - ([bd84f3b](https://github.com/sravioli/wezterm/commit/bd84f3b94d88cc4572e47f1bac94fcad5c91cd43)) - sravioli
+- **(picker:font_size)** Add a picker for selecting font size - ([bcfb3fd](https://github.com/sravioli/wezterm/commit/bcfb3fdacc52c4a967fb70e8beb9a515e77ffc93)) - Adam K
+- **(picker:leading)** Dynamically pick line heightI find this one very useful when moving between workspaces withdifferent size monitors/screens - ([3d2df04](https://github.com/sravioli/wezterm/commit/3d2df042f9bc5b4edce4e349da9a981bf68a9eed)) - Adam K
+- **(pr)** merge branch 'akthe-at-main' - ([562d74a](https://github.com/sravioli/wezterm/commit/562d74aa2f0b4e75704d89eac3beb517039db776)) - sravioli
+- **(readme)** add status bar showcase - ([a149e2a](https://github.com/sravioli/wezterm/commit/a149e2ae0bb13d4ca1dd144c959626a1a0af8198)) - sravioli
+- **(themes)** Adds rose pine to theme picker - ([abb8c42](https://github.com/sravioli/wezterm/commit/abb8c42f0fd8ca9b4e04f52017ac03c8d7474c3d)) - [@sravioli](https://github.com/sravioli)
+- **(themes)** Adds rose pine to theme picker - ([1ec7b81](https://github.com/sravioli/wezterm/commit/1ec7b8140eaa487467454decc9090349f3fde4aa)) - Adam K
+- **(utils:class)** add picker docs - ([70ebd03](https://github.com/sravioli/wezterm/commit/70ebd03d95b44fdcbee96c5213827009e3014838)) - sravioli
+- **(utils:fn)** move tab title formatting - ([2d5a551](https://github.com/sravioli/wezterm/commit/2d5a55161dfb9868074483c51c367ebb1f65c5df)) - sravioli
+- **(utils:fn)** upgrade gmemoize to handle non-fn values, gmemoize more stuff - ([ecaee0a](https://github.com/sravioli/wezterm/commit/ecaee0a53cbef621b6456fab435d4d9764713a87)) - sravioli
+- **(utils:fn)** implement basic "memoization" using `wezterm.GLOBAL` - ([2d64360](https://github.com/sravioli/wezterm/commit/2d6436032780b55c36fef35dfbe0d0fdb393418f)) - sravioli
+- **(utils:fn)** adapt to new picker path - ([d21ae41](https://github.com/sravioli/wezterm/commit/d21ae4171d99b4d585574e7f106d68878995872b)) - sravioli
+- **(utils:fn)** impl pathconcat and fn to make themes compatible w/ cfg - ([f011a92](https://github.com/sravioli/wezterm/commit/f011a9298c585e6b93e23f587bf1b40086026553)) - sravioli
+- **(utils:fn)** implement a table dump function - ([6e57004](https://github.com/sravioli/wezterm/commit/6e570047aa9611762e20e482b4b4748af3b3c6bd)) - sravioli
+- **(utils:picker)** improve readability of `pick()` method - ([6d88728](https://github.com/sravioli/wezterm/commit/6d887288dc63583839a6dc54091d967586406385)) - sravioli
+- **(utils:picker)** pass to build fn window and pane objects - ([693e386](https://github.com/sravioli/wezterm/commit/693e386da5dcf2044b30f3b0053cb42bf4d55144)) - sravioli
+- **(utils:picker)** add documentation, adjust some functions - ([d8d2c29](https://github.com/sravioli/wezterm/commit/d8d2c291a880ce6519e4617bd54164f46f7b9eec)) - sravioli
+- **(utils:picker)** re-implement a picker - ([7033c6e](https://github.com/sravioli/wezterm/commit/7033c6e229d317f69d52c79b81e7b185453fb9ff)) - sravioli
+- re-enable format-tab-title event - ([3348d3a](https://github.com/sravioli/wezterm/commit/3348d3a3848356fc629cb77b426bbd2b651ea338)) - sravioli
+- merge branch 'main' of https://github.com/sravioli/wezterm - ([09bb3f9](https://github.com/sravioli/wezterm/commit/09bb3f9cc3f972e20e9296ca4b212c1c82f35c9d)) - sravioli
+#### Hotfixes
+- **(events:update-status)** enable flexible status bar (disabled for showcase) - ([62a8150](https://github.com/sravioli/wezterm/commit/62a815069bac02ebd25f5c9d7838eb95b9f94075)) - sravioli
+- **(readme)** update link - ([1f839f1](https://github.com/sravioli/wezterm/commit/1f839f156db282310f1b1dd087dd41649070c9c0)) - sravioli
+- **(readme)** update imgs link - ([2cc5c7a](https://github.com/sravioli/wezterm/commit/2cc5c7a161c5554a7caa5c72ffb4ecaa395a5256)) - sravioli
+- **(utils:fn)** change command to read directory on windows - ([7ce516d](https://github.com/sravioli/wezterm/commit/7ce516d9c42167624d370b09a9b75342ff602c56)) - sravioli
+#### Refactoring
+- **(pick-lists:colorschemes)** move colorschemes to pick list folder, adapt to picker syntax - ([d963e7a](https://github.com/sravioli/wezterm/commit/d963e7a8162c0c7c8c576a8605278b9eba1b046d)) - sravioli
+#### Style
+- **(picker:colorschemes)** formatting - ([f53789d](https://github.com/sravioli/wezterm/commit/f53789d7cfe30e04ee39031a03449249cd781400)) - sravioli
+#### Tests
+- **(utils:fn)** try to solve popup problem on windows - ([b84ea68](https://github.com/sravioli/wezterm/commit/b84ea68c911acd74b02786864fdb5f55da04efc0)) - unknown
+
+- - -
+
 ## [5.2.2](https://github.com/sravioli/wezterm/compare/caf9a2be4b599cbf0bff2d9419ed2cc44d364786..5.2.2) - 2024-07-21
 #### Bug Fixes
 - **(colors:kanagawa-wave)** change active tab bg color - ([ab7881e](https://github.com/sravioli/wezterm/commit/ab7881ee1774d7bf948d6959f8d48a9b3116d1fb)) - sravioli
