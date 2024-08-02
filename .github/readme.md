@@ -35,7 +35,7 @@
 
 ### Flexible status bar
 
-<>
+![Showcase of responsive status bar](./imgs/showcase-own-statusbar.mp4)
 
 > [!NOTE]
 >
