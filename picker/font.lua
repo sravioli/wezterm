@@ -2,10 +2,7 @@
 ---@author sravioli, akthe-at
 ---@license GNU-GPLv3
 
----@diagnostic disable: undefined-field
-
-local Utils = require "utils"
-local Picker = Utils.class.picker
+local Picker = require("utils").class.picker
 
 return Picker.new {
   title = "Font picker",
