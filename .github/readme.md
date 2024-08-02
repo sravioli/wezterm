@@ -39,7 +39,7 @@
 
 > [!NOTE] compare to the stock wezterm status bar
 >
-> ![Showcase of the stock wezterm status bar](././imgs/showcase-stock-statusbar.png)
+> ![Showcase of the stock wezterm status bar](./imgs/showcase-stock-statusbar.png)
 
 The status bar is flexile and responsive.  This ensures that important
 information is always visible and/or adapts gracefully to changes in the
@@ -112,40 +112,40 @@ Currently four picker are already implemented:
 1. Colorscheme picker
    <details><summary>Click for image</summary>
 
-   ![Showcase of the colorscheme picker](././imgs/showcase-picker-colorscheme.png)
+   ![Showcase of the colorscheme picker](./imgs/showcase-picker-colorscheme.png)
    </details>
 2. Font picker
    <details><summary>Click for image</summary>
 
-   ![Showcase of the font picker](././imgs/showcase-picker-font.png)
+   ![Showcase of the font picker](./imgs/showcase-picker-font.png)
    </details>
 3. Font size picker
    <details><summary>Click for image</summary>
 
-   ![Showcase of the font size picker](././imgs/showcase-picker-font-size.png)
+   ![Showcase of the font size picker](./imgs/showcase-picker-font-size.png)
    </details>
 4. Font leading picker
    <details><summary>Click for image</summary>
 
-   ![Showcase of the font leading picker](././imgs/showcase-picker-font-leading.png)
+   ![Showcase of the font leading picker](./imgs/showcase-picker-font-leading.png)
    </details>
 
-Feel free to implement any new picker, [contributions](./.github/contributing.md)
+Feel free to implement any new picker, [contributions](./contributing.md)
 are welcome!
 
 ### Mode indicator with modal prompts
 
-![Showcase help mode with prompts](././imgs/showcase-mode-help.png)
+![Showcase help mode with prompts](./imgs/showcase-mode-help.png)
 
-![Showcase window mode with prompts](././imgs/showcase-mode-window.png)
+![Showcase window mode with prompts](./imgs/showcase-mode-window.png)
 
-![Showcase search mode with prompts](././imgs/showcase-mode-search.png)
+![Showcase search mode with prompts](./imgs/showcase-mode-search.png)
 
-![Showcase copy mode with prompts](././imgs/showcase-mode-copy.png)
+![Showcase copy mode with prompts](./imgs/showcase-mode-copy.png)
 
-![Showcase font mode with prompts](././imgs/showcase-mode-font.png)
+![Showcase font mode with prompts](./imgs/showcase-mode-font.png)
 
-![Showcase pick mode with prompts](././imgs/showcase-mode-pick.png)
+![Showcase pick mode with prompts](./imgs/showcase-mode-pick.png)
 
 The mode indicator highlights the current operationsl mode of the terminal.
 mode is represented by a distinct label and background color, providing a clear
@@ -160,7 +160,7 @@ the available space, then each prompt is formatted with a key (or list of keys)
 enclosed in angle brackets (`<key>`) and followed by its description in
 italicized text.
 
-![Showcase responsiveness of prompts](././imgs/showcase-modal-responsiveness.png)
+![Showcase responsiveness of prompts](./imgs/showcase-modal-responsiveness.png)
 
 <!--{{{1 MODES KEYMAPS -->
 
