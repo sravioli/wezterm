@@ -101,13 +101,13 @@ end
 ---
 ---@return string format The resulting string formatted by `wezterm.format()`
 function M:format()
-  return wt_format(self.layout)
+  return wt_format(self)
 end
 
 ---Logs the unformatted layout to wezterm's debug console
 ---@param formatted boolean whether to log the formatted layout or not
 function M:debug(formatted)
-  log_info { Layout = formatted and wt_format(self.layout) or self.layout }
+  log_info { Layout = formatted and self:format() or self }
 end
 
 return M
