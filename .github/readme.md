@@ -1,81 +1,166 @@
-# My wezterm config
+# My Wezterm configuration
 
-![configuration showcase](./.github/assets/config-showcase.png)
+![Configuration showcase](.github/imgs/showcase.png)
 
-## Getting started
+## Installation
 
-- **Requirements**:
-  - [Wezterm _**nightly**_](https://wezfurlong.org/wezterm/installation.html)
-  - [Fira Code NerdFont](https://www.nerdfonts.com).
-  - [Monaspace Radon](https://github.com/githubnext/monaspace/releases/latest)
-  - [Monaspace Krypton](https://github.com/githubnext/monaspace/releases/latest)
+> [!NOTE] Requirements:
+>
+> - [Wezterm _**nightly**_](https://wezfurlong.org/wezterm/installation.html)
+> - [Fira Code NerdFont](https://www.nerdfonts.com).
+> - [Monaspace Radon](https://github.com/githubnext/monaspace/releases/latest)
+> - [Monaspace Krypton](https://github.com/githubnext/monaspace/releases/latest)
 
-- **Steps**
+1. **Backup any old config**:
 
-  ~~~sh
-  git clone https://github.com/sravioli/wezterm.git ~/.config/wezterm
-  ~~~
+    ~~~sh
+    # on Linux
+    mv ~/.config/wezterm ~/.config/wezterm.bak
+    ~~~
 
-  and you're done.
+    ~~~powershell
+    # on Windows
+    Move-Item $env:HOME/.config/wezterm $env:HOME/.config/wezterm.bak
+    ~~~
+
+2. **Clone the repo:**
+
+    ~~~sh
+    git clone https://github.com/sravioli/wezterm.git ~/.config/wezterm
+    ~~~
+
+3. **Done** 🎉.
 
 ## Features
 
-### Flexible status-bar
+### Flexible status bar
 
-<https://github.com/sravioli/wezterm/assets/76562615/990e099d-c933-4f45-89f6-503135341fb9>
+<>
 
-This configuration provides a flexible and responsive status bar for WezTerm,
-ensuring important information is always visible and adapts gracefully to changes
-in terminal size.
+> [!NOTE] compare to the stock wezterm status bar
+>
+> ![Showcase of the stock wezterm status bar](./.github/imgs/showcase-stock-statusbar.png)
 
-The configuration attempts to display the most detailed version of each
-status-bar element.  If space is insufficient, it falls back to shorter versions
-or omits the element entirely.  It shows the full path, a shortened path, or an
-abbreviated path for the current working directory (CWD). For the hostname, it
-displays the full hostname or its first letter if space is limited. Date and time
-are shown in various formats: full date and time, date in dd/mm format, or
-only the time. The battery status is represented by the full battery status with
-icon and percentage, percentage only, or icon only.
+The status bar is flexile and responsive.  This ensures that important
+information is always visible and/or adapts gracefully to changes in the
+terminal size.
 
-Compare to stock Wezterm:
+The status bar attempts to display the most detailed version of each status
+bar element.  If space is insufficient, it falls back to shorter versions or
+omits the element entirely.
 
-![stock wezterm status-bar](./.github/assets/stock-wezterm-status-bar.png)
+Elements from Right-to-Left:
+
+1. Battery:
+   - icon and percentage
+   - percentage only
+   - icon only
+2. Datetime (using Rust [chrono strftime](https://docs.rs/chrono/0.4.19/chrono/format/strftime/index.html) syntax):
+   - `"%a %b %-d %H:%M"` (eg. `Thu Aug 1 19:30`)
+   - `"%d/%m %R"` (eg. `01/08 19:30`)
+   - `"%R"`  (eg. `19:30`)
+3. Hostname:
+   - hostname
+   - hostname initial only
+4. Current working directory (cwd):
+   - full cwd
+   - cwd with directories shortened at four letters
+   - cwd with directories shortened at one letter
+
+### Picker
+
+The picker utility class simplify the use of the builtin
+[`wezterm.action.InputSelector`](https://wezfurlong.org/wezterm/config/lua/keyassignment/InputSelector.html).
+
+Creating a new picker is easy, only the two following fields must be specified if
+you agree with the default settings.
+
+~~~lua
+local Picker = require("utils").class.picker
+
+return Picker.new {
+  title = "Font picker",
+  subdir = "fonts",
+}
+~~~
+
+You can otherwise specify every field for more control.  After defining a picker
+you should add the choices in the specified subdirectory (eg.
+`./picker/assets/<subdir>/<file>.lua`).  The picker expects asset files to
+contain these two functions:
+
+~~~lua
+---The wezterm window object
+---@class wt.Window
+
+---The wezterm Pane object
+---@class wt.Pane
+
+---@alias PickList.Opts { window: wt.Window, pane: wt.Pane, id: string|nil, label: string|nil }
+---@alias PickList.getReturn string|{ id: string|nil, label: string|table|nil }
+
+---@class PickList
+---@field get      fun(): PickList.getReturn
+---@field activate fun(Config: table, opts: PickList.Opts): nil
+~~~
+
+For more documentation have a look at
+[./utils/class/picker.lua](./utils/class/picker.lua)
+
+Currently four picker are already implemented:
+
+1. Colorscheme picker
+   <details><summary>Click for image</summary>
+
+   ![Showcase of the colorscheme picker](./.github/imgs/showcase-picker-colorscheme.png)
+   </details>
+2. Font picker
+   <details><summary>Click for image</summary>
+
+   ![Showcase of the font picker](./.github/imgs/showcase-picker-font.png)
+   </details>
+3. Font size picker
+   <details><summary>Click for image</summary>
+
+   ![Showcase of the font size picker](./.github/imgs/showcase-picker-font-size.png)
+   </details>
+4. Font leading picker
+   <details><summary>Click for image</summary>
+
+   ![Showcase of the font leading picker](./.github/imgs/showcase-picker-font-leading.png)
+   </details>
+
+Feel free to implement any new picker, [contributions](./.github/contributing.md)
+are welcome!
 
 ### Mode indicator with modal prompts
 
-![showcase help mode prompts](./.github/assets/prompts-help-showcase.png)
+![Showcase help mode with prompts](./.github/imgs/showcase-mode-help.png)
 
-![showcase window mode prompts](./.github/assets/prompts-window-showcase.png)
+![Showcase window mode with prompts](./.github/imgs/showcase-mode-window.png)
 
-![showcase search mode prompts](./.github/assets/prompts-search-showcase.png)
+![Showcase search mode with prompts](./.github/imgs/showcase-mode-search.png)
 
-![showcase copy mode prompts](./.github/assets/prompts-copy-showcase.png)
+![Showcase copy mode with prompts](./.github/imgs/showcase-mode-copy.png)
 
-![showcase font mode prompts](./.github/assets/prompts-font-showcase.png)
+![Showcase font mode with prompts](./.github/imgs/showcase-mode-font.png)
 
-The mode indicator highlights the current operational mode of the terminal, such
-as copy mode, search mode, window mode, font mode or help (normal) mode.  Each
+![Showcase pick mode with prompts](./.github/imgs/showcase-mode-pick.png)
+
+The mode indicator highlights the current operationsl mode of the terminal.
 mode is represented by a distinct label and background color, providing a clear
-visual cue.  The mode indicator is positioned on the left side of the status-bar.
+visual cue.  The mode indicator is positioned on the left side of the tab bar.
 
-The modal prompts enhance the user interface by displaying context-specific key
-mappings in the status bar.  When a mode is activated, it shows a series of
-prompts to guide the user on available commands. Each prompt includes a key and
-its description, styled colors and fonts to improve readability and user
-experience.
-
-The mode indicator supports customization through the [`modes`
-table](./utils/modes-list.lua), which defines the text label, background color
-and mappings prompt and descriptions for each mode.  The configuration listens
-for changes in the active key table and updates the mode indicator accordingly.
+When a mode is activated, it shows a series of prompts to guide the user on
+available commands. Each prompt includes a key and its description, styled
+colors and fonts.
 
 As for the status-bar, the prompt length gets calculated to ensure it fits within
 the available space, then each prompt is formatted with a key (or list of keys)
 enclosed in angle brackets (`<key>`) and followed by its description in
 italicized text.
 
-Feeling lost?  Type `<leader>h` (or activate any mode) to have a look at the
-prompts!
+![Showcase responsiveness of prompts](./.github/imgs/showcase-modal-responsiveness.png)
 
 <!--{{{1 MODES KEYMAPS -->
 
@@ -179,16 +264,29 @@ prompts!
 
 </details>
 <!-- }}} -->
+
+<!-- PICK MODE {{{2 -->
+<details>
+  <summary><strong>pick-mode</strong></summary>
+
+  | Key           | Action              |
+  | ------------- | ------------------- |
+  | `<ESC>`       | Exit pick mode      |
+  | `t`           | colorscheme picker  |
+  | `f`           | font picker         |
+  | `s`           | font size picker    |
+  | `l`           | font leading picker |
+
+</details>
+<!-- }}} -->
 <!--}}}-->
 
 ### Vim-style keymaps
 
-The config defines custom key bindings, inspired by Vim's keymap system.
-
 The `<leader>` (`LEADER` for wezterm) key is `<C-Space>` (Ctrl + Space).
 
-Key combinations try to follow the same conventions as Vim, with the added modifier
-of `W` that maps to the `SUPER`/`WINDOWS` key.
+Key combinations try to follow the same conventions as Vim, with the added
+modifier of `W` that maps to the `SUPER`/`WINDOWS` key.
 
 Switching mode is made possibile using designated leader key combinations:
 `<leader>w` for window mode, `<leader>f` for font mode, `<leader>c` for copy mode
@@ -268,23 +366,12 @@ the previous mapping will be translated to:
 </details>
 <!--}}}-->
 
-### Multiple fonts
-
-The base font is [Fira Code
-NerdFont](https://www.nerdfonts.com).
-[Monaspace Radon](https://github.com/githubnext/monaspace/releases/latest) is
-used for italics and [Monaspace
-Krypton](https://github.com/githubnext/monaspace/releases/latest) is used for
-bold-italics.
-
-### Thanks
+## Thanks
 
 - [@Wez](https://www.github.com/wez) of course, for the awesome terminal.
-- [@apredezdc](https://github.com/aperezdc/) for it's implementation of
-  [lua-wcwidth](https://github.com/aperezdc/lua-wcwidth).
+- [@apredezdc](https://github.com/aperezdc/) for it's implementation of [lua-wcwidth](https://github.com/aperezdc/lua-wcwidth).
 - [@KevinSilvester](https://github.com/KevinSilvester) for his GPU adapter auto picker.
-- [@twilsoft](https://github.com/twilsoft) inspired the modal prompts with their
-  [wezmode](https://github.com/twilsoft/wezmode) project.
-- [@akthe-at](https://github.com/akthe-at) for his contribution to the project.
+- [@twilsoft](https://github.com/twilsoft) inspired the modal prompts with their [wezmode](https://github.com/twilsoft/wezmode) project.
+- [@akthe-at](https://github.com/akthe-at) for his contributions to the project.
 
 <!-- vim: set fdm=marker fdl=1 -->
