@@ -1,4 +1,4 @@
----@module "mappings.default"
+---@module "mappings.modes"
 ---@author sravioli
 ---@license GNU-GPLv3
 
@@ -157,8 +157,8 @@ local key_tables = {
   pick_mode = {
     { "<ESC>", "PopKeyTable", "exit" },
     { "c", require("picker.colorscheme"):pick(), "colorscheme" },
-    { "s", require("picker.font-size"):pick(), "fontsize" },
     { "f", require("picker.font"):pick(), "font" },
+    { "s", require("picker.font-size"):pick(), "font size" },
     { "l", require("picker.font-leading"):pick(), "line height" },
   }, -- }}}
 }

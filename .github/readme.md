@@ -7,7 +7,7 @@
 > [!NOTE]
 >
 > Requirements:
-> 
+>
 > - [Wezterm _**nightly**_](https://wezfurlong.org/wezterm/installation.html)
 > - [Fira Code NerdFont](https://www.nerdfonts.com).
 > - [Monaspace Radon](https://github.com/githubnext/monaspace/releases/latest)
