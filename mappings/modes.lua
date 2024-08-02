@@ -156,10 +156,10 @@ local key_tables = {
   -- {{{1 PICK MODE (pick_mode)
   pick_mode = {
     { "<ESC>", "PopKeyTable", "exit" },
-    { "t", require("picker.colorscheme"):pick(), "theme picker" },
-    { "s", require("picker.font-size"):pick(), "fontsize picker" },
-    { "f", require("picker.font"):pick(), "font picker" },
-    { "l", require("picker.font-leading"):pick(), "line height picker" },
+    { "c", require("picker.colorscheme"):pick(), "colorscheme" },
+    { "s", require("picker.font-size"):pick(), "fontsize" },
+    { "f", require("picker.font"):pick(), "font" },
+    { "l", require("picker.font-leading"):pick(), "line height" },
   }, -- }}}
 }
 
