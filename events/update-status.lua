@@ -172,7 +172,7 @@ wt.on("update-status", function(window, pane)
     RightStatus:push(colors[i], theme.tab_bar.background, cell_to_use, { "Bold" })
 
     ---update the usable width
-    -- usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 2 -- padding
+    usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 2 -- padding
   end
 
   window:set_right_status(RightStatus:format())
