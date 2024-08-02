@@ -4,8 +4,10 @@
 
 ## Installation
 
-> [!NOTE] Requirements:
+> [!NOTE]
 >
+> Requirements:
+> 
 > - [Wezterm _**nightly**_](https://wezfurlong.org/wezterm/installation.html)
 > - [Fira Code NerdFont](https://www.nerdfonts.com).
 > - [Monaspace Radon](https://github.com/githubnext/monaspace/releases/latest)
@@ -35,7 +37,7 @@
 
 ### Flexible status bar
 
-![Showcase of responsive status bar](./imgs/showcase-own-statusbar.mp4)
+<https://github.com/user-attachments/assets/d8bd96f1-53d6-4fb0-9771-53ca8ecd604b>
 
 > [!NOTE]
 >
