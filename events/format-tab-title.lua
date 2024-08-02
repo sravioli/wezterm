@@ -8,7 +8,7 @@ local wt = require "wezterm"
 
 local Utils = require "utils"
 
-local fs = Utils.fn.fs
+local fs, str = Utils.fn.fs, Utils.fn.str
 local Icon = Utils.class.icon
 local tabicons = Icon.Sep.tb
 
@@ -23,7 +23,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
 
   local Title = Utils.class.layout:new() ---@class Layout
 
-  local pane, tab_idx = tab.active_pane, tab.tab_index
+  local tab_idx = tab.tab_index
   local attributes = {}
 
   ---set colors based on states
@@ -45,40 +45,7 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     end
   end
 
-  local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
-    or tab.active_pane.title
-  local process, other = title:match "^(%S+)%s*%-?%s*%s*(.*)$"
-
-  if Icon.Progs[process] then
-    title = Icon.Progs[process] .. " " .. (other or "")
-  end
-
-  local proc = pane.foreground_process_name
-  if proc:find "nvim" then
-    proc = proc:sub(proc:find "nvim")
-  end
-  local is_truncation_needed = true
-  if proc == "nvim" then
-    ---full title truncation is not necessary since the dir name will be truncated
-    is_truncation_needed = false
-    local cwd = fs.basename(pane.current_working_dir.file_path)
-
-    ---instead of truncating the whole title, truncate to length the cwd to ensure that the
-    ---right parenthesis always closes.
-    if max_width == config.tab_max_width then
-      cwd = wt.truncate_right(cwd, max_width - 14) .. "..."
-    end
-
-    title = ("%s ( %s)"):format(Icon.Progs[proc], cwd)
-  end
-
-  title = title:gsub(fs.basename(fs.home()), "󰋜 ")
-
-  ---truncate the tab title when it overflows the maximum available space, then concatenate
-  ---some dots to indicate the occurred truncation
-  if is_truncation_needed and max_width == config.tab_max_width then
-    title = wt.truncate_right(title, max_width - 8) .. "..."
-  end
+  local title = str.format_tab_title(tab, config, max_width)
 
   ---add the either the leftmost element or the normal left separator. This is done to
   ---esure a bit of space from the left margin.
