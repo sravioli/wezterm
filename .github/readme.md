@@ -1,4 +1,4 @@
-# My Wezterm configuration
+# My wezterm config
 
 ![Configuration showcase](./imgs/showcase.png)
 
