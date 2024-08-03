@@ -34,7 +34,7 @@ wt.on("update-status", function(window, pane)
 
   -- {{{1 LEFT STATUS
 
-  local LeftStatus = StatusBar:new()
+  local LeftStatus = StatusBar:new "LeftStatus"
   local name = window:active_key_table()
   if name and modes[name] then
     local txt, ico = modes[name].txt or "", modes[name].i or ""
@@ -47,7 +47,7 @@ wt.on("update-status", function(window, pane)
 
   -- {{{1 RIGHT STATUS
 
-  local RightStatus = StatusBar:new()
+  local RightStatus = StatusBar:new "RightStatus"
 
   --~~ {{{2 Calculate the used width by the tabs
   local MuxWindow = window:mux_window()
