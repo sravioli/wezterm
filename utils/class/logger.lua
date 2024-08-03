@@ -56,13 +56,13 @@ M.__index = M
 ---will disable logging; the opposite happens when it is set to `true`.
 ---
 ---@param identifier? string indentifier that will be printed in brackets before the msg
----@param enabled?    boolean whether to enable logging or not. defaults to false
+---@param enabled?    boolean whether to enable logging or not. defaults to true at warn lvl
 ---@return Utils.Class.Logger
 function M:new(identifier, enabled)
   return setmetatable({
     identifier = identifier or "Logger",
-    enabled = G.enable_logging or enabled or false,
-    log_level = h.get_level(G.log_level or levels.INFO),
+    enabled = G.enable_logging or enabled or true,
+    log_level = h.get_level(G.log_level or levels.WARN),
   }, self)
 end
 
