@@ -18,7 +18,7 @@ return Picker.new {
       local colors = item.module.scheme
       ---@cast label string
 
-      local ChoiceLayout = Layout:new() ---@class Layout
+      local ChoiceLayout = Layout:new "ColorschemeChoices"
       for i = 1, #colors.ansi do
         local bg = colors.ansi[i]
         ChoiceLayout:push("none", bg, " ")
