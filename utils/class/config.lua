@@ -27,7 +27,7 @@ function M:new()
     self.config:set_strict_mode(true)
     log:debug "Wezterm's config builder is available"
   else
-    log:error "Wezterm's config builder is unavailable"
+    log:warn "Wezterm's config builder is unavailable"
   end
 
   self = setmetatable(self.config, { __index = M })
@@ -48,6 +48,10 @@ end
 ---return Config:new():add(require "<module.name>").options
 function M:add(spec)
   if type(spec) == "string" then
+    if not pcall(require, spec) then
+      log:error("Unable to require module %s", spec)
+      return self
+    end
     spec = require(spec)
   end
 
