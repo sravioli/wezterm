@@ -11,8 +11,8 @@
 ---@class Utils.Class.Config
 local M = {}
 
+local log = require("utils.class.logger"):new "Config"
 local wt = require "wezterm"
-local log_info, log_warn, log_error = wt.log_info, wt.log_warn, wt.log_error
 
 ---Initializes a new Config object.
 ---Creates a new Wezterm configuration object. If `wez.config_builder` is available,
@@ -25,9 +25,9 @@ function M:new()
   if wt.config_builder then
     self.config = wt.config_builder()
     self.config:set_strict_mode(true)
-    log_info "Config: using config builder"
+    log:debug "Wezterm's config builder is available"
   else
-    log_error "Config: builder unavailable!"
+    log:error "Wezterm's config builder is unavailable"
   end
 
   self = setmetatable(self.config, { __index = M })
@@ -53,7 +53,7 @@ function M:add(spec)
 
   for key, value in pairs(spec) do
     if self.config[key] == spec[key] then
-      log_warn("Config: found dupe: ", { old = self.config[key], new = spec[key] })
+      log:warn("found duplicate! old: %s, new: %s", self.config[key], spec[key])
     end
     self.config[key] = value
   end
