@@ -12,7 +12,7 @@ local G = wt.GLOBAL
 
 local Icon = require("utils").class.icon
 
-local wcwidth, codes = require "utils.wcwidth", require("utf8").codes
+local wcwidth, codes = require "utils.external.wcwidth", require("utf8").codes
 local floor, ceil = math.floor, math.ceil
 
 ---User defined utility functions
