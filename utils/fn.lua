@@ -1,16 +1,14 @@
----@diagnostic disable: undefined-field
-
 ---Various utility functions
 ---
 ---@module "utils.fn"
 ---@author sravioli
 ---@license GNU-GPLv3
 
----@diagnostic disable-next-line: assign-type-mismatch
 local wt = require "wezterm"
-local G = wt.GLOBAL
+local G = wt.GLOBAL ---@diagnostic disable-line: undefined-field
 
 local Icon = require("utils").class.icon
+local Logger = require("utils").class.logger
 
 local wcwidth, codes = require "utils.external.wcwidth", require("utf8").codes
 local floor, ceil = math.floor, math.ceil
@@ -376,11 +374,11 @@ end
 ---the separator as plain text and to trim empty segments.
 ---
 ---@usage
----```lua
+---~~~lua
 ---for segment in M.str.gsplit("a,b,c", ",") do
 ---  print(segment)  -- Outputs: "a", "b", "c"
 ---end
----```
+---~~~
 ---
 ---@param s string The input string to split.
 ---@param sep string The separator pattern to split the string by.
@@ -458,12 +456,12 @@ end
 ---to treat the separator as plain text and to trim empty segments.
 ---
 ---@usage
----```lua
+---~~~lua
 ---local result = M.str.split("a,b,c", ",")
 ---for _, segment in ipairs(result) do
 ---  print(segment)  -- Outputs: "a", "b", "c"
 ---end
----```
+---~~~
 ---
 ---@param s string The input string to split.
 ---@param sep string The separator pattern to split the string by.
@@ -548,71 +546,121 @@ M.key = {
   modifiers = { C = "CTRL", S = "SHIFT", W = "SUPER", M = "ALT" },
 }
 
+---@private
+---nil checks the given parameters.
+---@param log Utils.Class.Logger logger object to log to console
+---@param lhs string? keymap
+---@param rhs (string|table)? keymap action
+---@param tbl table? table to fill with keymap
+---@return nil
+M.key.__check = function(log, lhs, rhs, tbl)
+  if not lhs then
+    return log:error("cannot map %s without lhs!", rhs)
+  elseif not rhs then
+    return log:error("cannot map %s to a nil action!", lhs)
+  elseif not tbl then
+    return log:error "cannot add keymaps! No table given"
+  end
+end
+
+---@private
+---
+---Check if the given keymap contains the given pattern
+---@param lhs string
+---@param pattern string
+---@return boolean
+M.key.__has = function(lhs, pattern)
+  if lhs:find(pattern) ~= nil then
+    return true
+  end
+  return false
+end
+
+---@private
+---
+---Checks if the given keymap contains the `<leader>` prefix.
+---
+---If `^<leader>` is found it gets removed from the keymap and added to the mods table.
+---
+---@param lhs string keymap to check
+---@param mods table modifiers table that gets eventually filled with the `"LEADER"` mod
+---@return string lhs keymap with `^<leader>` removed (if found)
+---@nodiscard
+M.key.__has_leader = function(lhs, mods)
+  if M.key.__has(lhs, "^<leader>") then ---leader should always be the fist keymap
+    lhs = (lhs:gsub("^<leader>", ""))
+    mods[#mods + 1] = "LEADER"
+  end
+  return lhs
+end
+
 ---Maps an action using (n)vim-like syntax.
 ---
 ---This function allows you to map a key or a combination of keys to a specific action,
 ---using a syntax similar to that of (n)vim. The mapped keys and actions are inserted
 ---into the provided table.
 ---
----@param lhs string The key or key combination to map.
----@param rhs string|table A valid `wezterm.action.<action>` to execute upon keypress.
----@param tbl table The table in which to insert the keymaps.
+---@param lhs string key or key combination to map.
+---@param rhs string|table valid `wezterm.action.<action>` to execute upon keypress.
+---@param tbl table table in which to insert the keymaps.
 ---
----@usage
----```lua
+---**Example usage*+
+---
+---~~~lua
 ---local keymaps = {}
 ---M.key.map("<leader>a", wezterm.action.ActivateTab(1), keymaps)
 ---M.key.map("<C-a>", wezterm.action.ActivateTab(2), keymaps)
 ---M.key.map("b", wezterm.action.SendString("hello"), keymaps)
----```
+---~~~
 M.key.map = function(lhs, rhs, tbl)
-  ---Inserts the keymap in the table
-  ---@param mods? string modifiers. defaults to `""`
+  local log = Logger:new "key.map()"
+  M.key.__check(log, lhs, rhs, tbl)
+
+  ---Inserts the given keymap in the table
+  ---@param mods? table modifiers. defaults to `""`
   ---@param key string key to press.
   local function __map(key, mods)
-    tbl[#tbl + 1] = { key = key, mods = mods or "", action = rhs }
+    tbl[#tbl + 1] = { key = key, mods = table.concat(mods or {}, "|"), action = rhs }
   end
 
-  ---skip checks for single key mapping, just map it.
+  ---initialize the modifiers table
+  local mods = {}
+
+  ---dont'parse a single key
   if #lhs == 1 then
-    return __map(lhs)
+    return __map(lhs, mods)
   end
 
   local aliases, modifiers = M.key.aliases, M.key.modifiers
+  lhs = M.key.__has_leader(lhs, mods)
 
-  local mods = {}
-  ---search for a leader key
-  if lhs:find "^<leader>" then
-    lhs = (lhs:gsub("^<leader>", ""))
-    mods[#mods + 1] = "LEADER"
+  if not M.key.__has(lhs, "%b<>") then
+    return __map(lhs, mods)
   end
 
-  if lhs:find "%b<>" then
-    lhs = lhs:gsub("(%b<>)", function(str)
-      return str:sub(2, -2)
-    end)
+  lhs = lhs:gsub("(%b<>)", function(str)
+    return str:sub(2, -2)
+  end)
 
-    local keys = M.str.split(lhs, "%-")
-    if #keys == 1 then
-      return __map(aliases[keys[1]] or keys[1])
-    end
+  local keys = M.str.split(lhs, "%-")
 
-    local k = keys[#keys]
-    if modifiers[k] then
-      return wt.log_error "keymap cannot end with modifier!"
-    else
-      table.remove(keys, #keys)
-    end
-    k = aliases[k] or k
-
-    for i = 1, #keys do
-      mods[#mods + 1] = modifiers[keys[i]]
-    end
-
-    return __map(k, table.concat(mods, "|"))
+  if #keys == 1 then
+    return __map(aliases[keys[1]] or keys[1], mods)
   end
 
-  return __map(lhs, table.concat(mods, "|"))
+  local k = keys[#keys]
+  if modifiers[k] then
+    return log:error "keymap cannot end with modifier!"
+  else
+    keys[#keys] = nil
+  end
+  k = aliases[k] or k
+
+  for i = 1, #keys do
+    mods[#mods + 1] = modifiers[keys[i]]
+  end
+
+  return __map(k, mods)
 end
 
 -- }}}
@@ -658,7 +706,7 @@ end
 ---It constructs the button layout with appropriate colors, separators, and text attributes.
 ---
 ---@usage
----```lua
+---~~~lua
 ---local config = {}
 ---local theme = {
 ---  tab_bar = {
@@ -668,7 +716,7 @@ end
 ---  }
 ---}
 ---M.color.set_tab_button(config, theme)
----```
+---~~~
 ---
 ---@param config table The configuration object to be updated with tab button styles.
 ---@param theme table The theme object containing color schemes for different tab states.
@@ -680,7 +728,6 @@ M.color.set_tab_button = function(config, theme)
     local style = theme.tab_bar[state]
     local sep_bg, sep_fg = style.bg_color, theme.tab_bar.background
 
-    ---@class Layout
     local ButtonLayout = require("utils.class.layout"):new()
     local attributes = {
       style.intensity
