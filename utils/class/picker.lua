@@ -1,16 +1,14 @@
----@diagnostic disable: undefined-field
-
 ---@module "utils.class.picker"
 ---@author sravioli
 ---@license GNU-GPLv3
+
+---@diagnostic disable: undefined-field
 
 local Utils = require "utils"
 local fs, Logger = Utils.fn.fs, Utils.class.logger
 
 local wt = require "wezterm"
-
----@diagnostic disable-next-line: undefined-field
-local log_info, log_error, config_dir = wt.log_info, wt.log_error, wt.config_dir
+local config_dir = wt.config_dir
 
 -- {{{1 Meta
 
@@ -104,6 +102,7 @@ local log_info, log_error, config_dir = wt.log_info, wt.log_error, wt.config_dir
 ---@field comp?              fun(a, b): boolean function to sort choices
 ---@field build?             fun(__choices: Choice.private[], comp: function, opts: table): Choice[]
 ---@field new                fun(opts: Utils.Class.Picker): Utils.Class.Picker
+---@field private log        Utils.Class.Logger
 
 --~ }}}
 
@@ -236,6 +235,8 @@ function M:select(Overrides, opts)
   choice.module.activate(Overrides, opts)
 end
 
+---Invoke the picker.
+---@return nil
 function M:pick()
   return wt.action_callback(function(window, pane)
     local opts = { window = window, pane = pane }
