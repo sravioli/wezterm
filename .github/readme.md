@@ -109,7 +109,7 @@ contain these two functions:
 ~~~
 
 For more documentation have a look at
-[./utils/class/picker.lua](./utils/class/picker.lua)
+[./utils/class/picker.lua](../utils/class/picker.lua)
 
 Currently four picker are already implemented:
 
@@ -299,7 +299,7 @@ Switching mode is made possibile using designated leader key combinations:
 Additional adjustments and bindings can be effortlessly incorporated to cater to
 individual preferences and requirements.  Adding or modifing existing keymaps is
 very easy: add (or remove) the desired keymap to the table in
-[./mappings/default.lua](./mappings/default.lua). The keymap will be
+[./mappings/default.lua](../mappings/default.lua). The keymap will be
 automatically converted to Wezterm's syntax.
 
 Usage example as follows:
