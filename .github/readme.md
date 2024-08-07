@@ -306,9 +306,9 @@ Usage example as follows:
 
 ~~~lua
 local act = require("wezterm").action
-local Config = { keys = {} } ---the wezterm config table
+local Config = { keys = {} } ---wezterm config table
 
-require("utils.fun").map("<M-CR>", act.ToggleFullScreen, Config.keys)
+require("utils.fn").key.map("<M-CR>", act.ToggleFullScreen, Config.keys)
 
 return Config
 ~~~
