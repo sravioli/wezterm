@@ -100,7 +100,7 @@ local config_dir = wt.config_dir
 ---@field description?       string  defaults to `"Select an item."`
 ---@field fuzzy_description? string  defaults to `"Fuzzy matching: "`
 ---@field comp?              fun(a, b): boolean function to sort choices
----@field build?             fun(__choices: Choice.private[], comp: function, opts: table): Choice[]
+---@field build?             fun(__choices: Choice.private[], comp: function, opts: { window: wt.Window, pane: wt.Pane }): Choice[]
 ---@field new                fun(opts: Utils.Class.Picker): Utils.Class.Picker
 ---@field private log        Utils.Class.Logger
 
@@ -179,8 +179,6 @@ function M.new(opts)
   self.comp = opts.comp
   self.build = opts.build or h.build
 
-  ---@diagnostic disable-next-line: undefined-field
-  self.action = opts.action or wt.action.Nop
   self.fuzzy = opts.fuzzy or false
   self.alphabet = opts.alphabet or "1234567890abcdefghilmnopqrstuvwxyz"
   self.description = opts.description or "Select an item."

@@ -105,7 +105,7 @@ end
 ---@param message string log message or format string
 ---@param ... any additional arguments to format into the message
 function M:debug(message, ...)
-  self:log(levels.DEBUG, message, ...)
+  self:log(levels.DEBUG, "DEBUG: " .. message, ...)
 end
 
 ---Logs a info level message to the Wezterm's debug overlay.

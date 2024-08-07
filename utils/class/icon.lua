@@ -1,11 +1,8 @@
----@diagnostic disable: undefined-field
-
----Nerd font icons aggregated by class/process/etc
----
 ---@module "utils.class.icon"
 ---@author sravioli
 ---@license GNU-GPLv3
 
+---@diagnostic disable-next-line: undefined-field
 local nf = require("wezterm").nerdfonts
 
 -- {{{1 META
