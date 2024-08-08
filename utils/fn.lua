@@ -570,10 +570,7 @@ end
 ---@param pattern string
 ---@return boolean
 M.key.__has = function(lhs, pattern)
-  if lhs:find(pattern) ~= nil then
-    return true
-  end
-  return false
+  return lhs:find(pattern) ~= nil
 end
 
 ---@private
