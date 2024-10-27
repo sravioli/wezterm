@@ -748,7 +748,12 @@ M.color.set_scheme = function(Config, theme, name)
   Config.command_palette_bg_color = theme.brights[6]
   Config.command_palette_fg_color = theme.background
   Config.background = {
-    { source = { Color = theme.background }, width = "100%", height = "100%" },
+    {
+      source = { Color = theme.background },
+      width = "100%",
+      height = "100%",
+      opacity = wt.GLOBAL.opacity or 1,
+    },
   }
   M.color.set_tab_button(Config, theme)
 end

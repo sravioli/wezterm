@@ -14,6 +14,7 @@ Config.background = {
     source = { Color = theme.background },
     width = "100%",
     height = "100%",
+    opacity = require("wezterm").GLOBAL.opacity or 1,
   },
 }
 
