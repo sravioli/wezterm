@@ -9,7 +9,7 @@ local key = require("utils.fn").key
 local Config = {}
 
 Config.disable_default_key_bindings = true
-Config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
+Config.leader = { key = "\\", mods = "ALT", timeout_milliseconds = 1000 }
 
 local mappings = {
   { "<C-Tab>", act.ActivateTabRelative(1), "next tab" },
