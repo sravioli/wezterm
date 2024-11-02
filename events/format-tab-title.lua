@@ -7,7 +7,6 @@
 local wt = require "wezterm"
 
 local Utils = require "utils"
-
 local str = Utils.fn.str
 local Icon = Utils.class.icon
 local tabicons = Icon.Sep.tb
