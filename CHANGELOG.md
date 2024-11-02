@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.1.0](https://github.com/sravioli/wezterm/compare/995a31aed8ea58579e6edde900db98db894311d3..6.1.0) - 2024-11-02
+#### Bug Fixes
+- **(events:format-tab-title)** rm useless local - ([820566d](https://github.com/sravioli/wezterm/commit/820566da28a8ef9cacd29f24de5f4fc32fb4b45e)) - sravioli
+- **(readme)** update links to files - ([991e4e9](https://github.com/sravioli/wezterm/commit/991e4e9f5bd61eb8a3f321a7b5d4874158806f80)) - [@sravioli](https://github.com/sravioli)
+- **(utils:class)** update docs, minor fixes - ([985b21d](https://github.com/sravioli/wezterm/commit/985b21d712426f7e8113dd84b33a297c79c1c916)) - sravioli
+- **(utils:config)** safe require of module, modify logging - ([1e9e092](https://github.com/sravioli/wezterm/commit/1e9e092a1bbb698293586d442eb4ed332bc7f3d2)) - sravioli
+- **(utils:external)** move external libraries to separate folder - ([0a73acc](https://github.com/sravioli/wezterm/commit/0a73acc452af454f40461de58f0fa188d740dd8b)) - sravioli
+- **(utils:fn)** simplify key.__has() function - ([9f9c726](https://github.com/sravioli/wezterm/commit/9f9c726541d143e407c47dbc76084bc90b82f5bf)) - sravioli
+- **(utils:layout)** implement missing colors, add logging - ([d87355b](https://github.com/sravioli/wezterm/commit/d87355b4f968c92dd4d80cc040afe2c96019fe66)) - sravioli
+- **(utils:logger)** enable logging by default at warn min level - ([f19daa5](https://github.com/sravioli/wezterm/commit/f19daa51a0dc5e380b79912424eb6f172466d583)) - sravioli
+- status bar spacing, use wt.column_width - ([dff7b21](https://github.com/sravioli/wezterm/commit/dff7b214857ce345116705f65e7efb6d43b906f6)) - sravioli
+- allow setting bg opacity (fixes #16) - ([923c39c](https://github.com/sravioli/wezterm/commit/923c39c8831fcb26e7c115327e8281149dff9fe8)) - sravioli
+- add pick mode keymaps in readme - ([56e584f](https://github.com/sravioli/wezterm/commit/56e584f4753cfca559a5d49fe5445534caf23973)) - sravioli
+- change colorscheme picker keymap in readme - ([995a31a](https://github.com/sravioli/wezterm/commit/995a31aed8ea58579e6edde900db98db894311d3)) - sravioli
+#### Documentation
+- **(utils:class)** update class documentation - ([277905e](https://github.com/sravioli/wezterm/commit/277905e96685225a5d6df4a2a7aa6eccb1c33ab3)) - sravioli
+#### Features
+- **(events)** add layout names for logging purposes - ([3695273](https://github.com/sravioli/wezterm/commit/36952733900967ff2da13956906bfeeb9d242f50)) - sravioli
+- **(picker:colorscheme)** add layout name for logging purposes - ([6093714](https://github.com/sravioli/wezterm/commit/6093714ec103206c866c62f0a076e53cdf27ba1f)) - sravioli
+- **(utils)** add logging - ([d1bcc4d](https://github.com/sravioli/wezterm/commit/d1bcc4d8f9e8793541a7e7ef920865b3632b321c)) - sravioli
+- **(utils)** get mod name using `...` - ([d885d04](https://github.com/sravioli/wezterm/commit/d885d0470c0691cad45169fd57b58b5c93529ae2)) - sravioli
+- **(utils:fn)** split key.map() fn in multiple ones - ([fe5b0f6](https://github.com/sravioli/wezterm/commit/fe5b0f6e7c1b4d570af7b4869cc0de9ee61edccb)) - sravioli
+- **(utils:logger)** implement a logger - ([a5eac0c](https://github.com/sravioli/wezterm/commit/a5eac0c2d4daf2ae1de670e86ac7f49ba8c4be7b)) - sravioli
+#### Hotfixes
+- **(readme)** use correct require for map fn - ([4afadca](https://github.com/sravioli/wezterm/commit/4afadca0f03e38710f953873bb116aea982b8643)) - sravioli
+#### Revert
+- restore <M-\> as leader - ([f9cb72c](https://github.com/sravioli/wezterm/commit/f9cb72cf2346866338949f5851a70785307cdc9c)) - sravioli
+#### Style
+- **(.github)** rename to lowercase - ([2679fdb](https://github.com/sravioli/wezterm/commit/2679fdb08fb48382a2aa95b781ffe8d7906f42c6)) - sravioli
+
+- - -
+
 ## [6.0.0](https://github.com/sravioli/wezterm/compare/1ec7b8140eaa487467454decc9090349f3fde4aa..6.0.0) - 2024-08-02
 #### Bug Fixes
 - **(.github)** linebreaks and formatting - ([9c80d09](https://github.com/sravioli/wezterm/commit/9c80d09ea7f445bbcee76f71af6dfea3da798267)) - sravioli
