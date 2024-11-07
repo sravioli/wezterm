@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-field
+
 ---Various utility functions
 ---
 ---@module "utils.fn"
@@ -5,13 +7,16 @@
 ---@license GNU-GPLv3
 
 local wt = require "wezterm"
-local G = wt.GLOBAL ---@diagnostic disable-line: undefined-field
 
 local Icon = require("utils").class.icon
 local Logger = require("utils").class.logger
 
-local wcwidth, codes = require "utils.external.wcwidth", require("utf8").codes
 local floor, ceil = math.floor, math.ceil
+
+if not wt.GLOBAL.cache then
+  wt.GLOBAL.cache = {}
+end
+local G = wt.GLOBAL.cache
 
 ---User defined utility functions
 ---@class Utils.Fn
@@ -47,27 +52,34 @@ M.tbl_merge = function(t1, ...)
   return t1
 end
 
+M.clear_cache = function()
+  for key, _ in pairs(G) do
+    G[key] = nil
+  end
+end
+
 ---Memoize the function return value in the given `wezterm.GLOBAL` key
 ---@param key string key in which to memoize fn return value
 ---@param value any function to memoize
----@return any value function that returns the cached value
+---@return any value the memoized value
 M.gmemoize = function(key, value)
-  local is_fn = type(value) == "function"
-  if G[key] == nil then
-    G[key] = is_fn and value() or value
+  if type(value) == "function" then
+    return function()
+      G[key] = G[key] or value()
+      return G[key]
+    end
   end
-  return is_fn and function()
-    return G[key]
-  end or value
-end
 
+  G[key] = G[key] or (value == nil and tostring(value) or value)
+  return G[key]
+end
 -- {{{1 Utils.Fn.FileSystem
 
 ---@class Utils.Fn.FileSystem
 ---@field private target_triple string
 M.fs = {}
 
-M.fs.target_triple = M.gmemoize("target_triple", wt.target_triple)
+M.fs.target_triple = M.gmemoize("target-triple", wt.target_triple)
 
 -- {{{2 META
 
@@ -85,7 +97,7 @@ M.fs.target_triple = M.gmemoize("target_triple", wt.target_triple)
 ---Linux, or macOS.
 ---
 ---@return Utils.Fn.FileSystem.Platform platform
-M.fs.platform = M.gmemoize("plaftorm", function()
+M.fs.platform = M.gmemoize("platform", function()
   local is_win = M.fs.target_triple:find "windows" ~= nil
   local is_linux = M.fs.target_triple:find "linux" ~= nil
   local is_mac = M.fs.target_triple:find "apple" ~= nil
@@ -93,7 +105,7 @@ M.fs.platform = M.gmemoize("plaftorm", function()
   return { os = os, is_win = is_win, is_linux = is_linux, is_mac = is_mac }
 end)
 
-local is_win = M.fs.platform().is_win
+local is_win = M.gmemoize("is-win", M.fs.platform().is_win)
 
 ---Gets the user home directory.
 ---
@@ -108,7 +120,7 @@ end)
 ---Path separator based on the platform.
 ---
 ---This variable holds the appropriate path separator character for the current platform.
-M.fs.path_separator = M.gmemoize("path_separator", is_win and "\\" or "/")
+M.fs.path_separator = M.gmemoize("path-separator", is_win and "\\" or "/")
 
 ---Equivalent to POSIX `basename(3)`.
 ---
@@ -117,9 +129,15 @@ M.fs.path_separator = M.gmemoize("path_separator", is_win and "\\" or "/")
 ---@param path string Any string representing a path.
 ---@return string str The base name of the path.
 M.fs.basename = function(path)
+  G["basename"] = G["basename"] or {}
+  if G["basename"][path] then
+    return G["basename"][path]
+  end
+
   local trimmed_path = path:gsub("[/\\]*$", "")
   local index = trimmed_path:find "[^/\\]*$"
-  return index and trimmed_path:sub(index) or trimmed_path
+  G["basename"][path] = index and trimmed_path:sub(index) or trimmed_path
+  return G["basename"][path]
 end
 
 ---Searches for the git project root directory of the given directory path.
@@ -131,13 +149,17 @@ end
 ---@return string|nil git_root If found, the `git_root`, else `nil`.
 M.fs.find_git_dir = function(directory)
   directory = directory:gsub("~", M.fs.home())
+  G["fing-git-dir"] = G["fing-git-dir"] or {}
+  if G["fing-git-dir"][directory] then
+    return G["fing-git-dir"][directory]
+  end
 
   while directory do
     local handle = io.open(directory .. "/.git/HEAD", "r")
     if handle then
       handle:close()
-      directory = directory:gsub(M.fs.home(), "~")
-      return directory
+      G["fing-git-dir"][directory] = directory:gsub(M.fs.home(), "~")
+      return G["fing-git-dir"][directory]
     elseif directory == "/" or directory == "" then
       break
     else
@@ -245,8 +267,9 @@ end
 ---end
 ---~~~
 M.fs.read_dir = function(directory)
-  if G.dirs_read and G.dirs_read[directory] then
-    return G.dirs_read[directory]
+  G["dirs-read"] = G["dirs-read"] or {}
+  if G["dirs-read"][directory] then
+    return G["dirs-read"][directory]
   end
 
   local filename = M.fs.basename(directory) .. ".txt"
@@ -279,8 +302,8 @@ M.fs.read_dir = function(directory)
     end
   end
 
-  G.dirs_read = { [directory] = files }
-  return G.dirs_read[directory]
+  G["dirs-read"][directory] = files
+  return G["dirs-read"][directory]
 end
 -- }}}
 
@@ -322,38 +345,6 @@ end
 
 ---@class Utils.Fn.String
 M.str = {}
-
----Calculate the printable length of first "num" characters of string "str" on a
----terminal. Returns the number of cells or -1 if the string contains non-printable
----characters. Raises an error on invalid UTF8 input.
----@param str string input string
----@param num? integer
----@return number|-1
-M.str.strwidth = function(str, num)
-  local cells = 0
-  if num then
-    local count = 0
-    for _, rune in codes(str) do
-      local w = wcwidth(rune)
-      if w < 0 then
-        return -1
-      end
-      count = count + 1
-      if count >= num then
-        break
-      end
-    end
-  else
-    for _, rune in codes(str) do
-      local w = wcwidth(rune)
-      if w < 0 then
-        return -1
-      end
-      cells = cells + w
-    end
-  end
-  return cells
-end
 
 ---Returns a padded string and ensures that it's not shorter than 2 chars.
 ---@param s string input string
