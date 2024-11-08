@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.1.1](https://github.com/sravioli/wezterm/compare/5457911ae31620f8584c2c821d72811c8bf42acd..6.1.1) - 2024-11-08
+#### Bug Fixes
+- restore leader key - ([3d57fbe](https://github.com/sravioli/wezterm/commit/3d57fbedd32b6a687ab8ac6555911b6f4f87dd70)) - sravioli
+#### Features
+- rewrite gmemoize to actually work, add more memoization - ([5457911](https://github.com/sravioli/wezterm/commit/5457911ae31620f8584c2c821d72811c8bf42acd)) - sravioli
+
+- - -
+
 ## [6.1.0](https://github.com/sravioli/wezterm/compare/995a31aed8ea58579e6edde900db98db894311d3..6.1.0) - 2024-11-02
 #### Bug Fixes
 - **(events:format-tab-title)** rm useless local - ([820566d](https://github.com/sravioli/wezterm/commit/820566da28a8ef9cacd29f24de5f4fc32fb4b45e)) - sravioli
