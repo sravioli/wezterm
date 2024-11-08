@@ -8,9 +8,10 @@
 
 local wt = require "wezterm"
 
-local Icon = require("utils").class.icon
-local Logger = require("utils").class.logger
+local Utils = require "utils"
+local Icon, Logger = Utils.class.icon, Utils.class.logger
 
+local tconcat, tremove = table.concat, table.remove
 local floor, ceil = math.floor, math.ceil
 
 if not wt.GLOBAL.cache then
@@ -26,6 +27,8 @@ local G = wt.GLOBAL.cache
 ---@field key   Utils.Fn.Keymap
 ---@field color Utils.Fn.Color
 local M = {}
+
+M.log = Logger:new("utils.fn", true)
 
 ---Merges two tables
 ---@param t1 table
@@ -73,6 +76,7 @@ M.gmemoize = function(key, value)
   G[key] = G[key] or (value == nil and tostring(value) or value)
   return G[key]
 end
+
 -- {{{1 Utils.Fn.FileSystem
 
 ---@class Utils.Fn.FileSystem
@@ -149,17 +153,17 @@ end
 ---@return string|nil git_root If found, the `git_root`, else `nil`.
 M.fs.find_git_dir = function(directory)
   directory = directory:gsub("~", M.fs.home())
-  G["fing-git-dir"] = G["fing-git-dir"] or {}
-  if G["fing-git-dir"][directory] then
-    return G["fing-git-dir"][directory]
+  G["git-dir"] = G["git-dir"] or {}
+  if G["git-dir"][directory] then
+    return G["git-dir"][directory]
   end
 
   while directory do
     local handle = io.open(directory .. "/.git/HEAD", "r")
     if handle then
       handle:close()
-      G["fing-git-dir"][directory] = directory:gsub(M.fs.home(), "~")
-      return G["fing-git-dir"][directory]
+      G["git-dir"][directory] = directory:gsub(M.fs.home(), "~")
+      return G["git-dir"][directory]
     elseif directory == "/" or directory == "" then
       break
     else
@@ -231,6 +235,12 @@ end
 ---@param len number The maximum length for each component of the path.
 ---@return string short_path
 M.fs.pathshortener = function(path, len)
+  G["pathshortener"] = G["pathshortener"] or {}
+  local key = path .. ":" .. tostring(len)
+  if G["pathshortener"][key] then
+    return G["pathshortener"][key]
+  end
+
   local splitted_path = M.str.split(path, M.fs.path_separator)
   local short_path = ""
   for i = 1, #splitted_path do
@@ -243,7 +253,8 @@ M.fs.pathshortener = function(path, len)
       .. (short_dir == "." and dir:sub(1, len + 1) or short_dir)
       .. M.fs.path_separator
   end
-  return short_path
+  G["pathshortener"][key] = short_path
+  return G["pathshortener"][key]
 end
 
 ---Concatenates a vararg list of values to a single string
@@ -251,7 +262,7 @@ end
 ---@return string path The concatenated path
 M.fs.pathconcat = function(...)
   local paths = { ... }
-  return table.concat(paths, M.fs.path_separator)
+  return tconcat(paths, M.fs.path_separator)
 end
 
 ---Reads the contents of a directory and returns a list of absolute filenames.
@@ -267,9 +278,9 @@ end
 ---end
 ---~~~
 M.fs.read_dir = function(directory)
-  G["dirs-read"] = G["dirs-read"] or {}
-  if G["dirs-read"][directory] then
-    return G["dirs-read"][directory]
+  G["read-dir"] = G["read-dir"] or {}
+  if G["read-dir"][directory] then
+    return G["read-dir"][directory]
   end
 
   local filename = M.fs.basename(directory) .. ".txt"
@@ -291,7 +302,7 @@ M.fs.read_dir = function(directory)
   else
     local success = os.execute(cmd)
     if not success then
-      return wt.log_error "Unable to create temp file."
+      return M.log:error "[fs.read_dir] Unable to create temp file!"
     end
     file = io.open(tempfile, "r")
     if file then
@@ -302,8 +313,8 @@ M.fs.read_dir = function(directory)
     end
   end
 
-  G["dirs-read"][directory] = files
-  return G["dirs-read"][directory]
+  G["read-dir"][directory] = files
+  return G["read-dir"][directory]
 end
 -- }}}
 
@@ -403,7 +414,7 @@ M.str.gsplit = function(s, sep, opts)
   return function()
     if trimempty and #segs > 0 then
       -- trimempty: Pop the collected segments.
-      return table.remove(segs)
+      return tremove(segs)
     elseif done or (s == "" and sep == "") then
       return nil
     elseif sep == "" then
@@ -433,7 +444,7 @@ M.str.gsplit = function(s, sep, opts)
       if seg ~= "" then
         segs[1] = seg
       end
-      return table.remove(segs)
+      return tremove(segs)
     end
 
     return seg
@@ -459,11 +470,19 @@ end
 ---@param opts? table|nil Optional parameters: `plain` (boolean): If true, treats the separator as plain text. `trimempty` (boolean): If true, trims empty segments from the start and end.
 ---@return table t A table containing the substrings.
 M.str.split = function(s, sep, opts)
+  local key = s .. ":" .. sep .. ":" .. tconcat(opts or {}, "-")
+  G["split"] = G["split"] or {}
+  if G["split"][key] then
+    return G["split"][key]
+  end
+
   local t = {}
   for c in M.str.gsplit(s, sep, opts) do
     t[#t + 1] = c
   end
-  return t
+
+  G["split"][key] = t
+  return G["split"][key]
 end
 
 M.str.format_tab_title = function(tab, config, max_width)
@@ -608,7 +627,7 @@ M.key.map = function(lhs, rhs, tbl)
   ---@param mods? table modifiers. defaults to `""`
   ---@param key string key to press.
   local function __map(key, mods)
-    tbl[#tbl + 1] = { key = key, mods = table.concat(mods or {}, "|"), action = rhs }
+    tbl[#tbl + 1] = { key = key, mods = tconcat(mods or {}, "|"), action = rhs }
   end
 
   ---initialize the modifiers table
@@ -661,16 +680,14 @@ M.color = {}
 ---Retrieves all the customs colorschemes
 ---@return table schemes Full colorschemes table
 M.color.get_schemes = function()
-  local schemes = {}
-
   local dir = M.fs.pathconcat(wt.config_dir, "picker", "assets", "colorschemes")
   local files = M.fs.read_dir(dir)
   if not files then
-    return wt.log_error(
-      ("Unable to read from directory: '%s'"):format(M.fs.basename(dir))
-    )
+    M.log:error("Unable to read from directory: '%s'", M.fs.basename(dir))
+    return {}
   end
 
+  local schemes = {}
   for i = 1, #files do
     local name = M.fs.basename(files[i]:gsub("%.lua$", ""))
     schemes[name] = require("picker.assets.colorschemes." .. name).scheme
@@ -710,7 +727,7 @@ end
 ---@param theme table The theme object containing color schemes for different tab states.
 M.color.set_tab_button = function(config, theme)
   config.tab_bar_style = {}
-  local sep = require("utils.class.icon").Sep.tb
+  local sep = Icon.Sep.tb
 
   for _, state in ipairs { "new_tab", "new_tab_hover" } do
     local style = theme.tab_bar[state]

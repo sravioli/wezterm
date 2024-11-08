@@ -1,11 +1,10 @@
-local battery_charge = require("wezterm").battery_info()[1].state_of_charge
-
 local Config = {}
 
 Config.front_end = "WebGpu"
 Config.webgpu_force_fallback_adapter = false
 
 ---switch to low power mode when battery is low
+local battery_charge = require("wezterm").battery_info()[1].state_of_charge
 if battery_charge < 0.35 then
   Config.webgpu_power_preference = "LowPower"
 else
