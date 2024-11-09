@@ -34,8 +34,8 @@ if fs.platform().is_win then
       name = "WSL:Ubuntu",
       distribution = "Ubuntu",
       username = "sravioli",
-      default_cwd = "/home/sRavioli",
-      default_prog = { "bash" },
+      default_cwd = "~",
+      default_prog = { "bash", "-i", "-l" },
     },
     {
       name = "WSL:Alpine",
