@@ -39,6 +39,14 @@ local mappings = {
   { "<C-S-Insert>", act.PasteFrom "PrimarySelection", "" },
   { "<C-Insert>", act.CopyTo "PrimarySelection", "" },
   { "<C-S-Space>", act.QuickSelect, "quick select" },
+  {
+    "<S-M-t>",
+    act.ShowLauncherArgs {
+      title = "  Search:",
+      flags = "FUZZY|LAUNCH_MENU_ITEMS|DOMAINS",
+    },
+    "new window",
+  },
 
   ---quick split and nav
   { '<C-S-">', act.SplitHorizontal { domain = "CurrentPaneDomain" }, "vsplit" },
