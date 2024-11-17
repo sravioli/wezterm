@@ -44,14 +44,16 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     end
   end
 
-  local title = str.format_tab_title(tab, config, max_width)
+  local pane = tab.active_pane
+  local tab_title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title or pane.title
+  local title = str.format_tab_title(pane, tab_title, config, max_width)
 
   ---add the either the leftmost element or the normal left separator. This is done to
   ---esure a bit of space from the left margin.
-  Title:push(bg, fg, tab_idx == 0 and tabicons.leftmost or tabicons.left, attributes)
+  Title:append(bg, fg, tab_idx == 0 and tabicons.leftmost or tabicons.left, attributes)
 
   ---add the tab number. can be substituted by the `has_unseen_output` notification
-  Title:push(
+  Title:append(
     fg,
     bg,
     (unseen_output and Icon.Notification or Icon.Nums[tab_idx + 1] or "") .. " ",
@@ -59,10 +61,10 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
   )
 
   ---the formatted tab title
-  Title:push(fg, bg, title, attributes)
+  Title:append(fg, bg, title, attributes)
 
   ---the right tab bar separator
-  Title:push(bg, fg, Icon.Sep.block .. tabicons.right, attributes)
+  Title:append(bg, fg, Icon.Sep.block .. tabicons.right, attributes)
 
   return Title
 end)

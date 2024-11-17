@@ -21,19 +21,19 @@ return Picker.new {
       local ChoiceLayout = Layout:new "ColorschemeChoices"
       for i = 1, #colors.ansi do
         local bg = colors.ansi[i]
-        ChoiceLayout:push("none", bg, " ")
+        ChoiceLayout:append("none", bg, " ")
       end
 
-      ChoiceLayout:push("none", "none", "   ")
+      ChoiceLayout:append("none", "none", "   ")
       for i = 1, #colors.brights do
         local bg = colors.brights[i]
-        ChoiceLayout:push("none", bg, " ")
+        ChoiceLayout:append("none", bg, " ")
       end
 
       local Config = opts.window:effective_config()
       local fg = Config.color_schemes[Config.color_scheme].foreground
-      ChoiceLayout:push("none", "none", (" "):rep(5))
-      ChoiceLayout:push("none", fg, label)
+      ChoiceLayout:append("none", "none", (" "):rep(5))
+      ChoiceLayout:append("none", fg, label)
       choices[#choices + 1] = { label = ChoiceLayout:format(), id = id }
     end
 
