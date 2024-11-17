@@ -1,24 +1,30 @@
+---@diagnostic disable: undefined-field
+---
 ---@module "events.update-status"
 ---@author sravioli
 ---@license GNU-GPLv3
 
+-- selene: allow(incorrect_standard_library_use)
+local tunpack = table.unpack or unpack
+local tostring, tonumber = tostring, tonumber
+local floor = math.floor
+
 local wt = require "wezterm"
+local timefmt, color_parse = wt.strftime, wt.color.parse
 
-local Utils = require "utils"
-local StatusBar = Utils.class.layout
-local Icon = Utils.class.icon
-local fs, mt, str = Utils.fn.fs, Utils.fn.mt, Utils.fn.str
+local class, fn = require "utils.class", require "utils.fn"
+local icon, sep, sb = class.icon, class.icon.Sep, class.layout:new "StatusBar"
+local fs, mt, str = fn.fs, fn.mt, fn.str
 
----@diagnostic disable-next-line: undefined-field
-local strftime, strwidth = wt.strftime, wt.column_width
-
--- luacheck: push ignore 561
----@diagnostic disable-next-line: undefined-field
+---Update status event
+---@param window wt.Window Wezterm's window object
+---@param pane   wt.Pane   Wezterm's pane object
 wt.on("update-status", function(window, pane)
-  local Config = window:effective_config()
-
-  local Overrides = window:get_config_overrides() or {}
+  local Config, Overrides = window:effective_config(), window:get_config_overrides() or {}
   local theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
+
+  --~ {{{2: Valid modes
+
   local modes = {
     search_mode = { i = "󰍉", txt = "SEARCH", bg = theme.brights[4], pad = 5 },
     window_mode = { i = "󱂬", txt = "WINDOW", bg = theme.ansi[6], pad = 4 },
@@ -26,169 +32,178 @@ wt.on("update-status", function(window, pane)
     font_mode = { i = "󰛖", txt = "FONT", bg = theme.ansi[7], pad = 4 },
     help_mode = { i = "󰞋", txt = "NORMAL", bg = theme.ansi[5], pad = 5 },
     pick_mode = { i = "󰢷", txt = "PICK", bg = theme.ansi[2], pad = 5 },
+  } --~ }}}
+
+  local bg, fg = theme.background, theme.ansi[5]
+
+  local width = {
+    ws = 0,
+    mode = 0,
+    tabs = 5,
+    prompt = 0,
+    usable = pane:get_dimensions().cols,
+    new_button = Config.show_new_tab_button_in_tab_bar and 8 or 0,
   }
 
-  local bg = theme.ansi[5]
-  local mode_indicator_width = 0
+  -- {{{1: Left status
 
-  -- {{{1 LEFT STATUS
+  local lsb = sb:new "LeftStatusBar"
 
-  local LeftStatus = StatusBar:new "LeftStatus"
-  local name = window:active_key_table()
-  if name and modes[name] then
-    local txt, ico = modes[name].txt or "", modes[name].i or ""
-    local indicator = str.pad(ico .. " " .. txt, 1)
-    mode_indicator_width, bg = strwidth(indicator) + 1, modes[name].bg
-    LeftStatus:push(bg, theme.background, indicator, { "Bold" })
+  --~ {{{2: Modal indicator
+
+  local mode = window:active_key_table()
+  if mode and modes[mode] then
+    local mode_fg = modes[mode].bg
+    local txt, ico = modes[mode].txt or "", modes[mode].i or ""
+    local indicator = str.pad(str.padr(ico) .. txt, 1)
+
+    lsb:append(mode_fg, bg, indicator, { "Bold" })
+
+    width.mode = str.width(indicator)
+  end --~ }}}
+
+  --~ {{{2: workspace indicator
+
+  local ws = window:active_workspace()
+  if ws ~= "" and not mode then
+    local ws_bg = theme.brights[6]
+    ws = str.pad(str.padr(icon.Workspace) .. ws)
+    width.ws = str.width(ws) + 4
+
+    if width.usable >= width.ws then
+      lsb:append(ws_bg, bg, ws, { "Bold" })
+    end
   end
 
-  window:set_left_status(LeftStatus:format())
+  --~}}}
+
+  window:set_left_status(lsb:format())
   -- }}}
 
-  -- {{{1 RIGHT STATUS
+  -- {{{1: Right Status
 
-  local RightStatus = StatusBar:new "RightStatus"
+  local rsb = sb:new "RightStatusBar"
 
-  --~~ {{{2 Calculate the used width by the tabs
-  local MuxWindow = window:mux_window()
-  local tab_bar_width = 5
-  for i = 1, #MuxWindow:tabs() do
-    local MuxPane = MuxWindow:tabs()[i]:panes()[1]
-    local tab_title = MuxPane:get_title()
-    local max_width = 30
+  --~ {{{2 usable width calculation
 
-    local process, other = tab_title:match "^(%S+)%s*%-?%s*%s*(.*)$"
-    tab_title = tab_title:gsub("^Copy mode: ", "")
-    if Icon.Progs[process] then
-      tab_title = Icon.Progs[process] .. " " .. (other or "")
-    end
-
-    local proc = MuxPane:get_foreground_process_name()
-    local is_truncation_needed = true
-    if proc and proc:find "nvim" then
-      is_truncation_needed = false
-      proc = proc:sub(proc:find "nvim")
-    end
-    if proc == "nvim" then
-      local cwd = fs.basename(MuxPane:get_current_working_dir().file_path)
-      if Config.tab_max_width == max_width then
-        cwd = wt.truncate_right(cwd, 25 - 14) .. "..."
-      end
-
-      tab_title = ("%s ( %s)"):format(Icon.Progs[proc], cwd)
-    end
-    tab_title = tab_title:gsub(fs.basename(fs.home()), "󰋜 ")
-
-    if is_truncation_needed and max_width == Config.tab_max_width then
-      tab_title = wt.truncate_right(tab_title, max_width - 8) .. "..."
-    end
-
-    tab_bar_width = tab_bar_width + strwidth(tab_title) + 5
+  for _ = 1, #window:mux_window():tabs() do
+    local tab_title = pane:get_title()
+    width.tabs = width.tabs + str.width(str.format_tab_title(pane, tab_title, Config, 25))
   end
 
-  local new_tab_button_width = Config.show_new_tab_button_in_tab_bar and 8 or 0
-  tab_bar_width = tab_bar_width + mode_indicator_width + new_tab_button_width
-  --~~ }}}
+  width.usable = width.usable - (width.tabs + width.mode + width.new_button + width.ws)
+  --~ }}}
 
-  local usable_width = pane:get_dimensions().cols - tab_bar_width
+  --~ {{{2: Modal prompts
 
-  --~ {{{2 MODAL PROMPTS
-  if name and modes[name] then
-    local mode = modes[name]
-    local prompt_bg, map_fg, txt_fg = theme.tab_bar.background, mode.bg, theme.foreground
-    local sep = Icon.Sep.sb.modal
+  if mode and modes[mode] then
+    local prompt_bg, map_fg, txt_fg =
+      theme.tab_bar.background, modes[mode].bg, theme.foreground
+    local msep = sep.sb.modal
 
-    local key_tbl = require("mappings.modes")[2][name]
+    local key_tbl = require("mappings.modes")[2][mode]
     for idx = 1, #key_tbl do
-      local map_tbl = key_tbl[idx]
-      local map, desc = map_tbl[1], map_tbl[3]
+      local map, _, desc = tunpack(key_tbl[idx])
+
       if map:find "%b<>" then
         map = map:gsub("(%b<>)", function(s)
           return s:sub(2, -2)
         end)
       end
 
-      local prompt_len = strwidth(map .. str.pad(desc)) + mode.pad
-      if usable_width > 0 and desc ~= "" then
-        RightStatus:push(prompt_bg, txt_fg, "<", { "Bold" })
-        RightStatus:push(prompt_bg, map_fg, map)
-        RightStatus:push(prompt_bg, txt_fg, ">")
-        RightStatus:push(prompt_bg, txt_fg, str.pad(desc), { "Normal", "Italic" })
+      width.prompt = str.width(map .. str.pad(desc)) + modes[mode].pad
+      width.usable = width.usable - width.prompt
+      if width.usable > 0 and desc ~= "" then
+        rsb:append(prompt_bg, txt_fg, "<", { "Bold" })
+        rsb:append(prompt_bg, map_fg, map)
+        rsb:append(prompt_bg, txt_fg, ">")
+        rsb:append(prompt_bg, txt_fg, str.pad(desc), { "Normal", "Italic" })
 
-        ---add separator only if it's not the last item and there's enough space
-        local next_prompt = key_tbl[idx + 1] or { "", "", "" }
-        local next_prompt_len = strwidth(next_prompt[1] .. str.pad(next_prompt[3])) + 8
-        if idx < #key_tbl and next_prompt_len < usable_width then
-          RightStatus:push(prompt_bg, theme.brights[1], sep .. " ", { "NoItalic" })
+        local next_map, _, next_desc = tunpack(key_tbl[idx + 1] or { "", "", "" })
+        local next_prompt_len = str.width(next_map .. str.pad(next_desc))
+        if idx < #key_tbl and next_prompt_len < width.usable then
+          rsb:append(prompt_bg, theme.brights[1], str.padr(msep, 1), { "NoItalic" })
         end
       end
-
-      usable_width = usable_width - prompt_len
     end
 
-    window:set_right_status(RightStatus:format())
-    return ---return early to not render status bar
-  end
-  --~ }}}
+    window:set_right_status(rsb:format())
+    return -- early return to not render the status bar
+  end --~ }}}
 
-  --~ {{{2 STATUS BAR
-  bg = wt.color.parse(bg)
-  local colors = { bg:darken(0.15), bg, bg:lighten(0.15), bg:lighten(0.25) }
+  --~ {{{2: Status bar
 
-  local battery = wt.battery_info()[1]
-  battery.charge = battery.state_of_charge * 100
-  battery.lvl_round = mt.toint(mt.mround(battery.charge, 10))
-  battery.ico = Icon.Bat[battery.state][tostring(battery.lvl_round)]
-  battery.lvl = tonumber(math.floor(battery.charge + 0.5))
-  battery.full = ("%s %i%%"):format(battery.ico, battery.lvl)
-
+  fg = color_parse(fg)
+  local palette = { fg:darken(0.15), fg, fg:lighten(0.15), fg:lighten(0.25) }
   local cwd, hostname = fs.get_cwd_hostname(pane, true)
 
-  local status_bar_cells = {
-    { cwd, fs.pathshortener(cwd, 4), fs.pathshortener(cwd, 1) },
-    { hostname, hostname:sub(1, 1) },
-    { strftime "%a %b %-d %H:%M", strftime "%d/%m %R", strftime "%R" },
-    { battery.full, battery.lvl .. "%", battery.ico },
-  }
+  --~~ {{{3: battery cells
+
+  local battery = wt.battery_info()[1]
+  battery.charge_lvl = battery.state_of_charge * 100
+  battery.charge_lvl_round = mt.toint(mt.mround(battery.charge_lvl, 10))
+  battery.ico = icon.Bat[battery.state][tostring(battery.charge_lvl_round)]
+  battery.lvl = tonumber(floor(battery.charge_lvl + 0.5)) .. "%"
+  battery.full = ("%s %s"):format(battery.lvl, battery.ico)
+  battery.cells = { battery.full, battery.lvl, battery.ico }
+  --~~ }}}
+
+  --~~ {{{3: datime cells
+
+  local time_ico = str.padl(icon.Clock[timefmt "%I"])
+  local time_cells = {
+    timefmt "%a %b %-d %H:%M" .. time_ico,
+    timefmt "%d/%m %R" .. time_ico,
+    timefmt "%R" .. time_ico,
+    time_ico,
+  } --~~}}}
+
+  --~~ {{{3: cwd cells
+  local cwd_ico = str.padl(icon.Folder)
+  local cwd_cells = {
+    cwd .. cwd_ico,
+    fs.pathshortener(cwd, 4) .. cwd_ico,
+    fs.pathshortener(cwd, 2) .. cwd_ico,
+    fs.pathshortener(cwd, 1) .. cwd_ico,
+  } --~~ }}}
+
+  --~~ {{{3: hostname cells
+  local hostname_ico = str.padl(icon.Hostname)
+  local hostname_cells =
+    { hostname .. hostname_ico, hostname:sub(1, 1) .. hostname_ico, hostname_ico }
+  --~~}}}
 
   local fancy_bg = Config.window_frame.active_titlebar_bg
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
-  ---push each cell and the separator
-  for i = 1, #status_bar_cells do
-    local cell_group = status_bar_cells[i]
-    local cell_bg, cell_fg = colors[i], i == 1 and last_fg or colors[i - 1]
-    local sep = Icon.Sep.sb.right
+  local cells_of_cells = { cwd_cells, hostname_cells, time_cells, battery.cells }
+  for i = 1, #cells_of_cells do
+    local cells = cells_of_cells[i]
+    local cell_bg, cell_fg = palette[i], i == 1 and last_fg or palette[i - 1]
+    local rsep = sep.sb.right
 
-    ---add each cell separator
-    RightStatus:push(cell_fg, cell_bg, sep)
+    rsb:append(cell_fg, cell_bg, rsep)
 
-    ---auto choose the first cell of the list
-    local cell_to_use, used_cell = cell_group[1], false
-
-    ---try to use the longest cell of the list, then fallback to a shorter one
-    for j = 1, #cell_group do
-      local cell_width = 0
-      if usable_width > cell_width then
-        cell_to_use, used_cell = cell_group[j], true
+    local cell, is_cell_used = cells[1], false
+    width.cell = 0
+    for j = 1, #cells do
+      width.cell = str.width(cell)
+      if width.usable > width.cell then
+        cell, is_cell_used = cells[j], true
         break
       end
     end
 
-    ---use the cell that fits best, otherwise set it to an empty one
-    cell_to_use = not used_cell and "" or str.pad(cell_to_use)
+    cell = not is_cell_used and "" or str.pad(cell)
 
-    ---push the cell
-    RightStatus:push(colors[i], theme.tab_bar.background, cell_to_use, { "Bold" })
+    rsb:append(palette[i], theme.tab_bar.background, cell, { "Bold" })
 
-    ---update the usable width
-    usable_width = usable_width - strwidth(cell_to_use) - strwidth(sep) - 5 -- padding
+    width.usable = width.usable - width.cell - str.width(rsep) - 5
   end
-
-  window:set_right_status(RightStatus:format())
   --~ }}}
+
+  window:set_right_status(rsb:format())
   -- }}}
 end)
--- luacheck: pop
 
 -- vim: fdm=marker fdl=1
