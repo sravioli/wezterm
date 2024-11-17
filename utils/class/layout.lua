@@ -5,6 +5,9 @@
 local Logger = require "utils.class.logger"
 local wt = require "wezterm"
 
+-- selene: allow(incorrect_standard_library_use)
+local tinsert, tunpack = table.insert, unpack or table.unpack
+
 local attribute_mappings = {
   None = "ResetAttributes",
   NoUnderline = { Underline = "None" },
@@ -52,71 +55,65 @@ function M:new(name)
   )
 end
 
----Push the given element in the Layout.
+---Inserts the given element in the Layout.
 ---
----Pushes the text element with the specified background and foreground colors, as well as
+---Inserts the text element with the specified background and foreground colors, as well as
 ---optional attributes such as: underline style, text intensity, etc.
 ---
----Supports all the attributes that the Wezterm's
+---Supports all the attributes that Wezterm's
 ---[`FormatItem`](https://wezfurlong.org/wezterm/config/lua/wezterm/format.html) object
----defines:
+---defines, and supports color definitions similarly.
 ---
---- - `None`: Reset attributes.
---- - `NoUnderline`: No underline.
---- - `Single`: Single underline.
---- - `Double`: Double underline.
---- - `Curly`: Curly underline.
---- - `Dotted`: Dotted underline.
---- - `Dashed`: Dashed underline.
---- - `Normal`: Normal intensity.
---- - `Bold`: Bold intensity.
---- - `Half`: Half intensity.
---- - `Italic`: Italic text.
---- - `NoItalic`: No italic text.
----
----Moreover support the definition of the `background` and/or `foreground` color either
----with ansi colors, named colors, rbg values or Wezterm's color objects.
----
+---@param action      "append"|"prepend" action type
 ---@param background  string background color of the element.
 ---@param foreground  string foreground color of the element.
 ---@param text        string text to be added.
 ---@param attributes? table  attributes to style the text.
 ---@return Utils.Class.Layout self updated layout instance.
-function M:push(background, foreground, text, attributes)
-  self.log:debug(
-    "pushing: { bg: %s, fg: %s, attributes: %s, text: %s }",
-    background,
-    foreground,
-    attributes,
-    text
-  )
-  self = self or {}
-
-  local function set_color(attr, color)
-    if ansi_colors[color] then
-      self[#self + 1] = { [attr] = { AnsiColor = color } }
-    else
-      self[#self + 1] = { [attr] = { Color = color } }
-    end
+function M:insert(action, background, foreground, text, attributes)
+  if not action or action == "" then
+    return self.log:error "Cannot operate with empty action"
   end
 
-  set_color("Background", background)
-  set_color("Foreground", foreground)
+  local idx = function()
+    return action == "prepend" and 1 or #self + 1
+  end
+
+  local colors_pair = { { "Background", background }, { "Foreground", foreground } }
+  for i = 1, #colors_pair do
+    local attr, color = tunpack(colors_pair[i])
+    local color_entry = ansi_colors[color] and { [attr] = { AnsiColor = color } }
+      or { [attr] = { Color = color } }
+
+    tinsert(self, idx(), color_entry)
+  end
 
   if attributes then
-    for k = 1, #attributes do
-      local attribute = attributes[k]
-      if attribute_mappings[attribute] then
-        self[#self + 1] = { Attribute = attribute_mappings[attribute] }
-      else
-        self.log:error("attribute '%s' is not defined!", attribute)
+    for i = 1, #attributes do
+      local attribute = attributes[i]
+      if not attribute_mappings[attribute] then
+        return self.log:error("attribute '%s' is not defined!", attribute)
       end
+
+      tinsert(self, idx(), { Attribute = attribute_mappings[attribute] })
     end
   end
 
-  self[#self + 1] = { Text = text }
+  tinsert(self, idx(), { Text = text })
 
   return self
+end
+
+---Append the given element in the Layout.
+---@see Utils.Class.Layout.insert
+function M:append(background, foreground, text, attributes)
+  return M.insert(self, "append", background, foreground, text, attributes)
+end
+
+---Prepend the given element in the Layout.
+---@see Utils.Class.Layout.insert
+function M:prepend(background, foreground, text, attributes)
+  return M.insert(self, "prepend", foreground, background, text, attributes)
 end
 
 ---Clears all elements from the layout.
