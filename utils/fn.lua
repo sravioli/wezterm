@@ -369,6 +369,37 @@ M.str.pad = function(s, padding)
   return ("%s%s%s"):format(pad, s, pad)
 end
 
+---Returns a padded string and ensures that it's not shorter than 2 chars.
+---@param s string input string
+---@param padding? integer left padding. defaults to 1
+---@return string s the padded string
+M.str.padl = function(s, padding)
+  s = type(s) ~= "string" and tostring(s) or s
+  padding = padding or 1
+
+  local pad = (" "):rep(padding)
+  return ("%s%s"):format(pad, s)
+end
+
+---Returns a padded string and ensures that it's not shorter than 2 chars.
+---@param s string input string
+---@param padding? integer right padding. defaults to 1
+---@return string s the padded string
+M.str.padr = function(s, padding)
+  s = type(s) ~= "string" and tostring(s) or s
+  padding = padding or 1
+
+  local pad = (" "):rep(padding)
+  return ("%s%s"):format(s, pad)
+end
+
+---Trims leading and trailing whitespace from the given string
+---@param s string input string
+---@return string s the trimmed string
+M.str.trim = function(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
 ---Splits a string into an iterator of substrings based on a separator pattern.
 ---
 ---This function returns an iterator that yields substrings from the input string `s`
@@ -741,9 +772,9 @@ M.color.set_tab_button = function(config, theme)
         or (style.underline ~= "None" and style.underline),
     }
 
-    ButtonLayout:push(sep_bg, sep_fg, sep.right, attributes)
-    ButtonLayout:push(sep_bg, style.fg_color, " + ", attributes)
-    ButtonLayout:push(sep_bg, sep_fg, sep.left, attributes)
+    ButtonLayout:append(sep_bg, sep_fg, sep.right, attributes)
+    ButtonLayout:append(sep_bg, style.fg_color, " + ", attributes)
+    ButtonLayout:append(sep_bg, sep_fg, sep.left, attributes)
 
     config.tab_bar_style[state] = ButtonLayout:format()
   end
