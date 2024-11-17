@@ -13,6 +13,7 @@ local Icon, Logger = Utils.class.icon, Utils.class.logger
 
 local tconcat, tremove = table.concat, table.remove
 local floor, ceil = math.floor, math.ceil
+local truncaterx = wt.truncate_right
 
 if not wt.GLOBAL.cache then
   wt.GLOBAL.cache = {}
@@ -357,6 +358,8 @@ end
 ---@class Utils.Fn.String
 M.str = {}
 
+M.str.width = wt.column_width
+
 ---Returns a padded string and ensures that it's not shorter than 2 chars.
 ---@param s string input string
 ---@param padding? integer left/right padding. defaults to 1
@@ -516,12 +519,7 @@ M.str.split = function(s, sep, opts)
   return G["split"][key]
 end
 
-M.str.format_tab_title = function(tab, config, max_width)
-  local pane = tab.active_pane
-
-  local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
-    or tab.active_pane.title
-
+M.str.format_tab_title = function(pane, title, config, max_width)
   title = title:gsub("^Copy mode: ", "")
   local process, other = title:match "^(%S+)%s*%-?%s*%s*(.*)$"
 
@@ -529,7 +527,7 @@ M.str.format_tab_title = function(tab, config, max_width)
     title = Icon.Progs[process] .. " " .. (other or "")
   end
 
-  local proc = pane.foreground_process_name
+  local proc = pane.foreground_process_name or pane:get_foreground_process_name() or ""
   if proc:find "nvim" then
     proc = proc:sub(proc:find "nvim")
   end
@@ -537,7 +535,9 @@ M.str.format_tab_title = function(tab, config, max_width)
   if proc == "nvim" then
     ---full title truncation is not necessary since the dir name will be truncated
     is_truncation_needed = false
-    local cwd = M.fs.basename(pane.current_working_dir.file_path)
+    local full_cwd = pane.current_working_dir and pane.current_working_dir.file_path
+      or pane:get_current_working_dir().file_path
+    local cwd = M.fs.basename(full_cwd)
 
     ---instead of truncating the whole title, truncate to length the cwd to ensure that the
     ---right parenthesis always closes.
@@ -545,7 +545,7 @@ M.str.format_tab_title = function(tab, config, max_width)
       cwd = wt.truncate_right(cwd, max_width - 14) .. "..."
     end
 
-    title = ("%s ( %s)"):format(Icon.Progs[proc], cwd)
+    title = ("%s (%s %s)"):format(Icon.Progs[proc], Icon.Folder, cwd)
   end
 
   title = title:gsub(M.fs.basename(M.fs.home()), "󰋜 ")
