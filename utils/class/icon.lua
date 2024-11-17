@@ -85,6 +85,26 @@ local nf = require("wezterm").nerdfonts
 
 --~ }}}
 
+--~ {{{2 Icons.Clock
+
+---Indexed list of clock icons
+---@class Utils.Class.Icons.Clock: table<string: string>
+---@field ["00"] string `󱑊`
+---@field ["01"] string `󱐿`
+---@field ["02"] string `󱑀`
+---@field ["03"] string `󱑁`
+---@field ["04"] string `󱑂`
+---@field ["05"] string `󱑃`
+---@field ["06"] string `󱑄`
+---@field ["07"] string `󱑅`
+---@field ["08"] string `󱑆`
+---@field ["09"] string `󱑇`
+---@field ["10"] string `󱑈`
+---@field ["11"] string `󱑉`
+---@field ["12"] string `󱑊`
+
+--~ }}}
+
 --~ {{{2 Utils.Class.Icons
 
 ---@class Utils.Class.Icons
@@ -92,6 +112,10 @@ local nf = require("wezterm").nerdfonts
 ---@field Bat          Utils.Class.Icons.Bat
 ---@field Nums         Utils.Class.Icons.Nums
 ---@field Progs        Utils.Class.Icons.Progs
+---@field Clock        Utils.Class.Icons.Clock
+---@field Folder       string `󰉋`
+---@field Workspace    string `󰒘`
+---@field Hostname     string `󱄄`
 ---@field Notification string ``
 
 --~ }}}
@@ -103,6 +127,10 @@ local M = {}
 
 M.Notification = nf.cod_circle_small_filled
 
+M.Workspace = nf.md_shield
+M.Folder = nf.md_folder
+M.Hostname = nf.md_monitor_shimmer
+
 M.Sep = {
   block = "█",
 
@@ -110,6 +138,11 @@ M.Sep = {
     left = nf.pl_left_hard_divider,
     right = nf.pl_right_hard_divider,
     modal = nf.ple_forwardslash_separator,
+  },
+
+  ws = {
+    right = nf.ple_right_half_circle_thick,
+    left = nf.ple_left_half_circle_thick,
   },
 
   tb = {
@@ -164,6 +197,22 @@ M.Nums = {
   nf.md_numeric_8,
   nf.md_numeric_9,
   nf.md_numeric_10,
+}
+
+M.Clock = {
+  ["00"] = nf.md_clock_time_twelve,
+  ["01"] = nf.md_clock_time_one,
+  ["02"] = nf.md_clock_time_two,
+  ["03"] = nf.md_clock_time_three,
+  ["04"] = nf.md_clock_time_four,
+  ["05"] = nf.md_clock_time_five,
+  ["06"] = nf.md_clock_time_six,
+  ["07"] = nf.md_clock_time_seven,
+  ["08"] = nf.md_clock_time_eight,
+  ["09"] = nf.md_clock_time_nine,
+  ["10"] = nf.md_clock_time_ten,
+  ["11"] = nf.md_clock_time_eleven,
+  ["12"] = nf.md_clock_time_twelve,
 }
 
 M.Progs = {
