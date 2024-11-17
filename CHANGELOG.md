@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.2.0](https://github.com/sravioli/wezterm/compare/b3d1a3fde7f874cd2ff90f70f716227cc41d7d7e..6.2.0) - 2024-11-17
+#### Bug Fixes
+- change tab title formatting signature - ([62ab5a0](https://github.com/sravioli/wezterm/commit/62ab5a05476d61f204a98c82b3e95c32235d50de)) - sravioli
+- make fields optionals to silence linter warnings - ([e284fc0](https://github.com/sravioli/wezterm/commit/e284fc0c23b8553a0ee09f1c1daa10db264448cd)) - [@sravioli](https://github.com/sravioli)
+- remove wcwidth (use wezterm.column.width) - ([b3d1a3f](https://github.com/sravioli/wezterm/commit/b3d1a3fde7f874cd2ff90f70f716227cc41d7d7e)) - sravioli
+#### Features
+- rewrite update-status, add icons, add workspace indicator - ([57d86d8](https://github.com/sravioli/wezterm/commit/57d86d8d25ae8581b871651be6bb086c07311aea)) - sravioli
+- use new append function, adapt to format_tab_title signature - ([1c54511](https://github.com/sravioli/wezterm/commit/1c54511bc6028d1ae9fc04227cda417a21bef52e)) - sravioli
+- add padl, padr, trim - ([3f64c57](https://github.com/sravioli/wezterm/commit/3f64c57ea1774317c571ead34d9582e4f1fea63a)) - sravioli
+- add prepend function - ([17d72ea](https://github.com/sravioli/wezterm/commit/17d72ea30e4278f9da6475941b00098003979899)) - sravioli
+- add new icons - ([3ac2a07](https://github.com/sravioli/wezterm/commit/3ac2a07efe472bd382de7075abc1183facba9088)) - sravioli
+- add keymap to select new tab to open - ([ba524ab](https://github.com/sravioli/wezterm/commit/ba524ab9f644fdf507bcbeba544e09e63e2fe3ff)) - [@sravioli](https://github.com/sravioli)
+- sort icons, change windows decorations for win - ([8e0c5e8](https://github.com/sravioli/wezterm/commit/8e0c5e82dbb6d11226e8a18b0bd931782207036c)) - [@sravioli](https://github.com/sravioli)
+- minor perf tweaks - ([8bb2c5a](https://github.com/sravioli/wezterm/commit/8bb2c5afbc7f4ba9d605a4d53ddf71ddf396e3e3)) - sravioli
+
+- - -
+
 ## [6.1.1](https://github.com/sravioli/wezterm/compare/5457911ae31620f8584c2c821d72811c8bf42acd..6.1.1) - 2024-11-08
 #### Bug Fixes
 - restore leader key - ([3d57fbe](https://github.com/sravioli/wezterm/commit/3d57fbedd32b6a687ab8ac6555911b6f4f87dd70)) - sravioli
