@@ -76,7 +76,7 @@ end
 ---@param message string log message or format string
 ---@param ... any additional arguments to format into the message
 function M:log(level, message, ...)
-  if not self.enabled then
+  if not (G.enable_logging and self.enabled) then
     return
   end
 

@@ -5,7 +5,7 @@
 ---@license GNU-GPLv3
 
 -- selene: allow(incorrect_standard_library_use)
-local tunpack = table.unpack or unpack
+local tunpack, tinsert = table.unpack or unpack, table.insert
 local tostring, tonumber = tostring, tonumber
 local floor = math.floor
 
@@ -14,7 +14,7 @@ local timefmt, color_parse = wt.strftime, wt.color.parse
 
 local class, fn = require "utils.class", require "utils.fn"
 local icon, sep, sb = class.icon, class.icon.Sep, class.layout:new "StatusBar"
-local fs, mt, str = fn.fs, fn.mt, fn.str
+local fs, mt, str, tbl = fn.fs, fn.mt, fn.str, fn.tbl
 
 ---Update status event
 ---@param window wt.Window Wezterm's window object
@@ -176,29 +176,42 @@ wt.on("update-status", function(window, pane)
   local fancy_bg = Config.window_frame.active_titlebar_bg
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
-  local cells_of_cells = { cwd_cells, hostname_cells, time_cells, battery.cells }
-  for i = 1, #cells_of_cells do
-    local cells = cells_of_cells[i]
+  local sets = { cwd_cells, hostname_cells, time_cells, battery.cells }
+
+  local function compute_width(combination, sep_width, pad_width)
+    local total_width = 0
+    for i = 1, #combination do
+      total_width = total_width + str.width(combination[i]) + sep_width + pad_width
+    end
+    return total_width
+  end
+
+  local function find_best_fit(combinations, max_width, sep_width, pad_width)
+    local best_fit = nil
+    local best_fit_width = 0
+
+    for i = 1, #combinations do
+      local total_width = compute_width(combinations[i], sep_width, pad_width)
+      if total_width <= max_width and total_width > best_fit_width then
+        best_fit = combinations[i]
+        best_fit_width = total_width
+      end
+    end
+
+    return best_fit or { "", "", "", "" }
+  end
+
+  local cells = tbl.reverse(
+    find_best_fit(tbl.cartesian(sets), width.usable, str.width(sep.sb.right), 5)
+  )
+
+  -- Render the best fit, ensuring correct colors
+  for i = 1, #cells do
     local cell_bg, cell_fg = palette[i], i == 1 and last_fg or palette[i - 1]
     local rsep = sep.sb.right
 
     rsb:append(cell_fg, cell_bg, rsep)
-
-    local cell, is_cell_used = cells[1], false
-    width.cell = 0
-    for j = 1, #cells do
-      width.cell = str.width(cell)
-      if width.usable > width.cell then
-        cell, is_cell_used = cells[j], true
-        break
-      end
-    end
-
-    cell = not is_cell_used and "" or str.pad(cell)
-
-    rsb:append(palette[i], theme.tab_bar.background, cell, { "Bold" })
-
-    width.usable = width.usable - width.cell - str.width(rsep) - 5
+    rsb:append(cell_bg, theme.tab_bar.background, str.pad(cells[i]), { "Bold" })
   end
   --~ }}}
 
