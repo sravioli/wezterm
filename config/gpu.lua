@@ -12,6 +12,6 @@ else
   Config.webgpu_power_preference = "HighPerformance"
 end
 
-Config.webgpu_preferred_adapter = require("utils.gpu_adapter"):pick_best()
+Config.webgpu_preferred_adapter = require("utils.gpu"):pick_best()
 
 return Config
