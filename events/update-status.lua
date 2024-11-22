@@ -5,7 +5,7 @@
 ---@license GNU-GPLv3
 
 -- selene: allow(incorrect_standard_library_use)
-local tunpack = table.unpack or unpack
+local tunpack, tinsert = table.unpack or unpack, table.insert
 local tostring, tonumber = tostring, tonumber
 local floor = math.floor
 
@@ -177,28 +177,77 @@ wt.on("update-status", function(window, pane)
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
   local cells_of_cells = { cwd_cells, hostname_cells, time_cells, battery.cells }
-  for i = 1, #cells_of_cells do
-    local cells = cells_of_cells[i]
-    local cell_bg, cell_fg = palette[i], i == 1 and last_fg or palette[i - 1]
-    local rsep = sep.sb.right
 
-    rsb:append(cell_fg, cell_bg, rsep)
+  local function compute_combinations(cells)
+    local function cartesian(tabs, i)
+      if i == 0 then
+        return { {} }
+      end
+      local res = {}
+      for _, v in ipairs(tabs[i]) do
+        for _, t in ipairs(cartesian(tabs, i - 1)) do
+          tinsert(res, { v, tunpack(t) })
+        end
+      end
+      return res
+    end
+    return cartesian(cells, #cells)
+  end
 
-    local cell, is_cell_used = cells[1], false
-    width.cell = 0
-    for j = 1, #cells do
-      width.cell = str.width(cell)
-      if width.usable > width.cell then
-        cell, is_cell_used = cells[j], true
-        break
+  local function compute_width(combination, sep_width, pad_width)
+    local total_width = 0
+    for _, cell in ipairs(combination) do
+      total_width = total_width + str.width(cell) + sep_width + pad_width
+    end
+    return total_width
+  end
+
+  local function find_best_fit(combinations, max_width, sep_width, pad_width)
+    local best_fit = nil
+    local best_fit_width = 0
+
+    for _, combination in ipairs(combinations) do
+      local total_width = compute_width(combination, sep_width, pad_width)
+      if total_width <= max_width and total_width > best_fit_width then
+        best_fit = combination
+        best_fit_width = total_width
       end
     end
 
-    cell = not is_cell_used and "" or str.pad(cell)
+    return best_fit or { "", "", "", "" }
+  end
 
-    rsb:append(palette[i], theme.tab_bar.background, cell, { "Bold" })
+  local sep_width = str.width(sep.sb.right)
+  local pad_width = 5 -- Adjust if padding changes
 
-    width.usable = width.usable - width.cell - str.width(rsep) - 5
+  -- Compute all combinations
+  local combinations = compute_combinations(cells_of_cells)
+
+  -- Find the best fit
+  local best_fit = find_best_fit(combinations, width.usable, sep_width, pad_width)
+
+  -- Utility to reverse a table
+  local function reverse_table(tbl)
+    local reversed = {}
+    for i = #tbl, 1, -1 do
+      tinsert(reversed, tbl[i])
+    end
+    return reversed
+  end
+
+  -- Reverse the best_fit table
+  best_fit = reverse_table(best_fit)
+
+  -- Render the best fit, ensuring correct colors
+  for i, cell in ipairs(best_fit) do
+    local cell_bg, cell_fg = palette[i], i == 1 and last_fg or palette[i - 1]
+    local rsep = sep.sb.right
+
+    -- Append the separator with its background and foreground
+    rsb:append(cell_fg, cell_bg, rsep)
+
+    -- Append the cell with its background and foreground
+    rsb:append(cell_bg, theme.tab_bar.background, str.pad(cell), { "Bold" })
   end
   --~ }}}
 
