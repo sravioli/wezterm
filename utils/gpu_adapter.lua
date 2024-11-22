@@ -1,6 +1,10 @@
+---@module "utils.gpu"
+---@author sravioli
+---@license GNU-GPLv3
+
 local wt = require "wezterm"
 
-local platform = require("utils.fn").fs.platform() --[[@class Platform]]
+local platform = require("utils.fn").fs.platform() --[[@class Utils.Fn.FileSystem.Platform]]
 
 ---see: https://github.com/KevinSilvester/wezterm-config
 
