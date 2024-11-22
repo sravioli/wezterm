@@ -2,11 +2,18 @@
 ---@author sravioli
 ---@license GNU-GPLv3
 
-local log = require("utils.class.logger"):new "Config"
+---locals are faster
+-- local type, pcall, pairs, setmetatable = type, pcall, pairs, setmetatable
+
 local wt = require "wezterm"
 
 ---@class Utils.Class.Config
 local M = {}
+
+---@package
+---
+---Class logger
+M.log = require("utils.class.logger"):new "Config"
 
 ---Initializes a new Config object.
 ---Creates a new Wezterm configuration object.  If `wezterm.config_builder()` is available,
@@ -19,9 +26,9 @@ function M:new()
   if wt.config_builder then ---@diagnostic disable-line: undefined-field
     self.config = wt.config_builder() ---@diagnostic disable-line: undefined-field
     self.config:set_strict_mode(true)
-    log:debug "Wezterm's config builder is available"
+    M.log:debug "Wezterm's config builder is available"
   else
-    log:warn "Wezterm's config builder is unavailable"
+    M.log:warn "Wezterm's config builder is unavailable"
   end
 
   self = setmetatable(self.config, { __index = M })
@@ -45,7 +52,7 @@ end
 function M:add(spec)
   if type(spec) == "string" then
     if not (pcall(require, spec)) then
-      log:error("Unable to require module %s", spec)
+      M.log:error("Unable to require module %s", spec)
       return self
     end
     spec = require(spec)
@@ -53,12 +60,12 @@ function M:add(spec)
 
   for key, value in pairs(spec) do
     if self.config[key] == spec[key] then
-      log:warn("found duplicate! old: %s, new: %s", self.config[key], spec[key])
+      M.log:warn("found duplicate! old: %s, new: %s", self.config[key], spec[key])
     end
     self.config[key] = value
   end
 
-  return self
+  return self.config
 end
 
 return M
