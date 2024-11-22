@@ -1,6 +1,7 @@
 ---@class Utils
----@field fn    Utils.Fn
 ---@field class Utils.Class
+---@field fn    Utils.Fn
+---@field gpu   GpuAdapters
 local M = {}
 
 local mod = ...
