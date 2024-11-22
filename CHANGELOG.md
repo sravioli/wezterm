@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.3.0](https://github.com/sravioli/wezterm/compare/36ec0de9cd7b91b5de1ab3eb5cba7166ed897490..6.3.0) - 2024-11-22
+#### Bug Fixes
+- **(utils:gpu_adapter)** use correct class name - ([b20c03c](https://github.com/sravioli/wezterm/commit/b20c03c8022fbbb327a87c0b295d78e173c2bdd2)) - sravioli
+- disable wrong linter warnings - ([36ec0de](https://github.com/sravioli/wezterm/commit/36ec0de9cd7b91b5de1ab3eb5cba7166ed897490)) - sravioli
+#### Features
+- **(logger)** also check for global enable_logging - ([506ba99](https://github.com/sravioli/wezterm/commit/506ba995859009359037132937fc8eeb5ea58e98)) - sravioli
+- **(utils)** add gpu field, reorder comments - ([d50bb96](https://github.com/sravioli/wezterm/commit/d50bb961d1a0230386a7960f0b03417e2fa5a796)) - sravioli
+- **(utils:class)** reorder comments - ([14f3308](https://github.com/sravioli/wezterm/commit/14f33081ee8847a00d89e981084f32a875a25753)) - sravioli
+- improve statusbar flexibility (#19) - ([b382bb5](https://github.com/sravioli/wezterm/commit/b382bb5bd52593b7141e4900c6ddd678504967a4)) - [@sravioli](https://github.com/sravioli)
+- use builtin tbl functions, minor optimizations - ([2beb355](https://github.com/sravioli/wezterm/commit/2beb355877044036593085d5c34fbae15cb2b222)) - sravioli
+- organize utils better (#18) - ([8545605](https://github.com/sravioli/wezterm/commit/8545605c34bf17adf6c0c2bcfcf68eaa5bd3b390)) - [@sravioli](https://github.com/sravioli)
+- use new utils.fn.tbl.merge() function - ([fa1ef35](https://github.com/sravioli/wezterm/commit/fa1ef3592a363bf51224eeb49b08aaa992c9eb10)) - sravioli
+- use class instance logger - ([12ceca7](https://github.com/sravioli/wezterm/commit/12ceca7b657f2a5dc0ad57d898d2041459588392)) - sravioli
+- refactor utils.fn to add more comments, improve performance - ([6f25268](https://github.com/sravioli/wezterm/commit/6f2526854b6a66f2d974b914d23f71e0888aa118)) - sravioli
+- improve statusbar flexibility - ([d5ba634](https://github.com/sravioli/wezterm/commit/d5ba6340cc2b8d083db0929f9984dbcd9a088cd7)) - sravioli
+#### Refactoring
+- **(utils:gpu)** rename gpu_adapter to gpu - ([86ef9e5](https://github.com/sravioli/wezterm/commit/86ef9e5bcfe07321699e9cae3b7a8418b290a20b)) - sravioli
+
+- - -
+
 ## [6.2.0](https://github.com/sravioli/wezterm/compare/b3d1a3fde7f874cd2ff90f70f716227cc41d7d7e..6.2.0) - 2024-11-17
 #### Bug Fixes
 - change tab title formatting signature - ([62ab5a0](https://github.com/sravioli/wezterm/commit/62ab5a05476d61f204a98c82b3e95c32235d50de)) - sravioli
