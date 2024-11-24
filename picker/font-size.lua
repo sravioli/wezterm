@@ -5,7 +5,7 @@
 local Picker = require("utils").class.picker
 
 return Picker.new {
-  title = "Font size picker",
+  title = "󰢷  Font size",
   subdir = "font-sizes",
   fuzzy = true,
   comp = function(a, b)

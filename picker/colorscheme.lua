@@ -6,10 +6,10 @@ local Utils = require "utils"
 local Picker, Layout = Utils.class.picker, Utils.class.layout
 
 return Picker.new {
-  title = "Colorscheme picker",
+  title = "󰢷  Colorscheme",
   subdir = "colorschemes",
   fuzzy = true,
-  fuzzy_description = "Matching colorscheme: ",
+  fuzzy_description = "Fuzzy matching: ",
 
   build = function(__choices, _, opts)
     local choices = {}

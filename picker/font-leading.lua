@@ -5,7 +5,7 @@
 local Picker = require("utils").class.picker
 
 return Picker.new {
-  title = "Font leading picker",
+  title = "󰢷  Font leading",
   subdir = "font-leadings",
   fuzzy = false,
   comp = function(a, b)
