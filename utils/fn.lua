@@ -513,7 +513,7 @@ end --~~ }}}
 ---  print(file)
 ---end
 ---~~~
-M.fs.read_dir = function(directory)
+M.fs.ls_dir = function(directory)
   CACHE["read-dir"] = CACHE["read-dir"] or {}
   if CACHE["read-dir"][directory] then
     return CACHE["read-dir"][directory]
@@ -1041,7 +1041,7 @@ M.color.log = Logger:new "Utils.Fn.Color"
 ---~~~
 M.color.get_schemes = function()
   local dir = M.fs.pathconcat(wt_cfg_dir, "picker", "assets", "colorschemes")
-  local files = M.fs.read_dir(dir)
+  local files = M.fs.ls_dir(dir)
   if not files then
     M.color.log:error("Unable to read from directory: '%s'", M.fs.basename(dir))
     return {}

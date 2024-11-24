@@ -185,7 +185,7 @@ function M.new(opts)
   self.fuzzy_description = opts.fuzzy_description or "Fuzzy matching: "
 
   local dir = fs.pathconcat(config_dir, "picker", "assets", opts.subdir)
-  local paths = fs.read_dir(dir)
+  local paths = fs.ls_dir(dir)
   if not paths then
     self.log:error("Cannot read files from %s", dir)
     return {}
