@@ -54,7 +54,12 @@ local G, wt_cfg_dir, wt_col_width, wt_gui, wt_home, wt_hostname, wt_triple, wt_t
   wt.truncate_right ---@diagnostic disable-line: undefined-field
 
 ---@diagnostic disable-next-line: undefined-field
-local CACHE = G.cache or {}
+if not wt.GLOBAL.cache then
+  ---@diagnostic disable-next-line: undefined-field
+  wt.GLOBAL.cache = {}
+end
+---@diagnostic disable-next-line: undefined-field
+local CACHE = wt.GLOBAL.cache
 
 local Icon, Logger = require "utils.class.icon", require "utils.class.logger"
 --~ }}}
