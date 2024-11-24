@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.3.2](https://github.com/sravioli/wezterm/compare/d49c76ebb93e229adc60b2b17e5bdc53cf2b2058..6.3.2) - 2024-11-24
+#### Bug Fixes
+- rename to fs.read_dir() to fs.ls_dir() also in docs - ([d49c76e](https://github.com/sravioli/wezterm/commit/d49c76ebb93e229adc60b2b17e5bdc53cf2b2058)) - sravioli
+#### Features
+- standardize picker messages and tab names - ([227583c](https://github.com/sravioli/wezterm/commit/227583cc13f74d7b00becc70d59488fbe9aa4648)) - sravioli
+
+- - -
+
 ## [6.3.1](https://github.com/sravioli/wezterm/compare/447164147e155970af2be0abbefc2afe00e7d29e..6.3.1) - 2024-11-24
 #### Bug Fixes
 - **(utils:fn)** rename fs.read_dir() to fs.ls_dir() - ([f0d9193](https://github.com/sravioli/wezterm/commit/f0d9193bcd9fc7c4d6fcdf9cc6cb7e5b83cbbcec)) - sravioli
