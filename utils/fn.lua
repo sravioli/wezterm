@@ -499,7 +499,7 @@ M.fs.pathconcat = function(...)
   return tconcat({ ... }, M.fs.path_separator)
 end --~~ }}}
 
---~~ {{{2 M.fs.read_dir(directory: string) -> table[]|nil
+--~~ {{{2 M.fs.ls_dir(directory: string) -> table[]|nil
 
 ---Reads the contents of a directory and returns a list of absolute filenames.
 ---@param directory string absolute path to the directory to read.
@@ -538,7 +538,7 @@ M.fs.ls_dir = function(directory)
   else
     local success = oexec(cmd)
     if not success then
-      return M.fs.log:error "[fs.read_dir] Unable to create temp file!"
+      return M.fs.log:error "[ls_dir] Unable to create temp file!"
     end
     file = ioopen(tempfile, "r")
     if file then
