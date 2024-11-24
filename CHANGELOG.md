@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.3.1](https://github.com/sravioli/wezterm/compare/447164147e155970af2be0abbefc2afe00e7d29e..6.3.1) - 2024-11-24
+#### Bug Fixes
+- **(utils:fn)** rename fs.read_dir() to fs.ls_dir() - ([f0d9193](https://github.com/sravioli/wezterm/commit/f0d9193bcd9fc7c4d6fcdf9cc6cb7e5b83cbbcec)) - sravioli
+- correctly instanciate wezterm cache - ([4471641](https://github.com/sravioli/wezterm/commit/447164147e155970af2be0abbefc2afe00e7d29e)) - sravioli
+
+- - -
+
 ## [6.3.0](https://github.com/sravioli/wezterm/compare/36ec0de9cd7b91b5de1ab3eb5cba7166ed897490..6.3.0) - 2024-11-22
 #### Bug Fixes
 - **(utils:gpu_adapter)** use correct class name - ([b20c03c](https://github.com/sravioli/wezterm/commit/b20c03c8022fbbb327a87c0b295d78e173c2bdd2)) - sravioli
