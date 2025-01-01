@@ -140,12 +140,14 @@ wt.on("update-status", function(window, pane)
   --~~ {{{3: battery cells
 
   local battery = wt.battery_info()[1]
-  battery.charge_lvl = battery.state_of_charge * 100
-  battery.charge_lvl_round = mt.toint(mt.mround(battery.charge_lvl, 10))
-  battery.ico = icon.Bat[battery.state][tostring(battery.charge_lvl_round)]
-  battery.lvl = tonumber(floor(battery.charge_lvl + 0.5)) .. "%"
-  battery.full = ("%s %s"):format(battery.lvl, battery.ico)
-  battery.cells = { battery.full, battery.lvl, battery.ico }
+  if battery then
+    battery.charge_lvl = battery.state_of_charge * 100
+    battery.charge_lvl_round = mt.toint(mt.mround(battery.charge_lvl, 10))
+    battery.ico = icon.Bat[battery.state][tostring(battery.charge_lvl_round)]
+    battery.lvl = tonumber(floor(battery.charge_lvl + 0.5)) .. "%"
+    battery.full = ("%s %s"):format(battery.lvl, battery.ico)
+    battery.cells = { battery.full, battery.lvl, battery.ico }
+  end
   --~~ }}}
 
   --~~ {{{3: datime cells
@@ -176,7 +178,10 @@ wt.on("update-status", function(window, pane)
   local fancy_bg = Config.window_frame.active_titlebar_bg
   local last_fg = Config.use_fancy_tab_bar and fancy_bg or theme.tab_bar.background
 
-  local sets = { cwd_cells, hostname_cells, time_cells, battery.cells }
+  local sets = { cwd_cells, hostname_cells, time_cells }
+  if battery then
+    tinsert(sets, battery.cells)
+  end
 
   local function compute_width(combination, sep_width, pad_width)
     local total_width = 0
