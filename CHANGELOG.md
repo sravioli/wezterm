@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.3.3](https://github.com/sravioli/wezterm/compare/1950423c0ff727ce1436218cdbd08a37feed5210..6.3.3) - 2025-01-01
+#### Bug Fixes
+- **(update-status)** close #13 - ([e93d0af](https://github.com/sravioli/wezterm/commit/e93d0af12ba57e07d54b69affa9d169d70fee48c)) - sravioli
+- battery on desktops - ([1950423](https://github.com/sravioli/wezterm/commit/1950423c0ff727ce1436218cdbd08a37feed5210)) - drzbida
+#### Features
+- **(icons)** add yazi icon - ([132ebe1](https://github.com/sravioli/wezterm/commit/132ebe11ae9aea447138f7a1274ec3c377487232)) - sravioli
+
+- - -
+
 ## [6.3.2](https://github.com/sravioli/wezterm/compare/d49c76ebb93e229adc60b2b17e5bdc53cf2b2058..6.3.2) - 2024-11-24
 #### Bug Fixes
 - rename to fs.read_dir() to fs.ls_dir() also in docs - ([d49c76e](https://github.com/sravioli/wezterm/commit/d49c76ebb93e229adc60b2b17e5bdc53cf2b2058)) - sravioli
