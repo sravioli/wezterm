@@ -35,13 +35,15 @@ wt.on("update-status", function(window, pane)
   } --~ }}}
 
   local bg, fg = theme.background, theme.ansi[5]
+  local pane_dimensions = pane:get_dimensions()
+  local win_width = window:get_dimensions().pixel_width
 
   local width = {
     ws = 0,
     mode = 0,
     tabs = 5,
     prompt = 0,
-    usable = pane:get_dimensions().cols,
+    usable = math.floor((win_width * pane_dimensions.cols) / pane_dimensions.pixel_width),
     new_button = Config.show_new_tab_button_in_tab_bar and 8 or 0,
   }
 
