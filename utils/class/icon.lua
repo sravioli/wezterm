@@ -250,6 +250,7 @@ M.Progs = {
   ["vim"] = nf.dev_vim,
   ["wget"] = nf.mdi_arrow_down_box,
   ["zsh"] = nf.dev_terminal,
+  ["Yazi"] = nf.md_duck,
 }
 
 return M
