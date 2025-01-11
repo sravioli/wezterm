@@ -28,7 +28,13 @@
 2. **Clone the repo:**
 
     ~~~sh
+    # on Linux
     git clone https://github.com/sravioli/wezterm.git ~/.config/wezterm
+    ~~~
+
+    ~~~powershell
+    # on Windows
+    git clone https://github.com/sravioli/wezterm.git $env:HOME/.config/wezterm
     ~~~
 
 3. **Done** 🎉.
