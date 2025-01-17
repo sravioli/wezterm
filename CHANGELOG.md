@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [6.3.4](https://github.com/sravioli/wezterm/compare/83e571ae02cbb604c0f22d733d532d612e99588e..6.3.4) - 2025-01-17
+#### Bug Fixes
+- update git clone for windows - ([83e571a](https://github.com/sravioli/wezterm/commit/83e571ae02cbb604c0f22d733d532d612e99588e)) - Dawen
+#### Features
+- **(update-status)** reduce complexity, add comments - ([3a42f56](https://github.com/sravioli/wezterm/commit/3a42f561bead94b993e2c7701633f65c374b4aa6)) - sravioli
+
+- - -
+
 ## [6.3.3](https://github.com/sravioli/wezterm/compare/1950423c0ff727ce1436218cdbd08a37feed5210..6.3.3) - 2025-01-01
 #### Bug Fixes
 - **(update-status)** close #13 - ([e93d0af](https://github.com/sravioli/wezterm/commit/e93d0af12ba57e07d54b69affa9d169d70fee48c)) - sravioli
