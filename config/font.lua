@@ -72,7 +72,7 @@ Config.font_rules = {
     font = wt.font_with_fallback {
       {
         family = "Monaspace Radon Var",
-        style = "Normal",
+        style = "Italic",
         weight = "Regular",
         stretch = "Normal",
         harfbuzz_features = monaspace_features,
@@ -87,7 +87,7 @@ Config.font_rules = {
       {
         family = "Monaspace Krypton Var",
         style = "Italic",
-        weight = "Black",
+        weight = "ExtraBold",
         harfbuzz_features = monaspace_features,
         scale = 1.1,
       },
