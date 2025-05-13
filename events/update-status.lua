@@ -243,7 +243,7 @@ end -- }}}
 e.set_right_status = function(Config, window, pane)
   local rsb = sb:new "RightStatusBar"
 
-  e.fg = color_parse(e.fg)
+  e.fg = color_parse(tostring(e.fg))
   local palette = { e.fg:darken(0.15), e.fg, e.fg:lighten(0.15), e.fg:lighten(0.25) }
   local cwd, hostname = fs.get_cwd_hostname(pane, true)
 
