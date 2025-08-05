@@ -1,0 +1,41 @@
+return {
+  default = {
+    output = "utfTerminal",
+    pattern = "_spec",
+    ROOT = {"tests/"},
+    lpath = "./?.lua;./?/init.lua;./utils/?.lua;./utils/?/init.lua",
+    coverage = false,
+    verbose = false,
+    sort = true,
+    shuffle = true,
+    defer_print = false,
+    keep_going = false,
+    exclude_tags = {},
+    suppress = {
+      pending = false,
+      disabled = false
+    },
+    lua = "lua"
+  },
+  unit = {
+    output = "utfTerminal",
+    pattern = "_spec",
+    ROOT = {"tests/utils/"},
+    exclude_tags = {"integration"},
+    verbose = false
+  },
+  integration = {
+    output = "utfTerminal",
+    pattern = "_spec",
+    ROOT = {"tests/integration/"},
+    tags = {"integration"},
+    verbose = false
+  },
+  coverage = {
+    output = "utfTerminal",
+    pattern = "_spec",
+    ROOT = {"tests/"},
+    coverage = true,
+    verbose = true
+  }
+}

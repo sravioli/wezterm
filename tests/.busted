@@ -1,0 +1,100 @@
+-- Busted configuration for WezTerm configuration tests
+-- This file configures the busted test framework for running tests
+
+return {
+  -- Test file pattern
+  pattern = "_spec%.lua$",
+
+  -- Recursive directory scanning
+  recursive = true,
+
+  -- Exclude patterns
+  exclude = {
+    "node_modules",
+    ".git"
+  },
+
+  -- Output format
+  output = "terminal", -- or "json", "junit", "tap"
+
+  -- Verbosity level
+  verbose = true,
+
+  -- Shuffle test order for better isolation testing
+  shuffle = false,
+
+  -- Random seed for shuffle (nil = random seed)
+  seed = nil,
+
+  -- Coverage settings (requires luacov)
+  coverage = false,
+
+  -- Lua options
+  lua = {
+    -- Additional Lua paths
+    path = {
+      "?.lua",
+      "?/init.lua"
+    },
+
+    -- Additional C paths
+    cpath = {
+      "?.so",
+      "?.dll"
+    }
+  },
+
+  -- Test helper configuration
+  helper = "tests/spec_helper.lua",
+
+  -- Before/after hooks
+  before = function()
+    -- Global setup before all tests
+    if package.loaded["tests.spec_helper"] then
+      local helper = require("tests.spec_helper")
+      helper.setup()
+    end
+  end,
+
+  after = function()
+    -- Global cleanup after all tests
+    if package.loaded["tests.spec_helper"] then
+      local helper = require("tests.spec_helper")
+      helper.teardown()
+    end
+  end,
+
+  -- Tags for filtering tests
+  tags = {
+    -- Example: only run fast tests
+    -- fast = true,
+    -- slow = false
+  },
+
+  -- Timeout for individual tests (in seconds)
+  timeout = 30,
+
+  -- Failure threshold (stop after N failures)
+  failure_threshold = nil, -- nil = run all tests
+
+  -- Defer printing results until all tests complete
+  defer_print = false,
+
+  -- Sound on completion (if terminal supports it)
+  sound = false,
+
+  -- Suppress pending tests output
+  suppress_pending = false,
+
+  -- Enable lazy loading of test files
+  lazy = true,
+
+  -- Custom assertions directory
+  assertions = "tests/assertions",
+
+  -- Custom matchers directory
+  matchers = "tests/matchers",
+
+  -- Root directory for tests
+  ROOT = "tests/"
+}
