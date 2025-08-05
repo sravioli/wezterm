@@ -308,10 +308,10 @@ e.set_right_status = function(Config, window, pane)
   window:set_right_status(rsb:format())
 end -- }}}
 
-local perf = require "utils.perf"
-
--- Throttle update-status to reduce CPU usage
-local throttled_update_status = perf.throttle(function(window, pane)
+---Update status event
+---@param window wt.Window Wezterm's window object
+---@param pane   wt.Pane   Wezterm's pane object
+wt.on("update-status", function(window, pane)
   local Config, Overrides = window:effective_config(), window:get_config_overrides() or {}
 
   -- Cache theme lookup
@@ -346,11 +346,6 @@ local throttled_update_status = perf.throttle(function(window, pane)
   end
 
   e.set_right_status(Config, window, pane)
-end, 50) -- Throttle to max 20 updates per second
-
----Update status event
----@param window wt.Window Wezterm's window object
----@param pane   wt.Pane   Wezterm's pane object
-wt.on("update-status", throttled_update_status)
+end)
 
 -- vim: fdm=marker fdl=1
