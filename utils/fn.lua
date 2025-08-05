@@ -468,26 +468,45 @@ end --~~ }}}
 ---@param len number The maximum length for each component of the path.
 ---@return string short_path
 M.fs.pathshortener = function(path, len)
-  CACHE["pathshortener"] = CACHE["pathshortener"] or {}
-  local key = path .. ":" .. tostring(len)
-  if CACHE["pathshortener"][key] then
-    return CACHE["pathshortener"][key]
+  -- Initialize cache if needed
+  if not CACHE["pathshortener"] then
+    CACHE["pathshortener"] = {}
   end
 
-  local splitted_path = M.str.split(path, M.fs.path_separator)
-  local short_path = ""
-  for i = 1, #splitted_path do
-    local dir = splitted_path[i]
-    local short_dir = ssub(dir, 1, len)
-    if short_dir == "" then
-      break
-    end
-    short_path = short_path
-      .. (short_dir == "." and ssub(dir, 1, len + 1) or short_dir)
-      .. M.fs.path_separator
+  local key = path .. ":" .. tostring(len)
+  local cached = CACHE["pathshortener"][key]
+  if cached then
+    return cached
   end
+
+  -- Use pre-compiled pattern for better performance
+  local separator = M.fs.path_separator
+  local result = {}
+  local start = 1
+
+  -- More efficient string splitting
+  for i = 1, #path do
+    local c = path:sub(i, i)
+    if c == separator then
+      local dir = path:sub(start, i - 1)
+      if dir ~= "" then
+        local short_dir = dir:sub(1, len)
+        result[#result + 1] = (short_dir == "." and dir:sub(1, len + 1) or short_dir)
+      end
+      start = i + 1
+    end
+  end
+
+  -- Handle last component
+  if start <= #path then
+    local dir = path:sub(start)
+    local short_dir = dir:sub(1, len)
+    result[#result + 1] = (short_dir == "." and dir:sub(1, len + 1) or short_dir)
+  end
+
+  local short_path = tconcat(result, separator) .. separator
   CACHE["pathshortener"][key] = short_path
-  return CACHE["pathshortener"][key]
+  return short_path
 end --~~ }}}
 
 --~~ {{{2 M.fs.pathconcat(...: string) -> string

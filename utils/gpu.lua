@@ -87,6 +87,11 @@ end
 ---Or feel free to re-arrange `GpuAdapters.AVAILABLE_BACKENDS` to you liking
 ---@return WeztermGPUAdapter|nil
 function GpuAdapters:pick_best()
+  -- Cache the result since GPU adapters don't change during runtime
+  if self._cached_best_adapter ~= nil then
+    return self._cached_best_adapter
+  end
+
   local adapters_options = self.DiscreteGpu
 
   if not adapters_options then
@@ -103,6 +108,7 @@ function GpuAdapters:pick_best()
 
   if not adapters_options then
     wt.log_error "No GPU adapters found. Using Default Adapter."
+    self._cached_best_adapter = false -- Cache negative result
     return nil
   end
 
@@ -110,9 +116,11 @@ function GpuAdapters:pick_best()
 
   if not adapter_choice then
     wt.log_error "Preferred backend not available. Using Default Adapter."
+    self._cached_best_adapter = false -- Cache negative result
     return nil
   end
 
+  self._cached_best_adapter = adapter_choice
   return adapter_choice
 end
 

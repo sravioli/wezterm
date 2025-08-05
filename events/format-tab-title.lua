@@ -16,16 +16,22 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     return
   end
 
-  local theme = config.color_schemes[config.color_scheme]
+  -- Cache expensive lookups
+  local cache_key = config.color_scheme .. "_theme"
+  local theme = wt.GLOBAL.cache and wt.GLOBAL.cache[cache_key]
+  if not theme then
+    theme = config.color_schemes[config.color_scheme]
+    if wt.GLOBAL.cache then
+      wt.GLOBAL.cache[cache_key] = theme
+    end
+  end
+
   local bg = theme.tab_bar.background
   local fg
-
-  local Title = Utils.class.layout:new "TabTitle"
-
   local tab_idx = tab.tab_index
   local attributes = {}
 
-  ---set colors based on states
+  -- Set colors based on states (most expensive operations first)
   if tab.is_active then
     fg = theme.ansi[5]
     attributes = { "Bold" }
@@ -35,35 +41,32 @@ wt.on("format-tab-title", function(tab, _, _, config, hover, max_width)
     fg = theme.brights[1]
   end
 
-  ---Check if any pane has unseen output
+  -- Early exit pattern - check for unseen output only when needed
   local unseen_output = false
-  for _, p in ipairs(tab.panes) do
-    if p.has_unseen_output then
-      unseen_output = true
-      break
+  if tab.panes then
+    for i = 1, #tab.panes do
+      if tab.panes[i].has_unseen_output then
+        unseen_output = true
+        break
+      end
     end
   end
+
+  local Title = Utils.class.layout:new "TabTitle"
 
   local pane = tab.active_pane
   local tab_title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title or pane.title
   local title = str.format_tab_title(pane, tab_title, config, max_width)
 
-  ---add the either the leftmost element or the normal left separator. This is done to
-  ---esure a bit of space from the left margin.
+  -- Build title components efficiently
   Title:append(bg, fg, tab_idx == 0 and tabicons.leftmost or tabicons.left, attributes)
-
-  ---add the tab number. can be substituted by the `has_unseen_output` notification
   Title:append(
     fg,
     bg,
     (unseen_output and Icon.Notification or Icon.Nums[tab_idx + 1] or "") .. " ",
     attributes
   )
-
-  ---the formatted tab title
   Title:append(fg, bg, title, attributes)
-
-  ---the right tab bar separator
   Title:append(bg, fg, Icon.Sep.block .. tabicons.right, attributes)
 
   return Title

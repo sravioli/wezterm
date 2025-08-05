@@ -1,7 +1,9 @@
 ---@class Utils
----@field class Utils.Class
----@field fn    Utils.Fn
----@field gpu   GpuAdapters
+---@field class    Utils.Class
+---@field devicons Utils.DevIcons
+---@field fn       Utils.Fn
+---@field gpu      GpuAdapters
+---@field perf     Utils.Perf
 local M = {}
 
 local mod = ...

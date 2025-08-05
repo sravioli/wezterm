@@ -308,15 +308,32 @@ e.set_right_status = function(Config, window, pane)
   window:set_right_status(rsb:format())
 end -- }}}
 
----Update status event
----@param window wt.Window Wezterm's window object
----@param pane   wt.Pane   Wezterm's pane object
-wt.on("update-status", function(window, pane)
+local perf = require "utils.perf"
+
+-- Throttle update-status to reduce CPU usage
+local throttled_update_status = perf.throttle(function(window, pane)
   local Config, Overrides = window:effective_config(), window:get_config_overrides() or {}
-  e.theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
+
+  -- Cache theme lookup
+  local theme_key = Overrides.color_scheme or Config.color_scheme
+  local cache_key = "theme_" .. theme_key
+  e.theme = wt.GLOBAL.cache[cache_key]
+  if not e.theme then
+    e.theme = Config.color_schemes[theme_key]
+    wt.GLOBAL.cache[cache_key] = e.theme
+  end
+
   e.bg, e.fg = e.theme.background, e.theme.ansi[5]
 
-  e.modes = e.__get_modes()
+  -- Cache modes - they don't change often
+  if not wt.GLOBAL.cache.modes or wt.GLOBAL.cache.modes_theme ~= theme_key then
+    e.modes = e.__get_modes()
+    wt.GLOBAL.cache.modes = e.modes
+    wt.GLOBAL.cache.modes_theme = theme_key
+  else
+    e.modes = wt.GLOBAL.cache.modes
+  end
+
   e.width = e.__get_width(Config, pane, window)
 
   e.set_left_status(window)
@@ -329,6 +346,11 @@ wt.on("update-status", function(window, pane)
   end
 
   e.set_right_status(Config, window, pane)
-end)
+end, 50) -- Throttle to max 20 updates per second
+
+---Update status event
+---@param window wt.Window Wezterm's window object
+---@param pane   wt.Pane   Wezterm's pane object
+wt.on("update-status", throttled_update_status)
 
 -- vim: fdm=marker fdl=1
