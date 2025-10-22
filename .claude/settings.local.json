@@ -39,7 +39,13 @@
       "Bash(git push:*)",
       "Bash(luarocks install:*)",
       "Bash(/Users/beengud/.luarocks/bin/busted spec/colorschemes/slime_spec.lua)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(/Applications/WezTerm.app/Contents/MacOS/wezterm --version)",
+      "Bash(/Applications/WezTerm.app/Contents/MacOS/wezterm ls-fonts)",
+      "Bash(/Applications/WezTerm.app/Contents/MacOS/wezterm cli list --format json)",
+      "Bash(/Applications/WezTerm.app/Contents/MacOS/wezterm cli adjust-pane-size --help)",
+      "WebFetch(domain:gist.github.com)",
+      "Bash(/Applications/WezTerm.app/Contents/MacOS/wezterm start --always-new-process -- bash -c 'echo \"\"\"\"Config test\"\"\"\"; sleep 2')"
     ],
     "deny": [],
     "ask": []
