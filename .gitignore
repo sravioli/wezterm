@@ -1,6 +1,7 @@
 # Claude Flow / AI coordination directories
 .claude-flow/
 .swarm/
+.claude/settings.local.json
 
 # Lua testing artifacts
 luacov.*.out
