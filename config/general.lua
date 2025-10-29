@@ -45,8 +45,22 @@ if fs.platform().is_win then
     },
   }
 else
-  -- macOS/Linux: Use nushell as default shell with login flag
-  Config.default_prog = { "/opt/homebrew/bin/nu", "--login" }
+  -- macOS/Linux: Try to use nushell if available
+  local nu_paths = {
+    "/opt/homebrew/bin/nu",  -- macOS Homebrew
+    "/usr/bin/nu",            -- Linux package manager
+    "/usr/local/bin/nu",      -- Manual install
+  }
+
+  for _, nu_path in ipairs(nu_paths) do
+    local f = io.open(nu_path, "r")
+    if f ~= nil then
+      io.close(f)
+      Config.default_prog = { nu_path, "--login" }
+      break
+    end
+  end
+  -- If nushell not found, WezTerm will use system default shell
 end
 
 Config.default_cwd = fs.home()
