@@ -34,7 +34,7 @@ Config.font_rules = {
     italic = true,
     font = wt.font_with_fallback {
       {
-        family = "Monaspace Radon Var",
+        family = "MonaspiceRn Nerd Font",
         style = "Italic",
         weight = "Regular",
         stretch = "Normal",
@@ -48,7 +48,7 @@ Config.font_rules = {
     italic = true,
     font = wt.font_with_fallback {
       {
-        family = "Monaspace Krypton Var",
+        family = "MonaspiceKr Nerd Font",
         style = "Italic",
         weight = "ExtraBold",
         harfbuzz_features = monaspace_features,
