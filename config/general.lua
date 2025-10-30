@@ -47,9 +47,11 @@ if fs.platform().is_win then
 else
   -- macOS/Linux: Try to use nushell if available
   local nu_paths = {
-    "/opt/homebrew/bin/nu",  -- macOS Homebrew
-    "/usr/bin/nu",            -- Linux package manager
-    "/usr/local/bin/nu",      -- Manual install
+    "/opt/homebrew/bin/nu",           -- macOS Homebrew
+    "/home/linuxbrew/.linuxbrew/bin/nu", -- Linux Homebrew
+    "/usr/bin/nu",                     -- Linux package manager
+    "/usr/local/bin/nu",               -- Manual install
+    os.getenv("HOME") .. "/.cargo/bin/nu", -- Cargo install
   }
 
   for _, nu_path in ipairs(nu_paths) do
