@@ -1,8 +1,7 @@
 ---@module "picker.assets.fonts.monaspace-xenon"
 ---@author sravioli, akthe-at
----@license GNU-GPLv3
 
----@class PickList
+---@class Picker.Module
 local M = {}
 
 local wt = require "wezterm"
@@ -11,7 +10,7 @@ M.get = function()
   return { id = "monaspace-xenon", label = "Monaspace Xenon" }
 end
 
-M.activate = function(Config, _)
+M.pick = function(Config, _)
   Config.font = wt.font_with_fallback {
     {
       family = "Monaspace Xenon",

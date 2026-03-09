@@ -1,8 +1,7 @@
 ---@module "picker.assets.fonts.cascadia-pl"
 ---@author sravioli, akthe-at
----@license GNU-GPLv3
 
----@class PickList
+---@class Picker.Module
 local M = {}
 
 local wt = require "wezterm"
@@ -11,7 +10,7 @@ M.get = function()
   return { id = "cascadia-pl", label = "Cascadia Code PL" }
 end
 
-M.activate = function(Config, _)
+M.pick = function(Config, _)
   local monaspace_features =
     { "dlig", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
 

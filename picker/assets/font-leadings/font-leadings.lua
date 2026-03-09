@@ -1,8 +1,7 @@
 ---@module "picker.assets.font-leadings.font-leadings"
 ---@author akthe-at, sravioli
----@license GNU-GPLv3
 
----@class PickList
+---@class Picker.Module
 local M = {}
 
 M.get = function()
@@ -13,11 +12,11 @@ M.get = function()
   return leadings_list
 end
 
-M.activate = function(config, opts)
-  if opts.id == "reset" then
+M.pick = function(config, opts)
+  if opts.choice.id == "reset" then
     config.line_height = nil
   else
-    config.line_height = tonumber(opts.id)
+    config.line_height = tonumber(opts.choice.id)
   end
 end
 
