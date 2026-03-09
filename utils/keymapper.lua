@@ -1184,7 +1184,7 @@ M.hint = function(config, name, width, window)
   local body = tconcat(parts, sep)
   local bw = str.column_width(body)
   if bw < budget then
-    body = body .. string.rep(" ", budget - bw)
+    body = string.rep(" ", budget - bw) .. body
   end
   return body .. indicator
 end
@@ -1246,11 +1246,32 @@ M.hint_layout = function(config, name, width, window, opts)
     return layout
   end
 
-  -- ── Iterate items ────────────────────────────────────────────────────────
+  -- ── Fit items to budget ───────────────────────────────────────────────────
   local sep_str = " / "
   local sep_w = str.column_width(sep_str)
   local budget = width - ind_w
   local used = 0
+  local selected = {}
+
+  for i, item in ipairs(items) do
+    local item_w = str.column_width(item.lhs) + 1 + str.column_width(item.desc)
+    local need = item_w + (i > 1 and sep_w or 0)
+    if used + need > budget then
+      break
+    end
+
+    selected[#selected + 1] = item
+    if i > 1 then
+      used = used + sep_w
+    end
+    used = used + item_w
+  end
+
+  -- Right-align body within available budget so short hints sit close to the
+  -- right edge and page indicator.
+  if used < budget then
+    layout:append(bg, fg, string.rep(" ", budget - used))
+  end
 
   ---Append a single lhs token with the correct bracket styling.
   ---Brackets `<`/`>` use `fg`+bold; the inner key uses `mode_bg`+normal.
@@ -1265,31 +1286,14 @@ M.hint_layout = function(config, name, width, window, opts)
     end
   end
 
-  for i, item in ipairs(items) do
-    local item_w = str.column_width(item.lhs) + 1 + str.column_width(item.desc)
-    local need = item_w + (i > 1 and sep_w or 0)
-    if used + need > budget then
-      break
-    end
-
-    -- ── Separator ──────────────────────────────────────────────────────
+  -- ── Render selected items ────────────────────────────────────────────────
+  for i, item in ipairs(selected) do
     if i > 1 then
       layout:append(bg, dim_fg, sep_str, "Normal")
-      used = used + sep_w
     end
 
-    -- ── Key ────────────────────────────────────────────────────────────
     append_lhs(item.lhs)
-    used = used + str.column_width(item.lhs)
-
-    -- ── Description ────────────────────────────────────────────────────
     layout:append(bg, fg, " " .. item.desc, "Italic")
-    used = used + 1 + str.column_width(item.desc)
-  end
-
-  -- ── Trailing padding ─────────────────────────────────────────────────
-  if used < budget then
-    layout:append(bg, fg, string.rep(" ", budget - used))
   end
 
   -- ── Pagination indicator ──────────────────────────────────────────────
@@ -1309,12 +1313,16 @@ end
 ---@param name      string|nil  key-table name, nil for `config.keys`
 ---@param direction number      `1` = forward, `-1` = backward
 ---@return table                `wezterm.action_callback`
+
 M.hint_action = function(name, direction)
   local wt = require "wezterm"
 
   return wt.action_callback(function(window, pane)
     local cache = require "utils.fn.cache"
-    local var_key = M.__hint_var(window:window_id(), pane:pane_id(), name)
+    local active_pane = window:active_pane()
+    local pane_id = active_pane and active_pane:pane_id() or pane:pane_id()
+    local active_name = window:active_key_table() or name
+    local var_key = M.__hint_var(window:window_id(), pane_id, active_name)
     local current = cache.get(var_key)
     local page = (type(current) == "number") and current or 1
 
