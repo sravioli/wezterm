@@ -601,6 +601,8 @@ local _hint_entries_cache = nil
 
 ---@alias KeyTableDefFn fun(theme: table): KeyTableDef
 
+local wt = require "wezterm" ---@class Wezterm
+
 ---@class Keymapper
 local M = {
   ---@package
@@ -884,11 +886,23 @@ M.tables = function(config, defs)
   end
 end
 
-local _modes_cache_theme = nil
+local _modes_cache_key = nil
 local _modes_cache = nil
 
+--- Build a cheap, stable identity string from the theme table.
+--- Uses foreground + background + ansi[5] which are unique per colour scheme
+--- and are always plain strings, avoiding reference-equality pitfalls.
+---@param theme table
+---@return string
+local function theme_cache_key(theme)
+  return tostring(theme.foreground or "")
+    .. "|" .. tostring(theme.background or "")
+    .. "|" .. tostring(theme.ansi and theme.ansi[5] or "")
+end
+
 M.get_modes = function(theme)
-  if theme == _modes_cache_theme and _modes_cache then
+  local key = theme_cache_key(theme)
+  if key == _modes_cache_key and _modes_cache then
     return _modes_cache
   end
   local modes = {}
@@ -902,7 +916,7 @@ M.get_modes = function(theme)
       end
     end
   end
-  _modes_cache_theme = theme
+  _modes_cache_key = key
   _modes_cache = modes
   return modes
 end
@@ -997,7 +1011,6 @@ end
 ---@param  budget number
 ---@return {lhs:string, desc:string}[][]  pages
 local function pack_pages(raw, budget)
-  local wt = require "wezterm"
   local sep_w = str.column_width " / "
   if #raw == 0 then
     return {}
@@ -1035,7 +1048,6 @@ end
 ---@return string                            indicator  e.g. `" [2/4]"` or `""`
 ---@return integer                           ind_w      column width of the indicator field
 local function current_page(entries, width, window, name)
-  local wt = require "wezterm"
   local cache = require "utils.fn.cache"
   local raw = collect_raw(entries)
 
@@ -1153,7 +1165,6 @@ end
 ---@param window  table       WezTerm window object
 ---@return string             exactly `width` columns
 M.hint = function(config, name, width, window)
-  local wt = require "wezterm"
   local entries = resolve_entries(config, name)
   local items, indicator, ind_w = current_page(entries, width, window, name)
 
@@ -1225,7 +1236,6 @@ end
 ---@param opts    table       `{ theme: table, mode_bg: string }`
 ---@return Layout             Layout instance (call `:format()` to get the string)
 M.hint_layout = function(config, name, width, window, opts)
-  local wt = require "wezterm"
   local Layout = require "utils.layout"
   local theme = opts.theme
   local mode_bg = tostring(opts.mode_bg)
@@ -1315,8 +1325,6 @@ end
 ---@return table                `wezterm.action_callback`
 
 M.hint_action = function(name, direction)
-  local wt = require "wezterm"
-
   return wt.action_callback(function(window, pane)
     local cache = require "utils.fn.cache"
     local active_pane = window:active_pane()

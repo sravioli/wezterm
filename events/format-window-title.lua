@@ -29,7 +29,8 @@ wt.on("format-window-title", function(tab, pane, tabs, _panes, _config)
     proc = proc:sub(proc:find "nvim" or 0)
   end
   if proc == "nvim" or title == "cmd" then
-    local cwd, _ = fs.basename(pane.current_working_dir.file_path)
+    local cwd_uri = pane.current_working_dir
+    local cwd = cwd_uri and fs.basename(cwd_uri.file_path) or ""
     title = ("Neovim (dir: %s)"):format(cwd)
   end
 

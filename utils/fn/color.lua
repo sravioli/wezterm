@@ -3,7 +3,6 @@ local wt = require "wezterm" ---@class Wezterm
 local Opts = require("opts").config.color ---@class Opts.Config.Color
 
 local Icon = require "utils.icons" ---@class Icons
-local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 local layout = require "utils.layout" ---@class Layout
 
 ---Manage and apply color schemes in Lua-based environment.
@@ -16,24 +15,28 @@ local M = {}
 ---@package
 M.log = require("utils.logger"):new "Fn.Color"
 
----Load and return all available color schemes.
----Scan predefined directory for Lua files, load them dynamically, and return table of schemes.
----@return table<string, table> schemes Map of loaded colorschemes.
+---Load color schemes lazily via `__index`.
+---Schemes are loaded on first access by name, avoiding the startup cost of
+---scanning the filesystem and requiring all ~30 colorscheme modules eagerly.
+---@return table<string, table> schemes Lazy map of colorschemes.
 M.get_schemes = function()
-  local dir = fs.join_path(wt.config_dir, "picker", "assets", "colorschemes")
-  local files = fs.ls_dir(dir)
-  if not files then
-    M.log:error("Unable to read from directory: '%s'", fs.basename(dir))
-    return {}
-  end
-
-  local schemes = {}
-  for i = 1, #files do
-    local name = fs.basename(files[i]:gsub("%.lua$", ""))
-    schemes[name] = require("picker.assets.colorschemes." .. name).scheme
-    M.log:debug("loaded %s colorscheme", name)
-  end
-  return schemes
+  return setmetatable({}, {
+    __index = function(t, name)
+      -- Ignore non-string keys (WezTerm's Rust side probes numeric indices)
+      if type(name) ~= "string" then
+        return nil
+      end
+      local mod_path = "picker.assets.colorschemes." .. name
+      local ok, mod = pcall(require, mod_path)
+      if ok and mod and mod.scheme then
+        rawset(t, name, mod.scheme)
+        M.log:debug("loaded %s colorscheme (lazy)", name)
+        return mod.scheme
+      end
+      M.log:error("Unable to load colorscheme: '%s'", name)
+      return nil
+    end,
+  })
 end
 
 ---Determine appropriate color scheme based on GUI appearance.

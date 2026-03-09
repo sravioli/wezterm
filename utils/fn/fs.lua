@@ -59,15 +59,21 @@ M.path_separator = cache.memoize("fs.path-separator", M.is_win and "\\" or "/")
 ---Extract base name from path.
 ---
 ---Equivalent to POSIX `basename(3)`. Returns the final component of the path.
+---Uses a simple direct-lookup cache to avoid generic cache machinery overhead.
 ---
 ---@param path string File path.
 ---@return string basename Final component of the path.
+local _basename_cache = {}
 M.basename = function(path)
-  return cache.compute_cached("fs.basename", function()
-    local trimmed_path = sgsub(path, "[/\\]*$", "")
-    local index = sfind(trimmed_path, "[^/\\]*$")
-    return index and ssub(trimmed_path, index) or trimmed_path
-  end, path)
+  local cached = _basename_cache[path]
+  if cached then
+    return cached
+  end
+  local trimmed_path = sgsub(path, "[/\\]*$", "")
+  local index = sfind(trimmed_path, "[^/\\]*$")
+  local result = index and ssub(trimmed_path, index) or trimmed_path
+  _basename_cache[path] = result
+  return result
 end
 
 ---Find git project root.
