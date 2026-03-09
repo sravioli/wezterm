@@ -1,8 +1,7 @@
-local Config = require("utils.class.config"):new()
+require "events"
 
-require "events.update-status"
-require "events.format-tab-title"
-require "events.new-tab-button-click"
-require "events.augment-command-palette"
-
-return Config:add("config"):add "mappings"
+---@class Configuration
+return require("config")
+  :add(require "mappings.default")
+  :add(require "mappings.modes")
+  :init()
