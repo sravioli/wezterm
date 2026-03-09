@@ -1,17 +1,13 @@
 ---@module "events.augment-command-palette"
----@author sravioli
----@license GNU-GPLv3
 
----@diagnostic disable: undefined-field
-local wt = require "wezterm"
+local wt = require "wezterm" ---@class Wezterm
 local act = wt.action
 
-wt.on("augment-command-palette", function(_, _)
+wt.on("augment-command-palette", function(_window, _pane)
   return {
     {
       brief = "Rename tab",
       icon = "md_rename_box",
-
       action = act.PromptInputLine {
         description = "Enter new name for tab",
         action = wt.action_callback(function(inner_window, _, line)
@@ -22,24 +18,31 @@ wt.on("augment-command-palette", function(_, _)
       },
     },
     {
-      brief = "Colorscheme picker",
+      brief = "Pick colorscheme",
       icon = "md_palette",
       action = require("picker.colorscheme"):pick(),
     },
     {
-      brief = "Font picker",
+      brief = "Pick font",
       icon = "md_format_font",
       action = require("picker.font"):pick(),
     },
     {
-      brief = "Font size picker",
+      brief = "Pick font size",
       icon = "md_format_font_size_decrease",
       action = require("picker.font-size"):pick(),
     },
     {
-      brief = "Font leading picker",
+      brief = "Pick font leading",
       icon = "fa_text_height",
       action = require("picker.font-leading"):pick(),
+    },
+    {
+      brief = "Invalidate cache",
+      icon = "md_cached",
+      action = wt.action_callback(function(_, _, _)
+        require("utils.fn.cache").forget()
+      end),
     },
   }
 end)

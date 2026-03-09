@@ -1,8 +1,6 @@
 ---@module "events.new-tab-button-click"
----@author sravioli
----@license GNU-GPLv3
 
-local wt = require "wezterm"
+local wt = require "wezterm" ---@class Wezterm
 
 wt.on("new-tab-button-click", function(window, pane, button, default_action)
   if default_action and button == "Left" then
