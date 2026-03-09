@@ -1,9 +1,9 @@
-local Icons = require "utils.class.icon"
-local fs = require("utils.fn").fs
+local Icons = require "utils.icons" ---@class Icons
+local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 
 local Config = {}
 
-if fs.platform().is_win then
+if fs.is_win then
   Config.default_prog =
     { "pwsh", "-NoLogo", "-ExecutionPolicy", "RemoteSigned", "-NoProfileLoadTime" }
 
