@@ -28,7 +28,7 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 This project and everyone participating in it is governed by the
 [project Code of Conduct](https://www.github.com/sravioli/wezterm/blob/main/code_of_conduct.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
-to <mailto:fsimone2002@proton.me>.
+to <mailto:s.fidanza@pm.me>.
 
 ## I Have a Question
 
@@ -67,7 +67,7 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 
 #### How Do I Submit a Good Bug Report?
 
-> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to <mailto:fsimone2002@proton.me>.
+> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to <mailto:s.fidanza@pm.me>.
 
 We use GitHub issues to track bugs and errors. If you run into an issue with the project:
 
