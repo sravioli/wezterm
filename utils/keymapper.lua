@@ -761,15 +761,15 @@ M.map = function(lhs, rhs, tbl)
     return __map(aliases[keys[1]] or keys[1], mods)
   end
 
-  local k = keys[#keys]
+  local nkeys = #keys
+  local k = keys[nkeys]
   if modifiers[k] then
     return M._log:error "keymap cannot end with modifier!"
-  else
-    keys[#keys] = nil
   end
   k = aliases[k] or k
 
-  for i = 1, #keys do
+  -- Loop up to nkeys-1 so we never mutate the (possibly cached) keys table.
+  for i = 1, nkeys - 1 do
     mods[#mods + 1] = modifiers[keys[i]]
   end
 
@@ -882,7 +882,13 @@ M.tables = function(config, defs)
   end
 end
 
+local _modes_cache_theme = nil
+local _modes_cache = nil
+
 M.get_modes = function(theme)
+  if theme == _modes_cache_theme and _modes_cache then
+    return _modes_cache
+  end
   local modes = {}
   for name, def in pairs(M._defs or {}) do
     local resolved = resolve_def(name, def, theme)
@@ -894,6 +900,8 @@ M.get_modes = function(theme)
       end
     end
   end
+  _modes_cache_theme = theme
+  _modes_cache = modes
   return modes
 end
 

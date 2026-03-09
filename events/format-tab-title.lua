@@ -11,6 +11,11 @@ local tabseps = Icon.Sep.tb
 
 local SHELLS = { fish = true, bash = true, zsh = true, sh = true, nu = true }
 
+-- Hoisted to module scope — the home directory never changes during a session.
+-- Avoids per-tab-per-repaint calls through the (previously broken) cache layer.
+local HOME = fs.home()
+local HOME_BASENAME = fs.basename(HOME)
+
 local function truncate(text, budget, callback)
   if str.column_width(text) <= budget then
     return text
@@ -49,7 +54,7 @@ end
 local function format_neovim(pane, title_budget)
   local cwd_url = pane.current_working_dir or pane:get_current_working_dir()
   local cwd = cwd_url and fs.basename(cwd_url.file_path) or ""
-  cwd = cwd:gsub(fs.basename(fs.home()), "󰋜 ")
+  cwd = cwd:gsub(HOME_BASENAME, "󰋜 ")
 
   local prefix = (Icon.Progs["nvim"] or "") .. " (" .. Icon.Folder .. " "
   local suffix = ")"
@@ -66,7 +71,7 @@ end
 ---@return string
 local function resolve_title(pane, raw_title, title_budget)
   local title = raw_title:gsub("^Copy mode: ", "")
-  title = title:gsub("^" .. fs.home(), "~"):gsub(fs.basename(fs.home()), "󰋜 ")
+  title = title:gsub("^" .. HOME, "~"):gsub(HOME_BASENAME, "󰋜 ")
 
   local process, rest = parse_title(title)
 

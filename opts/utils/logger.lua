@@ -3,6 +3,6 @@
 ---@class Opts.Utils.Logger
 return {
   enabled = true,
-  threshold = "INFO",
+  threshold = "WARN",
   sinks = { default_enabled = true },
 }
