@@ -1,7 +1,8 @@
-return require("utils.fn").tbl.merge(
-  (require "config.appearance"),
-  (require "config.font"),
-  (require "config.tab-bar"),
-  (require "config.general"),
-  (require "config.gpu")
-)
+---@class Configuration
+local Config = require "utils.config"
+
+return Config:add("config.appearance")
+  :add("config.font")
+  :add("config.tab-bar")
+  :add("config.general")
+  :add "config.gpu"

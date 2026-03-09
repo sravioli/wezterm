@@ -1,8 +1,5 @@
-local Utils = require "utils"
-local color = Utils.fn.color
-
----@diagnostic disable-next-line: undefined-field
-local G = require("wezterm").GLOBAL
+local Opts = require("opts").config ---@class Opts.Config
+local color = require "utils.fn.color" ---@class Fn.Color
 
 local Config = {}
 
@@ -16,7 +13,7 @@ Config.background = {
     source = { Color = theme.background },
     width = "100%",
     height = "100%",
-    opacity = G.opacity or 1,
+    opacity = Opts.color.opacity,
   },
 }
 
