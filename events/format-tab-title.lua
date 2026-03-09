@@ -146,7 +146,9 @@ wt.on("format-tab-title", function(tab, tabs, _, config, hover, max_width)
 
   local rendered = cell:format()
 
-  budget.record(idx, rendered)
+  -- Pass pre-computed width (plain-text parts sum) so `record()` skips the
+  -- expensive ANSI-strip + column_width call on the full rendered string.
+  budget.record(idx, static_width + str.width(title))
   budget.set_count(#tabs)
 
   return rendered
