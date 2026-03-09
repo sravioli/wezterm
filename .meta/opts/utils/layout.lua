@@ -1,0 +1,75 @@
+---@meta Opts.Utils.Layout
+error "cannot require a meta file!"
+
+-- luacheck: push ignore 631 (line is too long)
+
+---@class Opts.Utils.Layout: Opts.Utils.Base
+---@field public defaults?            Opts.Utils.Layout.Defaults
+---@field public attribute_aliases?   Opts.Utils.Layout.AttributeAliases
+---@field public validate_attributes? boolean                            Whether to warn on invalid attributes.
+---@field public strict_mode?         boolean                            Whether to throw errors instead of warnings for validation failures.
+---@field public text?                Opts.Utils.Layout.Text
+---@field public atomic?              boolean                            Whether to reset text attributes after each operation.
+---
+---
+---Default configuration settings
+---@class Opts.Utils.Layout.Defaults
+---@field public foreground? string|nil                            Default foreground color (nil = terminal default).
+---@field public background? string|nil                            Default background color (nil = terminal default).
+---@field public attributes? Opts.Utils.Layout.Defaults.Attributes Table of text attributes with attribute names as keys and attribute values as settings.
+---@field public colors?     Opts.Utils.Layout.Defaults.Colors     Table of color names (e.g., "Black", "Red")
+---
+---
+---@class Opts.Utils.Layout.Defaults.Attributes
+---@field public None?        "ResetAttributes",
+---@field public NoUnderline? { Underline: "None" }
+---@field public Single?      { Underline: "Single" }
+---@field public Double?      { Underline: "Double" }
+---@field public Curly?       { Underline: "Curly" }
+---@field public Dotted?      { Underline: "Dotted" }
+---@field public Dashed?      { Underline: "Dashed" }
+---@field public Normal?      { Intensity: "Normal" }
+---@field public Bold?        { Intensity: "Bold" }
+---@field public Half?        { Intensity: "Half" }
+---@field public Italic?      { Italic: true }
+---@field public NoItalic?    { Italic: false }
+---
+---
+---Shortcuts for attributes and combinations of attributes.
+---@class Opts.Utils.Layout.AttributeAliases
+---@field public b?         "Bold"
+---@field public i?         "Italic"
+---@field public u?         "Single"
+---@field public dim?       "Half"
+---@field public reset?     "None"
+---@field public highlight? table    { "Bold", "Single" }
+---@field public emph?      table    { "Bold", "Italic" }
+---@field public subtle?    table    { "Half", "Italic" }
+---
+---
+---@class Opts.Utils.Layout.Text
+---@field public strip?      boolean                       Whether to strip leading/trailing whitespace from text.
+---@field public max_length? number|nil                    Maximum text length before truncation (nil = no limit).
+---@field public transform?  nil|fun(text: string): string Function to transform text before processing.
+
+---
+
+---@enum Opts.Utils.Layout.Defaults.Colors
+---| Black
+---| Maroon
+---| Green
+---| Olive
+---| Navy
+---| Purple
+---| Teal
+---| Silver
+---| Grey
+---| Red
+---| Lime
+---| Yellow
+---| Blue
+---| Fuchsia
+---| Aqua
+---| White
+
+-- luacheck: pop

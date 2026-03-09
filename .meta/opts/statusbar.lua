@@ -1,0 +1,87 @@
+---@meta Opts.StatusBar
+error "cannot require a meta file!"
+
+-- luacheck: push ignore 631 (line is too long)
+
+---Define status bar configuration options.
+---Provide structure for layout, refresh rates, and individual module styling.
+---
+---@class Opts.StatusBar
+---@field public enabled?  boolean                                Enable status for status bar.
+---@field public position? "top"|"bottom"                         Screen position of status bar.
+---@field public fancy?    boolean                                Whether to use the fancy tab bar or not.
+---@field public flexible? boolean                                Whether to make the status bar flexible or not.
+---@field public padding?  number|{ left: number, right: number } Component padding. Applied to taxt and icon after being combined.
+---@field public style?    Opts.StatusBar.Module.Styler           Component style. Will be applied to both icon and text.
+---@field public layout?   Opts.StatusBar.Layout                  Structural arrangement of status bar components.
+---@field public modules?  Opts.StatusBar.Modules                 Collection of module-specific configurations.
+---
+---
+---Layout configuration for status bar sides.
+---@class Opts.StatusBar.Layout
+---@field public left?  Opts.StatusBar.Layout.Item[] List of module names for left-aligned section.
+---@field public right? Opts.StatusBar.Layout.Item[] List of module names for right-aligned section.
+---
+---
+---@alias Opts.StatusBar.Layout.Item
+---| (string | string[])
+---
+---
+---@alias Opts.StatusBar.Modules
+---| table<string, (Opts.StatusBar.Module|Opts.StatusBar.Module.Creator)>
+---
+---
+---@alias Opts.StatusBar.Module.Creator
+---| fun(window: Window, pane: Pane, theme, config): Opts.StatusBar.Module
+---
+---
+---Configuration schema for individual status bar modules.
+---@class Opts.StatusBar.Module
+---@field public enabled?  boolean                                          Enable status for specific module.
+---@field public cond?     boolean|fun(window: Window, pane: Pane): boolean Whether the module is visible or not.
+---@field public icon?     Opts.StatusBar.Module.Icon                       Icon to display next to the text.
+---@field public text?     Opts.StatusBar.Module.Text                       Text to display next to the icon.
+---@field public sep?      Opts.StatusBar.Module.Sep                        Text to display next to the icon.
+---@field public style?    Opts.StatusBar.Module.Styler                     Module style.
+---@field public layout?   Opts.StatusBar.Module.Layout                     Static or dynamic layout of the module.
+---@field public can_hide? boolean                                          Whether the module can be hidden or not.
+---@field public padding?  number|{ left: number, right: number }           Component padding.
+---
+---
+---@class Opts.StatusBar.Module.Component
+---@field public enabled? boolean                                         Whether the component is enabled or not.
+---@field public value?   string|(fun(window: Window, pane:Pane): string) Component string value to display.
+---@field public padding? number|{ left: number, right: number }          Component padding.
+---@field public style?   Opts.StatusBar.Module.Styler                    Component style.
+---
+---@class Opts.StatusBar.Module.Icon: Opts.StatusBar.Module.Component
+---@field public position? "left"|"right"                         Icon position relative to text.
+---
+---
+---@class Opts.StatusBar.Module.Text: Opts.StatusBar.Module.Component
+---
+---
+---@class Opts.StatusBar.Module.Sep : Opts.StatusBar.Module.Component
+---@field public invert_bg_fg? boolean Whether to invert the global style background and foreground for the separators.
+---@field public value?        Opts.StatusBar.Module.Sep.Value
+---
+---
+---@alias Opts.StatusBar.Module.Layout
+---| string
+---| table
+---| Layout
+---| fun(ctx: Opts.StatusBar.Module.LayoutContext): string|table|Layout
+---
+---@alias Opts.StatusBar.Module.LayoutContext
+---| { layout: Layout, theme: table, fn: Fn, window: Window, pane: Pane }
+---
+---@alias Opts.StatusBar.Module.Styler
+---| { bg?: string, fg?: string, attributes?: string|string[] }
+---| fun(theme: table): { bg?: string, fg?: string, attributes?: string|string[] }
+---
+---@alias Opts.StatusBar.Module.Sep.Value
+---| string
+---| { left: string, right: string }
+---| (fun(window: Window, pane: Pane): string|{ left: string, right: string })
+
+-- luacheck: pop
