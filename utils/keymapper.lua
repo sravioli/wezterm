@@ -586,6 +586,7 @@ local str = require "utils.fn.str" ---@class Fn.String
 
 local sgsub, ssub, smatch, sformat = string.gsub, string.sub, string.match, string.format
 local tconcat = table.concat
+local _hint_entries_cache = nil
 
 ---@class KeyMeta
 ---@field i    string  icon glyph (e.g. "󰆏")
@@ -854,6 +855,7 @@ M.tables = function(config, defs)
   end
 
   M._defs = defs
+  _hint_entries_cache = nil
 
   -- Nil-safe proxy: any field access returns the proxy itself so expressions
   -- like `theme.brights[3]` in a function-form definition never error when
@@ -1077,15 +1079,65 @@ end
 ---@param name   string?
 ---@return table[]
 local function resolve_entries(config, name)
+  local function has_descriptions(entries)
+    for _, entry in ipairs(entries or {}) do
+      if entry.desc and entry.desc ~= "" then
+        return true
+      end
+    end
+    return false
+  end
+
+  local function resolve_entries_from_defs(table_name)
+    if type(table_name) ~= "string" or table_name == "" then
+      return nil
+    end
+
+    _hint_entries_cache = _hint_entries_cache or {}
+    if _hint_entries_cache[table_name] then
+      return _hint_entries_cache[table_name]
+    end
+
+    local def = M._defs and M._defs[table_name]
+    if not def then
+      return nil
+    end
+
+    local proxy
+    proxy = setmetatable({}, {
+      __index = function()
+        return proxy
+      end,
+    })
+
+    local resolved = resolve_def(table_name, def, proxy)
+    if not resolved or not resolved.keys then
+      return nil
+    end
+
+    local rebuilt = M.table(resolved.keys)
+    _hint_entries_cache[table_name] = rebuilt
+    return rebuilt
+  end
+
   if not name then
     return config.keys or {}
   end
+
   local entries = config.key_tables and config.key_tables[name]
+  if entries and has_descriptions(entries) then
+    return entries
+  end
+
+  local fallback_entries = resolve_entries_from_defs(name)
+  if fallback_entries then
+    return fallback_entries
+  end
+
   if not entries then
     M._log:warn("hint: key table '%s' not found", name)
-    return {}
   end
-  return entries
+  return entries or {}
 end
 
 -- ──────────────────────────────────────────────────────────────────────────────
