@@ -11,16 +11,35 @@ local icons = require "utils.icons" ---@class Icons
 ---Render order (left → right): cwd · hostname · clock · battery
 ---Index 1 is the darkest (leftmost), 4 is the lightest (rightmost).
 ---
+---Results are cached on `theme.ansi[5]` + `theme.tab_bar.background`; the
+---four right-status modules that call this per repaint now share a single
+---computation instead of repeating it 4×.
+---
 ---@param  theme table
----@return table<integer, string>
+---@return table<integer, string> palette
+---@return string text_fg  foreground colour for text inside palette cells
+local _palette_key = nil
+local _palette_bg_key = nil
+local _palette_cache = nil
+local _text_fg_cache = nil
+
 local function make_palette(theme)
-  local fg = color_parse(tostring(theme.ansi[5]))
-  return {
+  local key = theme.ansi[5]
+  local bg_key = theme.tab_bar.background
+  if key == _palette_key and bg_key == _palette_bg_key then
+    return _palette_cache, _text_fg_cache
+  end
+  local fg = color_parse(tostring(key))
+  _palette_cache = {
     tostring(fg:darken(0.15)), -- [1] cwd
     tostring(fg), -- [2] hostname
     tostring(fg:lighten(0.15)), -- [3] clock
     tostring(fg:lighten(0.25)), -- [4] battery
   }
+  _text_fg_cache = tostring(bg_key)
+  _palette_key = key
+  _palette_bg_key = bg_key
+  return _palette_cache, _text_fg_cache
 end
 
 ---Returns a `sep.style` function that paints a powerline arrow with
@@ -194,8 +213,7 @@ local M = {
     -- cwd is the leftmost data cell → palette[1] (darkest)
     cwd = function(_, pane, theme, config)
       local cwd = fn.fs.get_cwd(pane, true)
-      local palette = make_palette(theme)
-      local text_fg = tostring(theme.tab_bar.background)
+      local palette, text_fg = make_palette(theme)
 
       return {
         enabled = true,
@@ -231,8 +249,7 @@ local M = {
     -- hostname → palette[2], prev = cwd (palette[1])
     hostname = function(_, pane, theme, _)
       local hostname = fn.fs.get_hostname(pane)
-      local palette = make_palette(theme)
-      local text_fg = tostring(theme.tab_bar.background)
+      local palette, text_fg = make_palette(theme)
 
       return {
         enabled = true,
@@ -266,8 +283,7 @@ local M = {
     end,
 
     clock = function(_, _, theme, _)
-      local palette = make_palette(theme)
-      local text_fg = tostring(theme.tab_bar.background)
+      local palette, text_fg = make_palette(theme)
 
       local hour_24 = tonumber(timefmt "%H")
       local hour_12 = timefmt "%I"
@@ -318,8 +334,7 @@ local M = {
       local charge_r = fn.maths.toint(fn.maths.mround(charge, 10))
       local bat_ico = icons.Bat[bat.state][tostring(charge_r)]
       local bat_lvl = tostring(math.floor(charge + 0.5)) .. "%"
-      local palette = make_palette(theme)
-      local text_fg = tostring(theme.tab_bar.background)
+      local palette, text_fg = make_palette(theme)
 
       return {
         enabled = true,

@@ -170,17 +170,28 @@ end
 
 ---Execute function and cache result using argument-based key.
 ---
----Generates a unique key based on `name` and serialized arguments, executes the function
----immediately, and caches the result.
+---Generates a unique key from `name` + serialised arguments, checks the cache
+---first, and only executes the function on a miss.  Previous implementation
+---always evaluated `fn(...)` before consulting the cache — defeating the
+---purpose entirely.
 ---
 ---@param name string              Namespace or context identifier for the key.
 ---@param fn   fun(...: any): any  Function to execute.
 ---@param ...  any                 Arguments passed to the function.
----@return any result              Result of the function execution.
+---@return any result              Cached or freshly computed result.
 function M.compute_cached(name, fn, ...)
-  local args = { ... }
-  local key = make_cache_key(name, tunpack(args))
-  return M.memoize(key, fn(tunpack(args)))
+  local key = make_cache_key(name, ...)
+  local flat = flatten_key(normalize_key(key))
+  local cached = CACHE[flat]
+  if cached ~= nil then
+    return cached
+  end
+  local ok, res = pcall(fn, ...)
+  if not ok then
+    error(res)
+  end
+  CACHE[flat] = res
+  return res
 end
 
 ---Retrieve cached value by key.

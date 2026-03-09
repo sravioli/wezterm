@@ -6,6 +6,13 @@ local str = require "utils.fn.str" ---@class Fn.String
 local budget = require "utils.bar-budget" ---@class BarBudget
 local wt = require "wezterm" ---@class Wezterm
 
+-- Direct binding to the C function — bypasses the ANSI-strip regex in
+-- str.column_width.  Safe here because all inputs at this layer are plain
+-- text (icons, separators, padding, resolved node values).  For strings
+-- that may contain ANSI codes (e.g. resolve_layout output), use
+-- str.column_width instead.
+local raw_cw = wt.column_width
+
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
 local log = require("utils.logger"):new("StatusBar", true) ---@class Logger
 
@@ -21,6 +28,13 @@ local M = {
   width = { used = 0, available = 0 },
 }
 
+-- Reusable Layout cell for assemble_cell (avoids Layout + Logger allocation
+-- per cell render).  Cleared via :clear() before each use.
+local _cell = sb:new "Cell"
+
+-- Reusable context table for resolve_layout (avoids per-call allocation).
+local _layout_ctx = {}
+
 -- ---------------------------------------------------------------------------
 -- Width utilities
 -- ---------------------------------------------------------------------------
@@ -31,7 +45,7 @@ local function visible_width(s)
   if not s or s == "" then
     return 0
   end
-  return str.column_width(s)
+  return raw_cw(s)
 end
 
 ---@param s        string
@@ -307,7 +321,9 @@ local function compute_overhead(module, sep)
 end
 
 --- Assemble a Layout Cell from pre-resolved content.
----@param name         string
+---
+--- Uses the module-level `_cell` instance (cleared on each call) to avoid
+--- allocating a new Layout + Logger per cell render.
 ---@param module       Opts.StatusBar.Module
 ---@param render_icon  string
 ---@param render_text  string
@@ -320,7 +336,6 @@ end
 ---@param style        table
 ---@return string
 local function assemble_cell(
-  name,
   module,
   render_icon,
   render_text,
@@ -332,75 +347,140 @@ local function assemble_cell(
   pad_right,
   style
 )
-  local cell = sb:new("Cell:" .. name)
+  _cell:clear()
   local icon_pos = (module.icon and module.icon.position) or "left"
 
-  M.add_padding(cell, pad_left, style)
-  M.add_separator(cell, sep.right, sep_style)
-
-  local function append_icon()
-    if render_icon ~= "" then
-      cell:append(icon_style.bg, icon_style.fg, render_icon, icon_style.attributes)
-    end
-  end
-  local function append_text()
-    if render_text ~= "" then
-      cell:append(text_style.bg, text_style.fg, render_text, text_style.attributes)
-    end
-  end
+  M.add_padding(_cell, pad_left, style)
+  M.add_separator(_cell, sep.right, sep_style)
 
   if icon_pos == "right" then
-    append_text()
-    append_icon()
+    if render_text ~= "" then
+      _cell:append(text_style.bg, text_style.fg, render_text, text_style.attributes)
+    end
+    if render_icon ~= "" then
+      _cell:append(icon_style.bg, icon_style.fg, render_icon, icon_style.attributes)
+    end
   else
-    append_icon()
-    append_text()
+    if render_icon ~= "" then
+      _cell:append(icon_style.bg, icon_style.fg, render_icon, icon_style.attributes)
+    end
+    if render_text ~= "" then
+      _cell:append(text_style.bg, text_style.fg, render_text, text_style.attributes)
+    end
   end
 
-  M.add_separator(cell, sep.left, sep_style)
-  M.add_padding(cell, pad_right, style)
+  M.add_separator(_cell, sep.left, sep_style)
+  M.add_padding(_cell, pad_right, style)
 
-  return cell:format()
+  return _cell:format()
 end
+
+-- ---------------------------------------------------------------------------
+-- Pre-resolved cell parts
+-- ---------------------------------------------------------------------------
+
+--- Pre-compute the mode-invariant parts of a module's cell rendering.
+--- Called once per module; the result is passed to `build_cell_from_parts`
+--- for each render-mode trial — avoiding redundant style / content / sep
+--- resolution per mode.
+---@param module Opts.StatusBar.Module
+---@return table parts
+local function resolve_cell_parts(module)
+  local style = M.style_node(module, M.default_style)
+  local icon_val, icon_style, text_val, text_style = resolve_module_content(module, style)
+  local sep, sep_style = M.prepare_sep(module.sep, style)
+  local pad_left, pad_right, overhead = compute_overhead(module, sep)
+  return {
+    style = style,
+    has_icon = module.icon ~= nil,
+    has_text = module.text ~= nil,
+    icon_val = icon_val,
+    icon_style = icon_style,
+    text_val = text_val,
+    text_style = text_style,
+    sep = sep,
+    sep_style = sep_style,
+    pad_left = pad_left,
+    pad_right = pad_right,
+    overhead = overhead,
+  }
+end
+
+--- Build a cell from pre-resolved parts for a specific render mode.
+--- Returns `("", -1)` when the mode is inapplicable or exceeds the budget.
+---@param module     Opts.StatusBar.Module
+---@param parts      table
+---@param mode       CellRenderMode
+---@param avail_cols integer|nil
+---@return string formatted
+---@return integer width
+local function build_cell_from_parts(module, parts, mode, avail_cols)
+  local render_icon, render_text = CONTENT_RESOLVERS[mode](
+    parts.icon_val,
+    parts.text_val,
+    parts.has_icon,
+    parts.has_text,
+    avail_cols,
+    parts.overhead
+  )
+
+  if render_icon == nil then
+    return "", -1
+  end
+
+  local total_w = parts.overhead + visible_width(render_icon) + visible_width(render_text)
+  if avail_cols and total_w > avail_cols then
+    return "", -1
+  end
+
+  local formatted = assemble_cell(
+    module,
+    render_icon,
+    render_text,
+    parts.icon_style,
+    parts.text_style,
+    parts.sep,
+    parts.sep_style,
+    parts.pad_left,
+    parts.pad_right,
+    parts.style
+  )
+  return formatted, total_w
+end
+
+-- ---------------------------------------------------------------------------
 
 --- Render only the separator (and padding) for a module, with no icon or text.
 --- Used as the last-resort candidate for `can_hide` modules so the colour
 --- chain between adjacent cells is preserved even when content is dropped.
 ---
----@param  name   string
 ---@param  module Opts.StatusBar.Module
+---@param  parts  table              pre-resolved cell parts
 ---@return string formatted
 ---@return integer width   0 when the module has no separator to show
-local function build_cell_sep_only(name, module)
-  local style = M.style_node(module, M.default_style)
-  local sep, sep_style = M.prepare_sep(module.sep, style)
-
-  -- Nothing to show if the module carries no separator at all.
-  if not sep.left and not sep.right then
+local function build_cell_sep_only(module, parts)
+  if not parts.sep.left and not parts.sep.right then
     return "", 0
   end
 
-  local pad_left, pad_right, overhead = compute_overhead(module, sep)
-
   local formatted = assemble_cell(
-    name,
     module,
     "",
-    "", -- render_icon, render_text both empty
-    style,
-    style, -- icon_style, text_style (irrelevant, content is empty)
-    sep,
-    sep_style,
-    pad_left,
-    pad_right,
-    style
+    "",
+    parts.style,
+    parts.style,
+    parts.sep,
+    parts.sep_style,
+    parts.pad_left,
+    parts.pad_right,
+    parts.style
   )
-  return formatted, overhead
+  return formatted, parts.overhead
 end
 
 --- Attempt to build a cell for the given mode within `avail_cols`.
---- Returns `("", -1)` when the mode is inapplicable or the budget is exceeded.
----
+--- Convenience wrapper that resolves parts internally — use
+--- `resolve_cell_parts` + `build_cell_from_parts` when calling in a loop.
 ---@param name       string
 ---@param module     Opts.StatusBar.Module
 ---@param mode       CellRenderMode
@@ -408,50 +488,20 @@ end
 ---@return string formatted
 ---@return integer width
 local function build_cell(name, module, mode, avail_cols)
-  local style = M.style_node(module, M.default_style)
-  local has_icon, has_text = module.icon ~= nil, module.text ~= nil
-
-  local icon_val, icon_style, text_val, text_style = resolve_module_content(module, style)
-  local sep, sep_style = M.prepare_sep(module.sep, style)
-  local pad_left, pad_right, overhead = compute_overhead(module, sep)
-
-  local render_icon, render_text =
-    CONTENT_RESOLVERS[mode](icon_val, text_val, has_icon, has_text, avail_cols, overhead)
-
-  if render_icon == nil then
-    return "", -1
-  end
-
-  local total_w = overhead + visible_width(render_icon) + visible_width(render_text)
-  if avail_cols and total_w > avail_cols then
-    return "", -1
-  end
-
-  local formatted = assemble_cell(
-    name,
-    module,
-    render_icon,
-    render_text,
-    icon_style,
-    text_style,
-    sep,
-    sep_style,
-    pad_left,
-    pad_right,
-    style
-  )
-  return formatted, total_w
+  return build_cell_from_parts(module, resolve_cell_parts(module), mode, avail_cols)
 end
 
 --- Walk the fallback chain and return the first mode that fits.
+--- Resolves cell parts once and reuses across all mode trials.
 ---@param name       string
 ---@param module     Opts.StatusBar.Module
 ---@param avail_cols integer
 ---@return string formatted
 ---@return integer width
 local function build_cell_flexible(name, module, avail_cols)
+  local parts = resolve_cell_parts(module)
   for _, mode in ipairs(RENDER_MODES) do
-    local result, w = build_cell(name, module, mode, avail_cols)
+    local result, w = build_cell_from_parts(module, parts, mode, avail_cols)
     if w >= 0 then
       log:info(
         "[%s] mode: %-4s  used: %d/%d  cell: %s",
@@ -471,7 +521,7 @@ local function build_cell_flexible(name, module, avail_cols)
   end
 
   -- Absolute last resort: force icon-only regardless of budget.
-  local result, w = build_cell(name, module, "icon", nil)
+  local result, w = build_cell_from_parts(module, parts, "icon", nil)
   log:info("[%s] forced icon-only  width: %d  cell: %s", name, w, result)
   return result, math.max(w, 0)
 end
@@ -518,13 +568,12 @@ end
 ---@return string
 local function resolve_layout(layout)
   if type(layout) == "function" then
-    layout = layout {
-      layout = require "utils.layout",
-      theme = M.theme,
-      fn = require "utils.fn",
-      window = M.window,
-      pane = M.pane,
-    }
+    _layout_ctx.layout = require "utils.layout"
+    _layout_ctx.theme = M.theme
+    _layout_ctx.fn = require "utils.fn"
+    _layout_ctx.window = M.window
+    _layout_ctx.pane = M.pane
+    layout = layout(_layout_ctx)
   end
 
   if type(layout) == "string" then
@@ -581,17 +630,18 @@ local function render_group(names, avail_cols)
     end
 
     if M.enabled(module) then
+      local parts = resolve_cell_parts(module)
       local candidates = {}
 
       for _, mode in ipairs(RENDER_MODES) do
-        local result, w = build_cell(name, module, mode, nil)
+        local result, w = build_cell_from_parts(module, parts, mode, nil)
         if w >= 0 then
           candidates[#candidates + 1] = { formatted = result, width = w }
         end
       end
 
       if module.can_hide then
-        local sep_fmt, sep_w = build_cell_sep_only(name, module)
+        local sep_fmt, sep_w = build_cell_sep_only(module, parts)
         candidates[#candidates + 1] = { formatted = sep_fmt, width = sep_w }
       end
 
@@ -616,11 +666,11 @@ local function render_group(names, avail_cols)
 
     if total <= avail_cols and total > best_width then
       best_width = total
-      local parts = {}
+      local pieces = {}
       for _, item in ipairs(combo) do
-        parts[#parts + 1] = item.formatted
+        pieces[#pieces + 1] = item.formatted
       end
-      best_formatted = table.concat(parts)
+      best_formatted = table.concat(pieces)
     end
   end
 
@@ -651,7 +701,7 @@ local function render_module(name, module, components)
 
   if module.layout then
     formatted = resolve_layout(module.layout)
-    consumed = visible_width(formatted)
+    consumed = str.column_width(formatted)
 
     -- Respect the budget: if the resolved layout is too wide and the module
     -- allows hiding, drop it rather than overflowing.

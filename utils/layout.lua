@@ -73,16 +73,16 @@ end
 ---@param fg?    string         Foreground color.
 ---@param idx    fun(): integer Insertion index.
 local function _insert_colors(layout, bg, fg, idx)
-  bg = bg or Opts.defaults.background
-  fg = fg or Opts.defaults.foreground
+  bg = bg or Opts.defaults.background or "none"
+  fg = fg or Opts.defaults.foreground or "none"
 
-  local colors_pair = { { "Background", bg or "none" }, { "Foreground", fg or "none" } }
-  for i = 1, #colors_pair do
-    local attr, color = tunpack(colors_pair[i])
-    local color_entry = Opts.defaults.colors[color] and { [attr] = { AnsiColor = color } }
-      or { [attr] = { Color = color } }
-    tinsert(layout, idx(), color_entry)
-  end
+  local bg_entry = Opts.defaults.colors[bg] and { Background = { AnsiColor = bg } }
+    or { Background = { Color = bg } }
+  tinsert(layout, idx(), bg_entry)
+
+  local fg_entry = Opts.defaults.colors[fg] and { Foreground = { AnsiColor = fg } }
+    or { Foreground = { Color = fg } }
+  tinsert(layout, idx(), fg_entry)
 end
 
 ---Insert attributes at specific index.
