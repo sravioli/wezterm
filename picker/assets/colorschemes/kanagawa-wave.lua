@@ -1,12 +1,12 @@
 ---Ported from: https://github.com/rebelot/kanagawa.nvim
 ---@module "picker.assets.colorschemes.kanagawa-wave"
----@author sravioli
----@license GNU-GPLv3
 
----@class PickList
+
+
+---@class Picker.Module
 local M = {}
 
-local color = require("utils").fn.color
+local color = require "utils.fn.color"
 
 M.scheme = {
   background = "#1F1F28",
@@ -39,16 +39,23 @@ M.scheme = {
     "#DCD7BA",
   },
   indexed = { [16] = "#FFA066", [17] = "#FF5D62" },
-  compose_cursor = "#938AA9",
+  compose_cursor = "#FF9E3B",
   visual_bell = "#16161D",
+
   copy_mode_active_highlight_bg = { Color = "#223249" },
   copy_mode_active_highlight_fg = { Color = "#DCD7BA" },
   copy_mode_inactive_highlight_bg = { Color = "#C8C093" },
   copy_mode_inactive_highlight_fg = { Color = "#16161D" },
+
   quick_select_label_bg = { Color = "#FF5D62" },
   quick_select_label_fg = { Color = "#DCD7BA" },
   quick_select_match_bg = { Color = "#FF9E3B" },
   quick_select_match_fg = { Color = "#DCD7BA" },
+
+  input_selector_label_bg = { AnsiColor = "Black" }, -- (*Since: Nightly Builds Only*)
+  input_selector_label_fg = { Color = "#ffffff" }, -- (*Since: Nightly Builds Only*)
+  launcher_label_bg = { AnsiColor = "Black" }, -- (*Since: Nightly Builds Only*)
+  launcher_label_fg = { Color = "#ffffff" }, -- (*Since: Nightly Builds Only*)
   tab_bar = {
     background = "#16161D",
     inactive_tab_edge = "#727169",
@@ -64,9 +71,8 @@ function M.get()
   return { id = "kanagawa-wave", label = "Kanagawa Wave" }
 end
 
-function M.activate(Config, callback_opts)
-  local theme = M.scheme
-  color.set_scheme(Config, theme, callback_opts.id)
+function M.pick(Config, callback_opts)
+  color.set_scheme(Config, M.scheme, callback_opts.choice.id)
 end
 
 return M

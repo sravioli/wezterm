@@ -1,12 +1,12 @@
 ---Ported from: https://github.com/folke/tokyonight.nvim
 ---@module "picker.assets.colorschemes.tokyonight-day"
----@author sravioli
----@license GNU-GPLv3
 
----@class PickList
+
+
+---@class Picker.Module
 local M = {}
 
-local color = require("utils").fn.color
+local color = require "utils.fn.color"
 
 M.scheme = {
   foreground = "#3760BF",
@@ -64,9 +64,8 @@ function M.get()
   return { id = "tokyonight-day", label = "Tokyonight Day" }
 end
 
-function M.activate(Config, callback_opts)
-  local theme = M.scheme
-  color.set_scheme(Config, theme, callback_opts.id)
+function M.pick(Config, callback_opts)
+  color.set_scheme(Config, M.scheme, callback_opts.choice.id)
 end
 
 return M

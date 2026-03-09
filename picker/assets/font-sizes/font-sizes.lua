@@ -1,8 +1,6 @@
 ---@module "picker.assets.font-sizes.font-sizes"
----@author sravioli
----@license GNU-GPLv3
 
----@class PickList
+---@class Picker.Module
 local M = {}
 
 M.get = function()
@@ -15,8 +13,8 @@ M.get = function()
   return sizes
 end
 
-M.activate = function(Config, opts)
-  Config.font_size = tonumber(opts.id)
+M.pick = function(Config, opts)
+  Config.font_size = tonumber(opts.choice.id) or 10
 end
 
 return M

@@ -1,12 +1,12 @@
 ---Ported from: https://github.com/catppuccin/wezterm
 ---@module "picker.assets.colorschemes.catppuccin-latte"
----@author sravioli
----@license GNU-GPLv3
 
----@class PickList
+
+
+---@class Picker.Module
 local M = {}
 
-local color = require("utils").fn.color
+local color = require "utils.fn.color"
 
 M.scheme = {
   background = "#EFF1F5",
@@ -64,9 +64,8 @@ function M.get()
   return { id = "catppuccin-latte", label = "Catppuccin Latte" }
 end
 
-function M.activate(Config, callback_opts)
-  local theme = M.scheme
-  color.set_scheme(Config, theme, callback_opts.id)
+function M.pick(Config, callback_opts)
+  color.set_scheme(Config, M.scheme, callback_opts.choice.id)
 end
 
 return M
