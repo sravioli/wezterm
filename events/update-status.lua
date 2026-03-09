@@ -27,7 +27,7 @@
 local wt = require "wezterm" ---@class Wezterm
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
 local sbr = require "utils.renderer" ---@class Renderer
-local tab_bar = require "utils.tab-bar"
+local budget = require "utils.bar-budget" ---@class BarBudget
 
 local cleared = false
 
@@ -47,30 +47,24 @@ wt.on("update-status", function(window, pane)
   local Overrides = window:get_config_overrides() or {}
   local theme = Config.color_schemes[Overrides.color_scheme or Config.color_scheme]
 
-  -- ── Left status ──────────────────────────────────────────────────────────
-  -- Render with the full terminal width so every module gets a fair shot at
-  -- the flexible fallback chain.  We measure what was actually consumed
-  -- afterwards.
+  -- Seed the tab count so the cold-start estimator in `budget.total_width()`
+  -- has the real count even if `format-tab-title` hasn't fired yet.
+  budget.set_count(#window:mux_window():tabs())
+
+  -- ── Single init: full terminal width ─────────────────────────────────────
   sbr.init(Config, window, pane, theme)
 
-  local total_cols = sbr.width.available -- save before second init()
+  -- ── Left status ──────────────────────────────────────────────────────────
   local left = sbr.render_layout(Opts.layout.left)
-  local left_used = sbr.width.used
 
-  -- ── Right status (width-constrained) ─────────────────────────────────────
-  -- Actual tab-bar column usage comes from `format-tab-title` via the shared
-  -- `tab_bar` module — no duplicated formatting logic here.
-  --
-  --   available = total_cols − left_status_cols − tab_bar_cols
-  --
-  -- floor at 0 so the renderer never receives a negative budget.
-  local right_avail = math.max(0, total_cols - left_used - tab_bar.total_width())
-  right_avail = right_avail - (Config.show_new_tab_button_in_tab_bar and 8 or 0)
+  -- ── Phase transition ─────────────────────────────────────────────────────
+  -- Publishes _left_used and _new_tab_button, then recalculates the right-
+  -- status budget from `budget.right_available()`.  No second init() needed.
+  sbr.commit_left()
 
-  sbr.init(Config, window, pane, theme, right_avail)
+  -- ── Right status ─────────────────────────────────────────────────────────
   local right = sbr.render_layout(Opts.layout.right)
 
   window:set_left_status(left)
-  sbr.commit_left()
   window:set_right_status(right)
 end)

@@ -155,12 +155,12 @@ local M = {
     --   desc text in theme.foreground + italic
     --   separator in theme.brights[1]
     --
-    -- Width is derived from tab_bar.right_available() which accounts for
+    -- Width is derived from budget.right_available() which accounts for
     -- screen width, rendered tab cells, left-status columns, and the new-tab
     -- button — so the hint fills exactly the remaining space.
     keys = function(window, _, theme, config)
       local keymapper = require "utils.keymapper"
-      local tab_bar = require "utils.tab-bar"
+      local budget = require "utils.bar-budget"
       local modes = keymapper.get_modes(theme)
       local active = window:active_key_table()
 
@@ -173,10 +173,6 @@ local M = {
         return { enabled = false }
       end
 
-      -- Keep the new-tab-button reservation current so right_available() is
-      -- accurate.  Called here because `config` is in scope.
-      tab_bar.set_new_tab_button(config.show_new_tab_button_in_tab_bar and 8 or 0)
-
       return {
         enabled = true,
         cond = cond.mode_active,
@@ -185,12 +181,11 @@ local M = {
         -- wezterm FormatItem array with per-segment colour and attributes.
         -- ctx.theme is the renderer's current resolved colour scheme.
         layout = function(ctx)
-          local width = tab_bar.right_available()
+          local width = budget.right_available()
           local hint = keymapper.hint_layout(config, active, width, window, {
             theme = ctx.theme,
             mode_bg = mode.bg,
           })
-          wt.log_error("hint", { hint = hint })
           return hint
         end,
       }

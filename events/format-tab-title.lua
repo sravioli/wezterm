@@ -4,7 +4,7 @@ local Icon = require "utils.icons" ---@class Icons
 local Layout = require "utils.layout" ---@class Layout
 local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 local str = require "utils.fn.str" ---@class Fn.String
-local tb = require "utils.tab-bar" ---@class TabBar
+local budget = require "utils.bar-budget" ---@class BarBudget
 local wt = require "wezterm" ---@class Wezterm
 
 local tabseps = Icon.Sep.tb
@@ -146,8 +146,8 @@ wt.on("format-tab-title", function(tab, tabs, _, config, hover, max_width)
 
   local rendered = cell:format()
 
-  tb.record(idx, rendered)
-  tb.set_count(#tabs)
+  budget.record(idx, rendered)
+  budget.set_count(#tabs)
 
   return rendered
 end)
