@@ -179,7 +179,7 @@ local M = {
     -- button — so the hint fills exactly the remaining space.
     keys = function(window, _, theme, config)
       local keymapper = require "utils.keymapper"
-      local budget = require "utils.bar-budget"
+      local renderer = require "utils.renderer"
       local modes = keymapper.get_modes(theme)
       local active = window:active_key_table()
 
@@ -200,7 +200,7 @@ local M = {
         -- wezterm FormatItem array with per-segment colour and attributes.
         -- ctx.theme is the renderer's current resolved colour scheme.
         layout = function(ctx)
-          local width = budget.right_available()
+          local width = math.max(0, renderer.width.available - renderer.width.used)
           local hint = keymapper.hint_layout(config, active, width, window, {
             theme = ctx.theme,
             mode_bg = mode.bg,
