@@ -1,0 +1,34 @@
+---@meta fn.Key
+error "cannot require a meta file!"
+
+---Keymap utility class providing WezTerm key binding helpers.
+---Translates (n)vim-like key binding syntax (e.g., `<C-S-a>`, `<leader>b`) into WezTerm's
+---keymap format.
+---
+---### Example Usage
+---~~~lua
+---local key = require("utils.fn.key")
+---local keymaps = {}
+---key.map("<leader>a", wezterm.action.ActivateTab(1), keymaps)
+---key.map("<C-a>", wezterm.action.ActivateTab(2), keymaps)
+---key.map("b", wezterm.action.SendString("hello"), keymaps)
+---
+----- `keymaps` will contain table entries like:
+---
+---{ key = "a", mods = "LEADER", action = wezterm.action.ActivateTab(1) }
+---{ key = "a", mods = "CTRL", action = wezterm.action.ActivateTab(2) }
+---{ key = "b", mods = "", action = wezterm.action.SendString("hello") }
+---~~~
+---
+---@class Fn.Keymap
+---@field aliases   table<string, string> Map of short key names (e.g., "CR") to WezTerm key names (e.g., "Enter").
+---@field modifiers table<string, string> Map of short modifier names (e.g., "C") to WezTerm modifier names (e.g., "CTRL").
+---@field log Logger Logger instance for utility operations.
+---
+---
+---
+---Definition for a single key binding entry in the target table.
+---@class Wezterm.Keybind
+---@field key    string       The physical key pressed.
+---@field mods   string       Modifiers separated by `|` (e.g., "CTRL|SHIFT").
+---@field action string|table WezTerm action to execute.
