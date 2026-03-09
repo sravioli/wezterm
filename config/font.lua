@@ -1,17 +1,21 @@
 ---@diagnostic disable: undefined-field
 
+---@class Wezterm
 local wt = require "wezterm"
-local fs = require("utils.fn").fs
 
 local Config = {}
 
 Config.adjust_window_size_when_changing_font_size = false
 Config.allow_square_glyphs_to_overflow_width = "WhenFollowedBySpace"
 Config.anti_alias_custom_block_glyphs = true
+Config.font_size = 11
+Config.underline_position = -3.5
+Config.underline_thickness = "2px"
+Config.warn_about_missing_glyphs = false
 
-Config.font = wt.font_with_fallback {
-  {
-    family = "FiraCode Nerd Font",
+local function make_fira_code_config(family)
+  return {
+    family = family,
     weight = "Regular",
     harfbuzz_features = {
       -- "cv01", ---styles: a
@@ -47,23 +51,33 @@ Config.font = wt.font_with_fallback {
       -- "ss10", ---styles: Fl Tl fi fj fl ft
       -- "onum", ---styles: 1234567890
     },
-  },
+  }
+end
+
+-- Search for multiple variants of Fira Code
+Config.font = wt.font_with_fallback {
+  make_fira_code_config "FiraCode Nerd Font Propo",
+  make_fira_code_config "FiraCode Nerd Font",
+  make_fira_code_config "Fira Code",
+  { family = "Symbols Nerd Font" },
   { family = "Noto Color Emoji" },
   { family = "LegacyComputing" },
 }
 
-if fs.platform().is_win then
-  Config.font_size = 9.5
-else
-  Config.font_size = 10.5
-end
-
-Config.underline_position = -2.5
-Config.underline_thickness = "2px"
-Config.warn_about_missing_glyphs = false
-
-local monaspace_features =
-  { "dlig", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
+local monaspace_features = {
+  "calt", -- (contextual alternates) activates texture healing.
+  "liga", -- activates ligatures
+  "ss01",
+  "ss02",
+  "ss03",
+  "ss04",
+  "ss05",
+  "ss06",
+  "ss07",
+  "ss08",
+  "ss09",
+  "ss10",
+}
 
 Config.font_rules = {
   {
@@ -71,8 +85,7 @@ Config.font_rules = {
     italic = true,
     font = wt.font_with_fallback {
       {
-        family = "Monaspace Radon Var",
-        style = "Italic",
+        family = "Monaspace Radon NF",
         weight = "Regular",
         stretch = "Normal",
         harfbuzz_features = monaspace_features,
@@ -82,14 +95,30 @@ Config.font_rules = {
   },
   {
     intensity = "Bold",
+    italic = false,
+    font = wt.font_with_fallback {
+      {
+        family = "Monaspace Argon NF",
+        italic = false,
+        weight = "DemiBold",
+        stretch = "Normal",
+        harfbuzz_features = monaspace_features,
+        scale = 1.1,
+      },
+      { family = "Symbols Nerd Font" },
+    },
+  },
+  {
+    intensity = "Bold",
     italic = true,
     font = wt.font_with_fallback {
       {
-        family = "Monaspace Krypton Var",
-        style = "Italic",
+        family = "Monaspace Krypton NF",
+        italic = false,
         weight = "ExtraBold",
+        stretch = "Normal",
         harfbuzz_features = monaspace_features,
-        scale = 1.1,
+        scale = 1.15,
       },
       { family = "Symbols Nerd Font" },
     },
