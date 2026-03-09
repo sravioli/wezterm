@@ -28,6 +28,7 @@ local M = {
   -- ── Per-tab widths (set by format-tab-title) ─────────────────────────────
   _widths = {}, ---@type table<integer, integer>  zero-based index → columns
   _count = 0, ---@type integer
+  _total_cached = 0, ---@type integer  running sum of all per-tab widths
   _has_real_data = false, ---@type boolean  true after the first `record()` call
 
   -- ── Layout-wide metrics ──────────────────────────────────────────────────
@@ -51,11 +52,25 @@ local M = {
 
 -- ── Tab-width registry ────────────────────────────────────────────────────────
 
----Record the rendered column-width for one tab cell.
----@param index    integer  zero-based tab index
----@param rendered string   raw output of `cell:format()` (may contain ANSI codes)
-function M.record(index, rendered)
-  M._widths[index] = str.column_width(rendered)
+---Record the column-width for one tab cell.
+---
+---Accepts either a pre-computed numeric width (fastest) or the raw rendered
+---string (ANSI codes are stripped automatically).  Prefer passing a number
+---when the caller already knows the width from its own layout math.
+---
+---@param index           integer         zero-based tab index
+---@param width_or_rendered integer|string  column count **or** raw `cell:format()` output
+function M.record(index, width_or_rendered)
+  local new_w
+  if type(width_or_rendered) == "number" then
+    new_w = width_or_rendered
+  else
+    new_w = str.column_width(width_or_rendered)
+  end
+
+  local old_w = M._widths[index] or 0
+  M._widths[index] = new_w
+  M._total_cached = M._total_cached - old_w + new_w
   M._has_real_data = true
 end
 
@@ -63,30 +78,29 @@ end
 ---from a layout with more tabs.
 ---@param count integer
 function M.set_count(count)
+  if count == M._count then
+    return
+  end
   for i = count, M._count - 1 do
+    local w = M._widths[i] or 0
+    M._total_cached = M._total_cached - w
     M._widths[i] = nil
   end
   M._count = count
 end
 
----Total columns consumed by all tab cells in the last render pass.
+---Total columns consumed by all tab cells in the last render pass.  O(1).
 ---
 ---On the **first frame**, before `format-tab-title` has published real widths,
 ---returns a conservative upper-bound estimate (`_count * _tab_max_width`) so
----the right status never overflows.  Once real data arrives the estimate is
----replaced automatically.
+---the right status never overflows.  Once real data arrives the cached running
+---total is returned directly.
 ---@return integer
 function M.total_width()
-  -- Cold-start: no real per-tab data yet → estimate conservatively.
   if M._count > 0 and not M._has_real_data then
     return M._count * M._tab_max_width
   end
-
-  local total = 0
-  for i = 0, M._count - 1 do
-    total = total + (M._widths[i] or 0)
-  end
-  return total
+  return M._total_cached
 end
 
 -- ── Layout-wide metric setters ────────────────────────────────────────────────
@@ -113,9 +127,12 @@ function M.set_new_tab_button(cols)
 end
 
 ---Set the per-tab max width from config (used for cold-start estimation).
----Called by `Renderer.init()`.
+---Called by `Renderer.init()`.  Skips the write when unchanged.
 ---@param cols integer
 function M.set_tab_max_width(cols)
+  if cols == M._tab_max_width then
+    return
+  end
   M._tab_max_width = cols
 end
 
