@@ -1151,7 +1151,7 @@ end
 ---~~~lua
 ----- Inside the `keys` module creator in opts/statusbar.lua:
 ---layout = function(ctx)
----  return keymapper.hint_layout(config, active_mode, tab_bar.right_available(), window, {
+---  return keymapper.hint_layout(config, active_mode, budget.right_available(), window, {
 ---    theme   = ctx.theme,
 ---    mode_bg = mode.bg,
 ---  })

@@ -3,7 +3,7 @@
 local fn = require "utils.fn" ---@class Fn
 local sb = require("utils.layout"):new "StatusBar" ---@class Layout
 local str = require "utils.fn.str" ---@class Fn.String
-local tb = require "utils.tab-bar" ---@class TabBar
+local budget = require "utils.bar-budget" ---@class BarBudget
 local wt = require "wezterm" ---@class Wezterm
 
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
@@ -64,22 +64,22 @@ end
 -- Init
 -- ---------------------------------------------------------------------------
 
-function M.init(config, window, pane, theme, available_cols)
+function M.init(config, window, pane, theme)
   M.config, M.window, M.pane, M.theme = config, window, pane, theme
   M.default_style = { fg = M.theme.foreground, bg = M.theme.background, attributes = nil }
 
-  if available_cols then
-    M.width.available = available_cols
-  else
-    local pane_dimensions = pane:get_dimensions()
-    local win_width = window:get_dimensions().pixel_width
-    M.width.available =
-      math.floor((win_width * pane_dimensions.cols) / pane_dimensions.pixel_width)
-  end
+  local pane_dimensions = pane:get_dimensions()
+  local win_width = window:get_dimensions().pixel_width
+  M.width.available =
+    math.floor((win_width * pane_dimensions.cols) / pane_dimensions.pixel_width)
   M.width.used = 0
 
-  -- Publish total screen width so hint module can derive right_available().
-  tb.set_screen_width(M.width.available)
+  -- Publish total screen width **once** per cycle so that
+  -- `budget.right_available()` always computes from the true terminal width.
+  budget.set_screen_width(M.width.available)
+
+  -- Seed tab_max_width for the cold-start estimator.
+  budget.set_tab_max_width(config.tab_max_width or 30)
 end
 
 -- ---------------------------------------------------------------------------
@@ -92,21 +92,34 @@ function M.get_used_width()
   return M.width.used
 end
 
----Publish the current `used` width as the left-status consumption in `tab_bar`.
+---Transition from the left-status render phase to the right-status phase.
 ---
----Call this in the `update-status` handler *after* rendering the left layout
----and *before* rendering the right layout so that `tab_bar.right_available()`
----returns an accurate value for the `keys` hint module.
+---This is the **single synchronisation point** between the two halves of the
+---status bar.  It performs three things atomically:
+---
+---  1. Publishes `_left_used` so `budget.right_available()` is accurate.
+---  2. Publishes `_new_tab_button` (derived from `config`).
+---  3. Recalculates `M.width.available` for the right render pass:
+---     `right_budget = total_screen − left_used − tab_cells − new_tab_button`
+---  4. Resets `M.width.used` to 0 for the right layout.
 ---
 ---```lua
 ----- update-status handler excerpt:
 ---Renderer.init(config, window, pane, theme)
----window:set_left_status(Renderer.render_layout(Opts.layout.left))
----Renderer.commit_left()   -- ← publishes left_used to tab_bar
----window:set_right_status(Renderer.render_layout(Opts.layout.right))
+---local left = Renderer.render_layout(Opts.layout.left)
+---Renderer.commit_left()
+---local right = Renderer.render_layout(Opts.layout.right)
 ---```
 function M.commit_left()
-  tb.set_left_used(M.width.used)
+  local left_used = M.width.used
+  budget.set_left_used(left_used)
+
+  local ntb = (M.config.show_new_tab_button_in_tab_bar and 8 or 0)
+  budget.set_new_tab_button(ntb)
+
+  -- Recalculate the budget for the right-status render pass.
+  M.width.available = budget.right_available()
+  M.width.used = 0
 end
 
 -- ---------------------------------------------------------------------------
