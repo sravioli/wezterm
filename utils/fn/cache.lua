@@ -91,8 +91,29 @@ end
 ---@param ... any
 ---@return string
 local function make_cache_key(name, ...)
+  local n = select("#", ...)
+
+  -- Fast path: all args are strings or numbers (the common case)
+  local all_simple = true
+  for i = 1, n do
+    local t = type(select(i, ...))
+    if t ~= "string" and t ~= "number" then
+      all_simple = false
+      break
+    end
+  end
+
+  if all_simple then
+    local parts = { name }
+    for i = 1, n do
+      parts[#parts + 1] = tostring(select(i, ...))
+    end
+    return tconcat(parts, "|")
+  end
+
+  -- Slow path: full serialisation for tables/functions
   local parts = { name }
-  for i = 1, select("#", ...) do
+  for i = 1, n do
     tinsert(parts, stable_hash(select(i, ...)))
   end
   return tconcat(parts, "|")

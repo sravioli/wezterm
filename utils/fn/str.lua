@@ -189,6 +189,10 @@ end
 ---@param s string input string
 ---@return number column_width
 M.column_width = function(s)
+  -- Fast path: no ESC byte means no ANSI codes to strip
+  if not s:find("\27", 1, true) then
+    return wt.column_width(s)
+  end
   return wt.column_width(M.strip_ansi(s))
 end
 

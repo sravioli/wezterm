@@ -16,9 +16,6 @@ local raw_cw = wt.column_width
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
 local log = require("utils.logger"):new("StatusBar", true) ---@class Logger
 
--- selene: allow(incorrect_standard_library_use)
-local tunpack = unpack or table.unpack
-
 ---@class Renderer
 local M = {
   window = nil,
@@ -593,35 +590,18 @@ local function resolve_layout(layout)
   return ""
 end
 
---- Materialise the cartesian product of a list of candidate lists.
----@param lists {formatted:string, width:integer}[][]
----@return {formatted:string, width:integer}[][]
-local function cartesian(lists)
-  local result = { {} }
-  for _, candidates in ipairs(lists) do
-    local next_result = {}
-    for _, existing in ipairs(result) do
-      for _, candidate in ipairs(candidates) do
-        local combo = { tunpack(existing) }
-        combo[#combo + 1] = candidate
-        next_result[#next_result + 1] = combo
-      end
-    end
-    result = next_result
-  end
-  return result
-end
-
---- For a group of module names, enumerate every representation of each module,
---- compute the full cartesian product, and return the widest combination whose
---- total width fits within `avail_cols`.
+--- For a group of module names, greedily pick the widest representation of
+--- each module that fits within the remaining budget (left-to-right).
+--- O(n × m) where n = modules and m = render modes, instead of O(m^n).
 ---
 ---@param  names      string[]
 ---@param  avail_cols integer
 ---@return string     formatted
 ---@return integer    consumed
 local function render_group(names, avail_cols)
-  local per_module = {} ---@type {formatted:string, width:integer}[][]
+  local remaining = avail_cols
+  local components = {}
+  local total_used = 0
 
   for _, name in ipairs(names) do
     local module = Opts.modules[name]
@@ -631,56 +611,37 @@ local function render_group(names, avail_cols)
 
     if M.enabled(module) then
       local parts = resolve_cell_parts(module)
-      local candidates = {}
+      local best_fmt, best_w = "", -1
 
+      -- Try modes from widest to narrowest; first fit wins.
       for _, mode in ipairs(RENDER_MODES) do
-        local result, w = build_cell_from_parts(module, parts, mode, nil)
+        local result, w = build_cell_from_parts(module, parts, mode, remaining)
         if w >= 0 then
-          candidates[#candidates + 1] = { formatted = result, width = w }
+          best_fmt, best_w = result, w
+          break
         end
       end
 
-      if module.can_hide then
-        local sep_fmt, sep_w = build_cell_sep_only(module, parts)
-        candidates[#candidates + 1] = { formatted = sep_fmt, width = sep_w }
+      -- can_hide fallback: separator only
+      if best_w < 0 and module.can_hide then
+        best_fmt, best_w = build_cell_sep_only(module, parts)
       end
 
-      if #candidates > 0 then
-        per_module[#per_module + 1] = candidates
+      if best_w >= 0 then
+        components[#components + 1] = best_fmt
+        remaining = remaining - best_w
+        total_used = total_used + best_w
       end
     end
   end
 
-  if #per_module == 0 then
-    return "", 0
-  end
-
-  local best_formatted = ""
-  local best_width = -1
-
-  for _, combo in ipairs(cartesian(per_module)) do
-    local total = 0
-    for _, item in ipairs(combo) do
-      total = total + item.width
-    end
-
-    if total <= avail_cols and total > best_width then
-      best_width = total
-      local pieces = {}
-      for _, item in ipairs(combo) do
-        pieces[#pieces + 1] = item.formatted
-      end
-      best_formatted = table.concat(pieces)
-    end
-  end
-
-  if best_width < 0 then
+  if #components == 0 then
     log:info("[group] nothing fits in %d cols", avail_cols)
     return "", 0
   end
 
-  log:info("[group] best fit  used: %d/%d", best_width, avail_cols)
-  return best_formatted, best_width
+  log:info("[group] greedy fit  used: %d/%d", total_used, avail_cols)
+  return table.concat(components), total_used
 end
 
 --- Render one module and append to `components` when it produces output.
