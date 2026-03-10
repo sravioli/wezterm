@@ -5,6 +5,8 @@ local str = require "utils.fn.str" ---@class Fn.String
 local sgsub, ssub, smatch, sformat = string.gsub, string.sub, string.match, string.format
 local tconcat = table.concat
 local _hint_entries_cache = nil
+local _modes_cache_key = nil
+local _modes_cache = nil
 
 ---@class KeyMeta
 ---@field i    string  icon glyph (e.g. "󰆏")
@@ -257,6 +259,231 @@ M.maps = function(config, mappings)
   M.map_batch(mappings, config.keys)
 end
 
+local function proxy_theme()
+  local proxy
+  proxy = setmetatable({}, {
+    __index = function()
+      return proxy
+    end,
+  })
+  return proxy
+end
+
+local function normalize_lhs(lhs)
+  if type(lhs) ~= "string" or lhs == "" then
+    return nil
+  end
+
+  local tmp = {}
+  M.map(lhs, true, tmp)
+  if #tmp == 0 then
+    return nil
+  end
+
+  return M.__entry_lhs(tmp[1])
+end
+
+local function normalize_set(values)
+  local set = {}
+  for _, lhs in ipairs(values or {}) do
+    local norm = normalize_lhs(lhs)
+    if norm then
+      set[norm] = true
+    end
+  end
+  return set
+end
+
+local function parse_spec(spec)
+  if type(spec) ~= "table" then
+    return nil
+  end
+
+  if spec.rhs ~= nil then
+    return spec.rhs, spec.desc
+  end
+
+  local rhs = spec[1]
+  if rhs == nil then
+    return nil
+  end
+  return rhs, spec[2]
+end
+
+local function apply_wez_entries(entries, spec)
+  local out = {}
+  for i = 1, #(entries or {}) do
+    out[#out + 1] = entries[i]
+  end
+
+  local disabled = normalize_set(spec and spec.disable)
+  if next(disabled) then
+    local filtered = {}
+    for i = 1, #out do
+      local entry = out[i]
+      local lhs = M.__entry_lhs(entry)
+      if not disabled[lhs] then
+        filtered[#filtered + 1] = entry
+      end
+    end
+    out = filtered
+  end
+
+  local by_lhs = {}
+  for i = 1, #out do
+    by_lhs[M.__entry_lhs(out[i])] = i
+  end
+
+  for lhs, value in pairs(spec and spec.override or {}) do
+    local normalized = normalize_lhs(lhs)
+    local rhs, desc = parse_spec(value)
+    if normalized and rhs ~= nil then
+      local idx = by_lhs[normalized]
+      if idx then
+        out[idx].action = rhs
+        if desc ~= nil then
+          out[idx].desc = desc
+        end
+      else
+        M.map(lhs, rhs, out)
+        if desc ~= nil then
+          out[#out].desc = desc
+        end
+        by_lhs[normalized] = #out
+      end
+    end
+  end
+
+  for _, mapping in ipairs(spec and spec.add or {}) do
+    if type(mapping) == "table" and #mapping >= 2 then
+      local lhs, rhs, desc = mapping[1], mapping[2], mapping[3]
+      M.map(lhs, rhs, out)
+      if #out > 0 and desc ~= nil then
+        out[#out].desc = desc
+      end
+    end
+  end
+
+  return out
+end
+
+local function apply_raw_entries(entries, spec)
+  local out = {}
+  for i = 1, #(entries or {}) do
+    local entry = entries[i]
+    if type(entry) == "table" then
+      out[#out + 1] = { entry[1], entry[2], entry[3] }
+    end
+  end
+
+  local disabled = normalize_set(spec and spec.disable)
+  if next(disabled) then
+    local filtered = {}
+    for i = 1, #out do
+      local entry = out[i]
+      local lhs = normalize_lhs(entry[1])
+      if not lhs or not disabled[lhs] then
+        filtered[#filtered + 1] = entry
+      end
+    end
+    out = filtered
+  end
+
+  local by_lhs = {}
+  for i = 1, #out do
+    local lhs = normalize_lhs(out[i][1])
+    if lhs then
+      by_lhs[lhs] = i
+    end
+  end
+
+  for lhs, value in pairs(spec and spec.override or {}) do
+    local normalized = normalize_lhs(lhs)
+    local rhs, desc = parse_spec(value)
+    if normalized and rhs ~= nil then
+      local idx = by_lhs[normalized]
+      if idx then
+        out[idx][1] = lhs
+        out[idx][2] = rhs
+        if desc ~= nil then
+          out[idx][3] = desc
+        end
+      else
+        out[#out + 1] = { lhs, rhs, desc }
+        by_lhs[normalized] = #out
+      end
+    end
+  end
+
+  for _, mapping in ipairs(spec and spec.add or {}) do
+    if type(mapping) == "table" and #mapping >= 2 then
+      out[#out + 1] = { mapping[1], mapping[2], mapping[3] }
+    end
+  end
+
+  return out
+end
+
+---Apply user mapping overrides to both emitted config tables and keymapper defs.
+---@param config table WezTerm configuration table.
+---@param overrides table User overrides from `overrides.mappings`.
+M.apply_overrides = function(config, overrides)
+  if type(overrides) ~= "table" then
+    return
+  end
+
+  local enabled = overrides.enabled or {}
+
+  if enabled.keys == false then
+    config.keys = {}
+  else
+    config.keys = apply_wez_entries(config.keys or {}, overrides.keys or {})
+  end
+
+  if enabled.key_tables == false then
+    config.key_tables = {}
+    M._defs = {}
+  else
+    config.key_tables = config.key_tables or {}
+    local table_specs = overrides.key_tables or {}
+
+    for name, spec in pairs(table_specs) do
+      if type(spec) == "table" then
+        if spec.enabled == false then
+          config.key_tables[name] = nil
+          M._defs[name] = nil
+        else
+          local existing = config.key_tables[name] or {}
+          config.key_tables[name] = apply_wez_entries(existing, spec)
+
+          local def = M._defs[name]
+          if def then
+            M._defs[name] = function(theme)
+              local resolved = resolve_def(name, def, theme)
+              if not resolved then
+                return nil
+              end
+
+              local next_resolved = {
+                meta = resolved.meta,
+                keys = apply_raw_entries(resolved.keys or {}, spec),
+              }
+              if next_resolved.meta then
+                next_resolved.meta.name = name
+              end
+              return next_resolved
+            end
+          end
+        end
+      end
+    end
+  end
+
+  _hint_entries_cache = nil
+  _modes_cache_key = nil
+  _modes_cache = nil
+end
+
 M.tables = function(config, defs)
   if not defs then
     M._log:error "cannot register key tables: no definitions provided"
@@ -269,12 +496,7 @@ M.tables = function(config, defs)
   -- Nil-safe proxy: any field access returns the proxy itself so expressions
   -- like `theme.brights[3]` in a function-form definition never error when
   -- called without a real theme (we only need the `keys` arrays here).
-  local proxy
-  proxy = setmetatable({}, {
-    __index = function()
-      return proxy
-    end,
-  })
+  local proxy = proxy_theme()
 
   config.key_tables = config.key_tables or {}
 
@@ -292,9 +514,6 @@ M.tables = function(config, defs)
     end
   end
 end
-
-local _modes_cache_key = nil
-local _modes_cache = nil
 
 --- Build a cheap, stable identity string from the theme table.
 --- Uses foreground + background + ansi[5] which are unique per colour scheme
@@ -514,12 +733,7 @@ local function resolve_entries(config, name)
       return nil
     end
 
-    local proxy
-    proxy = setmetatable({}, {
-      __index = function()
-        return proxy
-      end,
-    })
+    local proxy = proxy_theme()
 
     local resolved = resolve_def(table_name, def, proxy)
     if not resolved or not resolved.keys then

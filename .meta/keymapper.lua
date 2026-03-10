@@ -30,5 +30,6 @@ error "cannot require a meta file!"
 ---@field private _defs         table<string, KeyTableDef|KeyTableDefiner> Raw definitions stored by `tables()`, resolved by `get_modes()`.
 ---@field private _log          Logger                                   Class logger.
 ---@field private _rev_aliases? table<string, string>                    Lazy reverse-alias cache (WezTerm key → vim key).
+---@field public  apply_overrides fun(config: table, overrides: table): nil Apply user overrides to `keys`, `key_tables`, and internal defs.
 
 -- luacheck: pop
