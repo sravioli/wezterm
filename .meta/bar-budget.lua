@@ -8,9 +8,9 @@ error "cannot require a meta file!"
 ---Track three categories of column consumption so that every module can
 ---query how much space remains without duplicating measurement logic:
 ---
----  1. **Tab cells** – per-tab rendered widths published by `format-tab-title`.
----  2. **Left status** – columns consumed by the left-status render pass.
----  3. **New-tab button** – 0 or 8 columns reserved when the button is shown.
+---  1. **Tab cells** - per-tab rendered widths published by `format-tab-title`.
+---  2. **Left status** - columns consumed by the left-status render pass.
+---  3. **New-tab button** - 0 or 8 columns reserved when the button is shown.
 ---
 ---@class BarBudget
 ---@field private _widths             table<integer, integer> Zero-based tab index → column width.

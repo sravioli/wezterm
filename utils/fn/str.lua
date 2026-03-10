@@ -1,5 +1,5 @@
 local sfind, sformat, sgsub, ssub, srep =
-  string.find, string.format, string.gsub, string.sub, string.rep
+    string.find, string.format, string.gsub, string.sub, string.rep
 
 local tremove, tinsert, tconcat = table.remove, table.insert, table.concat
 
@@ -196,9 +196,6 @@ M.column_width = function(s)
   return wt.column_width(M.strip_ansi(s))
 end
 
----@alias TruncateMode "left" | "right" | "middle"
-
--- local ELLIPSIS = "…"
 local ELLIPSIS = require("utils.icons").Ellipsis
 local ELLIPSIS_W = M.column_width(ELLIPSIS)
 

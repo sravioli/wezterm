@@ -1,4 +1,4 @@
----@meta utils.Assert
+---@meta utils.assert.core
 ---
 ---Provide flexible assertion utilities with configurable error handling and grouping.
 ---

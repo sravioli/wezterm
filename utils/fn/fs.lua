@@ -4,21 +4,17 @@ local cache = require "utils.fn.cache" ---@class Fn.Cache
 local str = require "utils.fn.str" ---@class Fn.String
 
 local ioclose, ioopen = io.close, io.open
-local oexec, ogetenv = os.execute, os.getenv
+local ogetenv = os.getenv
 local tconcat = table.concat
 
-local schar, sfind, sformat, sgsub, smatch, ssub =
-  string.char, string.find, string.format, string.gsub, string.match, string.sub
+local schar, sfind, sgsub, smatch, ssub =
+    string.char, string.find, string.gsub, string.match, string.sub
 
 local wt = require "wezterm" ---@class Wezterm
 
 local wt_home, wt_hostname, wt_triple = wt.home, wt.hostname, wt.target_triple
 
 ---@class Fn.FileSystem
----@field log             Logger  Logger instance.
----@field target_triple   string  WezTerm target triple string.
----@field is_win          boolean Static boolean indicating if running on Windows.
----@field path_separator  string  Platform-specific path separator (`\` or `/`).
 local M = {}
 
 ---@package

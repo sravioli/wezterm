@@ -1,8 +1,6 @@
 ---@module "utils.logger.levels"
 
 ---@class Logger.Levels
----@field levels table<string, integer> Map of level names to integer values.
----@field names  table<integer, string> Map of integer values to level names.
 local M = {}
 
 ---@enum Logger.Levels.Level

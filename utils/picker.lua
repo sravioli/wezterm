@@ -46,6 +46,10 @@ local M = {}
 ---@return Picker picker Newly created picker instance.
 function M.new(opts)
   local self = setmetatable({}, { __index = M })
+  local pick_opt = function(value, default)
+    return value ~= nil and value or default
+  end
+
   self.title = opts.title or Opts.defaults.title
   self._name = opts.name
   self._choices = {}
@@ -61,10 +65,11 @@ function M.new(opts)
 
   self.choices = {}
   self.sort_by = opts.sort_by or Opts.defaults.sort_by
-  self.fuzzy = opts.fuzzy or Opts.defaults.fuzzy
-  self.alphabet = opts.alphabet or Opts.defaults.alphabet
-  self.description = opts.description or Opts.defaults.description
-  self.fuzzy_description = opts.fuzzy_description or Opts.defaults.fuzzy_description
+  self.fuzzy = pick_opt(opts.fuzzy, Opts.defaults.fuzzy)
+  self.alphabet = pick_opt(opts.alphabet, Opts.defaults.alphabet)
+  self.description = pick_opt(opts.description, Opts.defaults.description)
+  self.fuzzy_description =
+    pick_opt(opts.fuzzy_description, Opts.defaults.fuzzy_description)
 
   self.comp = opts.comp or Opts.defaults.comp(self.sort_by)
   self.format_choices = opts.format_choices or Opts.defaults.format_choices

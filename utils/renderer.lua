@@ -184,8 +184,8 @@ M.resolve_node = function(node)
     return ""
   end
 
-  local typ = type(node.value)
-  local value = typ == "function" and node.value(M.window, M.pane) or node.value
+  local value = type(node.value) == "function" and node.value(M.window, M.pane) or node.value
+  local typ = type(value)
 
   if typ == "table" then
     return value
@@ -513,7 +513,7 @@ local function build_cell_flexible(name, module, avail_cols)
   end
 
   if module.can_hide then
-    log:info("[%s] hidden – no space remaining", name)
+    log:info("[%s] hidden - no space remaining", name)
     return "", 0
   end
 
@@ -536,8 +536,8 @@ M.format_cell = function(name, module, avail_cols)
   log:info(
     "[%s] icon: %s\ttext: %s",
     name,
-    module.icon and tostring(module.icon.value) or "–",
-    module.text and tostring(module.text.value) or "–"
+    module.icon and tostring(module.icon.value) or "-",
+    module.text and tostring(module.text.value) or "-"
   )
 
   if not Opts.flexible or not avail_cols then
@@ -647,10 +647,10 @@ end
 --- Render one module and append to `components` when it produces output.
 ---
 --- Handles two rendering paths:
----   1. `module.layout`    – arbitrary Layout / string / table / function;
+---   1. `module.layout`    - arbitrary Layout / string / table / function;
 ---                           rendered via `resolve_layout` and measured for
 ---                           the flexible-width budget.
----   2. `module.icon/text` – structured cell rendered by `format_cell` with
+---   2. `module.icon/text` - structured cell rendered by `format_cell` with
 ---                           the full fallback chain.
 ---
 ---@param name       string

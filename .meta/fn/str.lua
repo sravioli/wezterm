@@ -6,3 +6,6 @@ error "cannot require a meta file!"
 ---@field public trimempty? boolean Trim empty segments from start and end.
 
 ---@alias TruncateMode "left" | "right" | "middle"
+
+---@class Fn.String
+---@field public width fun(s: string): integer

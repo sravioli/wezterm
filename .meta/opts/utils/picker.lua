@@ -14,7 +14,7 @@ error "cannot require a meta file!"
 ---@class Opts.Utils.Picker.Defaults
 ---@field public title?              string                              Picker window default title.
 ---@field public sort_by?            "id"|"label"                        Key to use when sorting choices.
----@field public fuzzy?              bool                                Whether the picker is fuzzy or not.
+---@field public fuzzy?              boolean                             Whether the picker is fuzzy or not.
 ---@field public description?        string                              Description to display when picker is opened.
 ---@field public fuzzy_description?  string                              Description to display when fuzzy picker is opened.
 ---@field public alphabet?           string                              Alphabet to use to quick select an item when in normal mode.

@@ -11,4 +11,6 @@ error "cannot require a meta file!"
 ---@field public combine?  boolean                If `true`, list values are concatenated into the base list without duplicates
 --- rather than overwriting it. Applies regardless of `behavior`. Defaults to `false`.
 
+---@class Fn.Table
+
 -- luacheck: pop

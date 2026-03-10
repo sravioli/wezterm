@@ -1,7 +1,6 @@
 ---@module "utils.logger.sinks.memory"
 
 ---@class Logger.Sinks.MemorySink
----@field entries Logger.Event[] List of stored log events.
 local M = {}
 M.__index = M
 

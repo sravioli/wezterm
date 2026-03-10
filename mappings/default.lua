@@ -14,7 +14,7 @@ local Config = {}
 Config.disable_default_key_bindings = false
 Config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
 
--- ── Tab activation via F-keys (F1–F24) ───────────────────────────────────────
+-- ── Tab activation via F-keys (F1-F24) ───────────────────────────────────────
 -- Built programmatically and merged into the mappings table below so that
 -- key.maps() can process everything in a single call.
 local fkey_mappings = {}
@@ -99,7 +99,7 @@ key.maps(Config, {
     "pick mode",
   },
 
-  -- ── F-key tab activation (F1–F24) ────────────────────────────────────────
+  -- ── F-key tab activation (F1-F24) ────────────────────────────────────────
   tunpack(fkey_mappings),
 })
 
