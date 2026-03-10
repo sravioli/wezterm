@@ -21,14 +21,14 @@ error "cannot require a meta file!"
 ---~~~
 ---
 ---@class Fn.Keymap
----@field aliases   table<string, string> Map of short key names (e.g., "CR") to WezTerm key names (e.g., "Enter").
----@field modifiers table<string, string> Map of short modifier names (e.g., "C") to WezTerm modifier names (e.g., "CTRL").
----@field log Logger Logger instance for utility operations.
+---@field public aliases   table<string, string> Map of short key names (e.g., "CR") to WezTerm key names (e.g., "Enter").
+---@field public modifiers table<string, string> Map of short modifier names (e.g., "C") to WezTerm modifier names (e.g., "CTRL").
+---@field public log       Logger                Logger instance for utility operations.
 ---
 ---
 ---
 ---Definition for a single key binding entry in the target table.
 ---@class Wezterm.Keybind
----@field key    string       The physical key pressed.
----@field mods   string       Modifiers separated by `|` (e.g., "CTRL|SHIFT").
----@field action string|table WezTerm action to execute.
+---@field public key    string       The physical key pressed.
+---@field public mods   string       Modifiers separated by `|` (e.g., "CTRL|SHIFT").
+---@field public action string|table WezTerm action to execute.

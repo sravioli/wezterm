@@ -11,6 +11,6 @@ error "cannot require a meta file!"
 ---
 ---Logger sink configuration options.
 ---@class Opts.Utils.Logger.Sinks
----@field default_enabled? boolean Enable the default log sink (usually stdout/stderr).
+---@field public default_enabled? boolean Enable the default log sink (usually stdout/stderr).
 
 -- luacheck: pop
