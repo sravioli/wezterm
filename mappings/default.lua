@@ -96,7 +96,7 @@ key.maps(Config, {
   },
   {
     "<leader>p",
-    act.ActivateKeyTable { name = "pick_mode" },
+    act.ActivateKeyTable { name = "pick_mode", one_shot = true },
     "pick mode",
   },
 

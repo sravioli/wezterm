@@ -47,9 +47,11 @@ local M = {}
 function M.new(opts)
   local self = setmetatable({}, { __index = M })
   self.title = opts.title or Opts.defaults.title
+  self._name = opts.name
   self._choices = {}
   self._initialized = false
   self._dir = nil
+  self._event_registered = false
   self._log = Logger:new("Picker > " .. self.title, Opts.log.enabled, Opts.log.sinks)
   self._build_choices = function(internal_choices, comp, ctx)
     local choices = self.format_choices(internal_choices, ctx)
@@ -137,48 +139,59 @@ end
 
 ---Invoke the picker UI action.
 ---
----Present choices to the user using `wezterm.InputSelector` and execute selected action.
----Lazily initializes choices on first call.
+---Registers a named event handler for this picker and returns a stable
+---`EmitEvent` action.  Using `EmitEvent` instead of a raw `action_callback`
+---ensures the action survives config-override cycles and can be stored
+---reliably inside key tables.
+---
+---Lazily initializes choices on the first invocation of the event handler.
 function M:pick()
-  return wt.action_callback(function(window, pane)
-    -- Lazy initialization: register all choices when picker is first used
-    self:_initialize()
+  local event_name = "picker:" .. self._name
 
-    local ctx = { window = window, pane = pane } ---@type Picker.BuildContext
-    window:perform_action(
-      wt.action.InputSelector {
-        action = wt.action_callback(function(inner_window, _, id, label)
-          if not id and not label then
-            self._log:error "cancelled by user"
-          else
-            ---@type Picker.CallbackOpts
-            local callback_opts =
-              { window = window, pane = pane, choice = { id = id, label = label } }
-            self._log:info("applying %s", id)
+  if not self._event_registered then
+    wt.on(event_name, function(window, pane)
+      -- Lazy initialization: register all choices when picker is first used
+      self:_initialize()
 
-            local Overrides = inner_window:get_config_overrides() or {}
-            self:select(Overrides, callback_opts)
-            window:set_config_overrides(Overrides)
-          end
-        end),
-        title = self.title,
-        choices = self._build_choices(self._choices, self.comp, ctx),
-        fuzzy = self.fuzzy,
-        description = self.format_description(
-          self.description,
-          self.fuzzy,
-          Opts.defaults.icons
-        ),
-        fuzzy_description = self.format_description(
-          self.fuzzy_description,
-          self.fuzzy,
-          Opts.defaults.icons
-        ),
-        alphabet = self.alphabet,
-      },
-      pane
-    )
-  end)
+      local ctx = { window = window, pane = pane } ---@type Picker.BuildContext
+      window:perform_action(
+        wt.action.InputSelector {
+          action = wt.action_callback(function(inner_window, _, id, label)
+            if not id and not label then
+              self._log:error "cancelled by user"
+            else
+              ---@type Picker.CallbackOpts
+              local callback_opts =
+                { window = window, pane = pane, choice = { id = id, label = label } }
+              self._log:info("applying %s", id)
+
+              local Overrides = inner_window:get_config_overrides() or {}
+              self:select(Overrides, callback_opts)
+              window:set_config_overrides(Overrides)
+            end
+          end),
+          title = self.title,
+          choices = self._build_choices(self._choices, self.comp, ctx),
+          fuzzy = self.fuzzy,
+          description = self.format_description(
+            self.description,
+            self.fuzzy,
+            Opts.defaults.icons
+          ),
+          fuzzy_description = self.format_description(
+            self.fuzzy_description,
+            self.fuzzy,
+            Opts.defaults.icons
+          ),
+          alphabet = self.alphabet,
+        },
+        pane
+      )
+    end)
+    self._event_registered = true
+  end
+
+  return wt.action.EmitEvent(event_name)
 end
 
 return M
