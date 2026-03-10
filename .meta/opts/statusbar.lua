@@ -3,6 +3,9 @@ error "cannot require a meta file!"
 
 -- luacheck: push ignore 631 (line is too long)
 
+---@alias Opts.StatusBar.Module.ConditionChecker fun(window: Window, pane: Pane): boolean
+---@alias Opts.StatusBar.Module.ValueProvider     fun(window: Window, pane: Pane): string
+
 ---Define status bar configuration options.
 ---Provide structure for layout, refresh rates, and individual module styling.
 ---
@@ -37,22 +40,22 @@ error "cannot require a meta file!"
 ---
 ---Configuration schema for individual status bar modules.
 ---@class Opts.StatusBar.Module
----@field public enabled?  boolean                                          Enable status for specific module.
----@field public cond?     boolean|fun(window: Window, pane: Pane): boolean Whether the module is visible or not.
----@field public icon?     Opts.StatusBar.Module.Icon                       Icon to display next to the text.
----@field public text?     Opts.StatusBar.Module.Text                       Text to display next to the icon.
----@field public sep?      Opts.StatusBar.Module.Sep                        Text to display next to the icon.
----@field public style?    Opts.StatusBar.Module.Styler                     Module style.
----@field public layout?   Opts.StatusBar.Module.Layout                     Static or dynamic layout of the module.
----@field public can_hide? boolean                                          Whether the module can be hidden or not.
----@field public padding?  number|{ left: number, right: number }           Component padding.
+---@field public enabled?  boolean                                Enable status for specific module.
+---@field public cond?     boolean|Opts.StatusBar.Module.ConditionChecker   Whether the module is visible or not.
+---@field public icon?     Opts.StatusBar.Module.Icon             Icon to display next to the text.
+---@field public text?     Opts.StatusBar.Module.Text             Text to display next to the icon.
+---@field public sep?      Opts.StatusBar.Module.Sep              Text to display next to the icon.
+---@field public style?    Opts.StatusBar.Module.Styler           Module style.
+---@field public layout?   Opts.StatusBar.Module.Layout           Static or dynamic layout of the module.
+---@field public can_hide? boolean                                Whether the module can be hidden or not.
+---@field public padding?  number|{ left: number, right: number } Component padding.
 ---
 ---
 ---@class Opts.StatusBar.Module.Component
----@field public enabled? boolean                                         Whether the component is enabled or not.
----@field public value?   string|(fun(window: Window, pane:Pane): string) Component string value to display.
----@field public padding? number|{ left: number, right: number }          Component padding.
----@field public style?   Opts.StatusBar.Module.Styler                    Component style.
+---@field public enabled? boolean                                    Whether the component is enabled or not.
+---@field public value?   string|Opts.StatusBar.Module.ValueProvider       Component string value to display.
+---@field public padding? number|{ left: number, right: number }     Component padding.
+---@field public style?   Opts.StatusBar.Module.Styler               Component style.
 ---
 ---@class Opts.StatusBar.Module.Icon: Opts.StatusBar.Module.Component
 ---@field public position? "left"|"right"                         Icon position relative to text.
@@ -62,7 +65,7 @@ error "cannot require a meta file!"
 ---
 ---
 ---@class Opts.StatusBar.Module.Sep : Opts.StatusBar.Module.Component
----@field public invert_bg_fg? boolean Whether to invert the global style background and foreground for the separators.
+---@field public invert_bg_fg? boolean                          Whether to invert the global style background and foreground for the separators.
 ---@field public value?        Opts.StatusBar.Module.Sep.Value
 ---
 ---

@@ -47,10 +47,13 @@ error "cannot require a meta file!"
 ---@field public subtle?    table    { "Half", "Italic" }
 ---
 ---
+---@alias Opts.Utils.Layout.Text.Transformer fun(text: string): string
+---
+---
 ---@class Opts.Utils.Layout.Text
----@field public strip?      boolean                       Whether to strip leading/trailing whitespace from text.
----@field public max_length? number|nil                    Maximum text length before truncation (nil = no limit).
----@field public transform?  nil|fun(text: string): string Function to transform text before processing.
+---@field public strip?      boolean                            Whether to strip leading/trailing whitespace from text.
+---@field public max_length? number|nil                         Maximum text length before truncation (nil = no limit).
+---@field public transform?  nil|Opts.Utils.Layout.Text.Transformer Function to transform text before processing.
 
 ---
 

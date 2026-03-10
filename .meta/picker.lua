@@ -9,8 +9,8 @@ error "cannot require a meta file!"
 ---
 ---Context passed to choice formatting functions.
 ---@class Picker.BuildContext
----@field window Window WezTerm window object.
----@field pane   Pane   WezTerm pane object.
+---@field public window Window WezTerm window object.
+---@field public pane   Pane   WezTerm pane object.
 ---
 ---
 ---Callback function executed upon final selection.
@@ -36,63 +36,69 @@ error "cannot require a meta file!"
 ---@alias Picker.DescriptionFormatter
 ---| fun(desc: string, fuzzy: bool, icons: Opts.Utils.Picker.Defaults.Icons|table): string
 
+---Returns choice(s) provided by this module.
+---@alias Picker.Module.Getter fun(): Picker.Choice|Picker.Choice[]
+
+---Executes the selected choice action.
+---@alias Picker.Module.PickHandler fun(config: Config, opts: Picker.CallbackOpts): nil
+
 ---
 
 ---Choice item displayed in the picker UI.
 ---@class Picker.Choice
----@field id?   Picker.Choice.Id    Unique identifier for the choice item.
----@field label Picker.Choice.Label Display label for the choice item.
+---@field public id?   Picker.Choice.Id    Unique identifier for the choice item.
+---@field public label Picker.Choice.Label Display label for the choice item.
 ---
 ---
 ---Internal choice wrapper linking module to choice data.
 ---@class Picker.InternalChoice
----@field module Picker.Module Module containing the `pick` action handler.
----@field choice Picker.Choice Choice metadata.
+---@field public module Picker.Module Module containing the `pick` action handler.
+---@field public choice Picker.Choice Choice metadata.
 ---
 ---
 ---Module interface for picker items.
 ---Each module in the picker assets directory must implement this interface.
 ---@class Picker.Module
----@field get  fun(): Picker.Choice|Picker.Choice[]                Returns choice(s) provided by this module.
----@field pick fun(config: Config, opts: Picker.CallbackOpts): nil Executes the selected choice action.
+---@field public get  Picker.Module.Getter  Returns choice(s) provided by this module.
+---@field public pick Picker.Module.PickHandler Executes the selected choice action.
 ---
 ---
 ---Options passed to module's `pick()` handler.
 ---@class Picker.CallbackOpts
----@field window Window        Active WezTerm window.
----@field pane   Pane          Active WezTerm pane.
----@field choice Picker.Choice Selected choice.
+---@field public window Window        Active WezTerm window.
+---@field public pane   Pane          Active WezTerm pane.
+---@field public choice Picker.Choice Selected choice.
 ---
 ---
 ---Configuration for creating a new picker.
 ---@class (exact) Picker.Config
----@field name                string                      Subdirectory name in picker assets path.
----@field title?              string                      Picker window title (default: "Pick a value").
----@field sort_by?            "id"|"label"                Sort choices by id or label (default: "id").
----@field comp?               Picker.Comparator           Custom sort comparator (overrides sort_by).
----@field format_choices?     Picker.ChoicesFormatter     Custom choice formatter.
----@field fuzzy?              boolean                     Enable fuzzy matching (default: false).
----@field alphabet?           string                      Quick selection characters (default: "1234567890abcdefghilmnopqrstuvwxyz").
----@field description?        string                      Help text for normal mode.
----@field fuzzy_description?  string                      Help text for fuzzy mode.
----@field format_description? Picker.DescriptionFormatter Custom description formatter
+---@field public name                string                      Subdirectory name in picker assets path.
+---@field public title?              string                      Picker window title (default: "Pick a value").
+---@field public sort_by?            "id"|"label"                Sort choices by id or label (default: "id").
+---@field public comp?               Picker.Comparator           Custom sort comparator (overrides sort_by).
+---@field public format_choices?     Picker.ChoicesFormatter     Custom choice formatter.
+---@field public fuzzy?              boolean                     Enable fuzzy matching (default: false).
+---@field public alphabet?           string                      Quick selection characters (default: "1234567890abcdefghilmnopqrstuvwxyz").
+---@field public description?        string                      Help text for normal mode.
+---@field public fuzzy_description?  string                      Help text for fuzzy mode.
+---@field public format_description? Picker.DescriptionFormatter Custom description formatter
 
 ---Picker instance for interactive selection.
 ---@class Picker
----@field name                   string                      Picker module name.
----@field title?                 string                      Picker window title.
----@field choices?               Picker.Choice[]             Public choices list.
----@field fuzzy?                 boolean                     Fuzzy matching enabled.
----@field alphabet?              string                      Quick selection characters.
----@field description?           string                      Normal mode description.
----@field fuzzy_description?     string                      Fuzzy mode description.
----@field comp?                  Picker.Comparator           Sort comparator function.
----@field format_choices?        Picker.ChoicesFormatter     Choice formatter function.
----@field format_description?    Picker.DescriptionFormatter Custom description formatter
----@field private _choices       Picker.InternalChoice[]     Internal choice registry.
----@field private _log           Logger                      Logger instance.
----@field private _build_choices Picker.ChoicesBuilder       Choice builder function.
----@field private _dir           string                      Absolute path to assets directory.
----@field private _initialized   boolean                     Lazy initialization flag.
+---@field public  name                   string                      Picker module name.
+---@field public  title?                 string                      Picker window title.
+---@field public  choices?               Picker.Choice[]             Public choices list.
+---@field public  fuzzy?                 boolean                     Fuzzy matching enabled.
+---@field public  alphabet?              string                      Quick selection characters.
+---@field public  description?           string                      Normal mode description.
+---@field public  fuzzy_description?     string                      Fuzzy mode description.
+---@field public  comp?                  Picker.Comparator           Sort comparator function.
+---@field public  format_choices?        Picker.ChoicesFormatter     Choice formatter function.
+---@field public  format_description?    Picker.DescriptionFormatter Custom description formatter
+---@field private _choices               Picker.InternalChoice[]     Internal choice registry.
+---@field private _log                   Logger                      Logger instance.
+---@field private _build_choices         Picker.ChoicesBuilder       Choice builder function.
+---@field private _dir                   string                      Absolute path to assets directory.
+---@field private _initialized           boolean                     Lazy initialization flag.
 
 -- luacheck: pop

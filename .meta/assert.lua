@@ -1,4 +1,4 @@
----@module 'utils.assert'
+---@meta utils.Assert
 ---
 ---Provide flexible assertion utilities with configurable error handling and grouping.
 ---
@@ -33,125 +33,147 @@ error "cannot require a meta file!"
 
 -- luacheck: push ignore 631 (line is too long)
 
+---@alias Assert.FailureHandler   fun(message: string, level: number): nil
+---@alias Assert.MessageFormatter  fun(error: Assert.Error, config: Assert.Config): string
+---@alias Assert.OnErrorHandler     fun(error: Assert.Error): nil
+---
+---@alias Assert.EqualityChecker fun(self: Assert, actual: any, expected: any, message?: string): boolean
+---@alias Assert.ValueChecker    fun(self: Assert, value: any, message?: string): boolean
+---@alias Assert.TypeChecker     fun(self: Assert, value: any, expected_type: string, message?: string): boolean
+---
+---@alias Assert.Table.KeyChecker   fun(self: Assert, tbl: table, key: any, message?: string): Assert.Table
+---@alias Assert.Table.EmptyChecker fun(self: Assert, tbl: table, message?: string): Assert.Table
+---@alias Assert.Table.KeysChecker  fun(self: Assert, tbl: table, keys: any[], message?: string): Assert.Table
+---
+---@alias Assert.Number.RangeChecker     fun(self: Assert, value: number, min: number, max: number, message?: string): Assert.Number
+---@alias Assert.Number.ThresholdChecker fun(self: Assert, value: number, threshold: number, message?: string): Assert.Number
+---@alias Assert.Number.SignChecker      fun(self: Assert, value: number, message?: string): Assert.Number
+---
+---@alias Assert.String.PatternChecker   fun(self: Assert, str: string, pattern: string, message?: string): Assert.String
+---@alias Assert.String.SubstringChecker fun(self: Assert, str: string, target: string, message?: string): Assert.String
+---@alias Assert.String.EmptyChecker     fun(self: Assert, str: string, message?: string): Assert.String
+---@alias Assert.String.LengthChecker    fun(self: Assert, str: string, len: number, message?: string): Assert.String
+
+
 ---@class Assert.Error
----@field message string Error message.
----@field level number Stack level for error reporting.
----@field group? string Assertion group name.
----@field timestamp? number Error creation timestamp (Unix time).
+---@field public message    string Error message.
+---@field public level      number Stack level for error reporting.
+---@field public group?     string Assertion group name.
+---@field public timestamp? number Error creation timestamp (Unix time).
 
 ---@class Assert.Handler
----@field handle fun(message: string, level: number): nil Handler invoked on assertion failure.
+---@field public handle Assert.FailureHandler Handler invoked on assertion failure.
 
 ---@class Assert.ErrorFormatter
----@field format fun(error: Assert.Error, config: Assert.Config): string Custom error message formatter.
+---@field public format Assert.MessageFormatter Custom error message formatter.
 
 ---@class Assert.Config
 ---Configuration options for assertion behavior and error handling.
 ---
----@field handler? Assert.Handler Custom failure handler (default: error function).
----@field accumulate? boolean Accumulate errors instead of immediate failure (default: false).
----@field fail_fast? boolean Stop on first error even in accumulate mode (default: false).
----@field strict_mode? boolean Convert all failures to errors regardless of handler (default: false).
----@field silent? boolean Suppress handler calls, only track errors internally (default: false).
----@field prefix? string Prepend to all error messages (default: "").
----@field context? table|string Additional context info added to errors.
----@field group_errors? boolean Organize errors by assertion group (default: false).
----@field show_stack_trace? boolean Include stack traces in error messages (default: false).
----@field max_message_length? number Truncate error messages to this length (default: nil).
----@field lazy_eval? boolean Skip assertions if already failed in accumulate mode (default: false).
----@field cache_type_checks? boolean Cache type() results for repeated checks (default: false).
----@field on_error? fun(error: Assert.Error): nil Callback hook before handler is called.
----@field logger? table Integration with existing logging system.
----@field metrics? table Track assertion statistics.
----@field format_error? Assert.ErrorFormatter Custom error formatter.
+---@field public handler?            Assert.Handler        Custom failure handler (default: error function).
+---@field public accumulate?         boolean               Accumulate errors instead of immediate failure (default: false).
+---@field public fail_fast?          boolean               Stop on first error even in accumulate mode (default: false).
+---@field public strict_mode?        boolean               Convert all failures to errors regardless of handler (default: false).
+---@field public silent?             boolean               Suppress handler calls, only track errors internally (default: false).
+---@field public prefix?             string                Prepend to all error messages (default: "").
+---@field public context?            table|string          Additional context info added to errors.
+---@field public group_errors?       boolean               Organize errors by assertion group (default: false).
+---@field public show_stack_trace?   boolean               Include stack traces in error messages (default: false).
+---@field public max_message_length? number                Truncate error messages to this length (default: nil).
+---@field public lazy_eval?          boolean               Skip assertions if already failed in accumulate mode (default: false).
+---@field public cache_type_checks?  boolean               Cache type() results for repeated checks (default: false).
+---@field public on_error?           Assert.OnErrorHandler      Callback hook before handler is called.
+---@field public logger?             table                 Integration with existing logging system.
+---@field public metrics?            table                 Track assertion statistics.
+---@field public format_error?       Assert.ErrorFormatter Custom error formatter.
 
 ---@class Assert.Comparison
 ---Comparison assertion methods.
 ---
----@field equal fun(self: Assert, actual: any, expected: any, message?: string): boolean Assert values are equal.
----@field not_equal fun(self: Assert, actual: any, expected: any, message?: string): boolean Assert values differ.
----@field truthy fun(self: Assert, value: any, message?: string): boolean Assert value is truthy.
----@field falsy fun(self: Assert, value: any, message?: string): boolean Assert value is falsy.
----@field _parent table
----@field _group string
+---@field public  equal     Assert.EqualityChecker Assert values are equal.
+---@field public  not_equal Assert.EqualityChecker Assert values differ.
+---@field public  truthy    Assert.ValueChecker    Assert value is truthy.
+---@field public  falsy     Assert.ValueChecker    Assert value is falsy.
+---@field private _parent   table
+---@field private _group    string
 
 ---@class Assert.Value
 ---Value holder enabling chained assertions without repeating the value.
 ---
----@field value any Value being validated.
----@field parent Assert Parent assertion instance.
----@field str Assert.String String assertions on this value.
----@field num Assert.Number Number assertions on this value.
----@field tbl Assert.Table Table assertions on this value.
----@field type Assert.Type Type assertions on this value.
----@field nul Assert.Nil Nil assertions on this value.
----@field cmp Assert.Comparison Comparison assertions on this value.
+---@field public value  any               Value being validated.
+---@field public parent Assert            Parent assertion instance.
+---@field public str    Assert.String     String assertions on this value.
+---@field public num    Assert.Number     Number assertions on this value.
+---@field public tbl    Assert.Table      Table assertions on this value.
+---@field public type   Assert.Type       Type assertions on this value.
+---@field public nul    Assert.Nil        Nil assertions on this value.
+---@field public cmp    Assert.Comparison Comparison assertions on this value.
 
 ---@class Assert.Nil
 ---Nil check assertion methods.
 ---
----@field is_nil fun(self: Assert, value: any, message?: string): boolean Assert value is nil.
----@field not_nil fun(self: Assert, value: any, message?: string): boolean Assert value is not nil.
----@field _parent table
----@field _group string
+---@field public  is_nil  Assert.ValueChecker Assert value is nil.
+---@field public  not_nil Assert.ValueChecker Assert value is not nil.
+---@field private _parent table
+---@field private _group  string
 
 ---@class Assert.Type
 ---Type check assertion methods.
 ---
----@field is_type fun(self: Assert, value: any, expected_type: string, message?: string): boolean Assert value matches expected type.
----@field _parent table
----@field _group string
+---@field public  is_type Assert.TypeChecker Assert value matches expected type.
+---@field private _parent table
+---@field private _group  string
 
 ---@class Assert.Table
 ---Table assertion methods supporting method chaining.
 ---
----@field has_key fun(self: Assert, tbl: table, key: any, message?: string): Assert.Table Assert table contains key.
----@field is_empty fun(self: Assert, tbl: table, message?: string): Assert.Table Assert table is empty.
----@field not_empty fun(self: Assert, tbl: table, message?: string): Assert.Table Assert table is not empty.
----@field has_keys fun(self: Assert, tbl: table, keys: any[], message?: string): Assert.Table Assert table contains all specified keys.
----@field _parent table
----@field _group string
+---@field public  has_key   Assert.Table.KeyChecker   Assert table contains key.
+---@field public  is_empty  Assert.Table.EmptyChecker Assert table is empty.
+---@field public  not_empty Assert.Table.EmptyChecker Assert table is not empty.
+---@field public  has_keys  Assert.Table.KeysChecker  Assert table contains all specified keys.
+---@field private _parent   table
+---@field private _group    string
 
 ---@class Assert.Number
 ---Number assertion methods supporting method chaining.
 ---
----@field in_range fun(self: Assert, value: number, min: number, max: number, message?: string): Assert.Number Assert value is within range (inclusive).
----@field greater_than fun(self: Assert, value: number, threshold: number, message?: string): Assert.Number Assert value exceeds threshold.
----@field less_than fun(self: Assert, value: number, threshold: number, message?: string): Assert.Number Assert value is below threshold.
----@field positive fun(self: Assert, value: number, message?: string): Assert.Number Assert value is positive (> 0).
----@field negative fun(self: Assert, value: number, message?: string): Assert.Number Assert value is negative (< 0).
----@field _parent table
----@field _group string
+---@field public  in_range     Assert.Number.RangeChecker     Assert value is within range (inclusive).
+---@field public  greater_than Assert.Number.ThresholdChecker Assert value exceeds threshold.
+---@field public  less_than    Assert.Number.ThresholdChecker Assert value is below threshold.
+---@field public  positive     Assert.Number.SignChecker      Assert value is positive (> 0).
+---@field public  negative     Assert.Number.SignChecker      Assert value is negative (< 0).
+---@field private _parent      table
+---@field private _group       string
 
 ---@class Assert.String
 ---String assertion methods supporting method chaining.
 ---
----@field matches fun(self: Assert, str: string, pattern: string, message?: string): Assert.String Assert string matches Lua pattern.
----@field starts_with fun(self: Assert, str: string, prefix: string, message?: string): Assert.String Assert string starts with prefix.
----@field ends_with fun(self: Assert, str: string, suffix: string, message?: string): Assert.String Assert string ends with suffix.
----@field contains fun(self: Assert, str: string, substring: string, message?: string): Assert.String Assert string contains substring.
----@field not_empty fun(self: Assert, str: string, message?: string): Assert.String Assert string is not empty.
----@field min_length fun(self: Assert, str: string, len: number, message?: string): Assert.String Assert string length is at least specified value.
----@field max_length fun(self: Assert, str: string, len: number, message?: string): Assert.String Assert string length does not exceed specified value.
----@field _parent table
----@field _group string
+---@field public  matches     Assert.String.PatternChecker   Assert string matches Lua pattern.
+---@field public  starts_with Assert.String.SubstringChecker Assert string starts with prefix.
+---@field public  ends_with   Assert.String.SubstringChecker Assert string ends with suffix.
+---@field public  contains    Assert.String.SubstringChecker Assert string contains substring.
+---@field public  not_empty   Assert.String.EmptyChecker     Assert string is not empty.
+---@field public  min_length  Assert.String.LengthChecker    Assert string length is at least specified value.
+---@field public  max_length  Assert.String.LengthChecker    Assert string length does not exceed specified value.
+---@field private _parent     table
+---@field private _group      string
 
 ---@class Assert
 ---Assertion utility with grouped assertion methods and configurable error handling.
 ---
----@field cmp Assert.Comparison Comparison assertions (equal, truthy, etc.).
----@field nul Assert.Nil Nil check assertions.
----@field type Assert.Type Type check assertions.
----@field tbl Assert.Table Table assertions.
----@field num Assert.Number Number assertions.
----@field str Assert.String String assertions.
----@field private _errors Assert.Error[] Accumulated error list.
----@field private _config Assert.Config Configuration options.
----@field private _accumulate boolean Whether to accumulate errors.
----@field private _fail_fast boolean Whether to throw on first error in accumulate mode.
----@field private _has_failed boolean Flag indicating if any assertion has failed.
----@field private _type_cache? table<string, string> Type cache for performance (when enabled).
----@field private _stats? table Assertion statistics tracker (when enabled).
----@field private _handler Assert.Handler Error handler function.
+---@field public  cmp         Assert.Comparison     Comparison assertions (equal, truthy, etc.).
+---@field public  nul         Assert.Nil            Nil check assertions.
+---@field public  type        Assert.Type           Type check assertions.
+---@field public  tbl         Assert.Table          Table assertions.
+---@field public  num         Assert.Number         Number assertions.
+---@field public  str         Assert.String         String assertions.
+---@field private _errors     Assert.Error[]        Accumulated error list.
+---@field private _config     Assert.Config         Configuration options.
+---@field private _accumulate boolean               Whether to accumulate errors.
+---@field private _fail_fast  boolean               Whether to throw on first error in accumulate mode.
+---@field private _has_failed boolean               Flag indicating if any assertion has failed.
+---@field private _type_cache table<string, string> Type cache for performance (when enabled).
+---@field private _stats      table                 Assertion statistics tracker (when enabled).
+---@field private _handler    Assert.Handler        Error handler function.
 
 -- luacheck: pop
