@@ -23,7 +23,7 @@ for i = 1, 24 do
 end
 
 key.maps(Config, {
-  -- ── Global navigation ───────────────────────────────────────────────────
+
   { "<C-Tab>", act.ActivateTabRelative(1), "next tab" },
   { "<C-S-Tab>", act.ActivateTabRelative(-1), "prev tab" },
   { "<M-CR>", act.ToggleFullScreen, "fullscreen" },
@@ -45,7 +45,6 @@ key.maps(Config, {
   { "<PageUp>", act.ScrollByPage(-1), "" },
   { "<PageDown>", act.ScrollByPage(1), "" },
 
-  -- ── Windows / tabs ──────────────────────────────────────────────────────
   { "<C-S-n>", act.SpawnWindow, "new window" },
   { "<C-S-t>", act.SpawnTab "CurrentPaneDomain", "new pane" },
   { "<C-S-w>", act.CloseCurrentTab { confirm = true }, "close tab" },
@@ -60,7 +59,7 @@ key.maps(Config, {
     "char select",
   },
 
-  -- ── Quick split and pane navigation ─────────────────────────────────────
+
   { '<C-S-">', act.SplitHorizontal { domain = "CurrentPaneDomain" }, "vsplit" },
   { "<C-S-%>", act.SplitVertical { domain = "CurrentPaneDomain" }, "hsplit" },
   { "<C-M-h>", act.ActivatePaneDirection "Left", "move left" },
@@ -68,7 +67,7 @@ key.maps(Config, {
   { "<C-M-k>", act.ActivatePaneDirection "Up", "move up" },
   { "<C-M-l>", act.ActivatePaneDirection "Right", "move right" },
 
-  -- ── Key-table entry points ───────────────────────────────────────────────
+
   {
     "<leader>h",
     act.ActivateKeyTable { name = "help_mode", one_shot = true },

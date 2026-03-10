@@ -50,8 +50,6 @@ local M = {
   _tab_max_width = 30, ---@type integer
 }
 
--- ── Tab-width registry ────────────────────────────────────────────────────────
-
 ---Record the column-width for one tab cell.
 ---
 ---Accepts either a pre-computed numeric width (fastest) or the raw rendered
@@ -103,8 +101,6 @@ function M.total_width()
   return M._total_cached
 end
 
--- ── Layout-wide metric setters ────────────────────────────────────────────────
-
 ---Set the true terminal width for the current render cycle.
 ---Called **once** by `Renderer.init()` (the first, un-constrained call).
 ---@param cols integer
@@ -135,8 +131,6 @@ function M.set_tab_max_width(cols)
   end
   M._tab_max_width = cols
 end
-
--- ── Derived metrics ───────────────────────────────────────────────────────────
 
 ---Columns available for the right-status bar in the current render cycle.
 ---

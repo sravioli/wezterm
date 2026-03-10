@@ -190,6 +190,14 @@ M.get_cwd_hostname = function(pane, search_git_root_instead)
   return M.get_cwd(pane, search_git_root_instead), M.get_hostname(pane)
 end
 
+---Abbreviate path by shortening intermediate components to specified length.
+---
+---Useful for creating compact path representations while preserving full component names
+---for the final directory.
+---
+---@param path string File or directory path.
+---@param len integer  Number of characters to keep per component.
+---@return string shortened Abbreviated path.
 M.shorten_path = function(path, len)
   -- key must include both arguments so different inputs don't collide
   return cache.compute_cached("fs.shorten_path", function()

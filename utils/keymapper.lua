@@ -78,10 +78,6 @@ local M = {
   _defs = {},
 }
 
--- ──────────────────────────────────────────────────────────────────────────────
--- Internal helpers
--- ──────────────────────────────────────────────────────────────────────────────
-
 ---@package
 M._log = require("utils.logger"):new "Utils.Keymapper"
 
@@ -109,10 +105,9 @@ M.__has_leader = function(lhs, mods)
   return lhs
 end
 
--- ──────────────────────────────────────────────────────────────────────────────
--- Public – validation and mapping
--- ──────────────────────────────────────────────────────────────────────────────
-
+---@param lhs string Keymap string to validate (e.g., "<C-a>").
+---@return boolean valid True if the keymap is syntactically valid.
+---@return string|nil error Error message if invalid, nil otherwise.
 M.validate = function(lhs)
   if not lhs or type(lhs) ~= "string" then
     return false, "keymap must be a non-empty string"
@@ -239,10 +234,6 @@ M.table = function(mappings)
   return key_table
 end
 
--- ──────────────────────────────────────────────────────────────────────────────
--- Internal – definition resolution
--- ──────────────────────────────────────────────────────────────────────────────
-
 ---Resolve a raw definition (plain table or function) against `theme`.
 ---@param  name  string
 ---@param  def   KeyTableDef|KeyTableDefFn
@@ -259,10 +250,8 @@ local function resolve_def(name, def, theme)
   return nil
 end
 
--- ──────────────────────────────────────────────────────────────────────────────
--- Public – top-level config helpers
--- ──────────────────────────────────────────────────────────────────────────────
-
+---@param config table WezTerm configuration object to update.
+---@param mappings table[] Array of {lhs, rhs[, desc]} mappings.
 M.maps = function(config, mappings)
   config.keys = config.keys or {}
   M.map_batch(mappings, config.keys)
@@ -339,10 +328,6 @@ M.get_modes = function(theme)
   return modes
 end
 
--- ──────────────────────────────────────────────────────────────────────────────
--- Internal – lhs reverse-translation helpers
--- ──────────────────────────────────────────────────────────────────────────────
-
 --- Lazily build and cache the WezTerm-key → vim-key reverse lookup.
 local function get_rev_aliases()
   if not M._rev_aliases then
@@ -397,10 +382,6 @@ M.__entry_lhs = function(entry)
   local has_leader, mod_parts = parse_mods(entry.mods or "")
   return format_lhs(display_key, mod_parts, has_leader)
 end
-
--- ──────────────────────────────────────────────────────────────────────────────
--- Internal – pagination helpers
--- ──────────────────────────────────────────────────────────────────────────────
 
 ---Return the `wezterm.GLOBAL` key scoped to a specific window + pane + table.
 ---@package
@@ -570,10 +551,6 @@ local function resolve_entries(config, name)
   return entries or {}
 end
 
--- ──────────────────────────────────────────────────────────────────────────────
--- Public – hint string (plain)
--- ──────────────────────────────────────────────────────────────────────────────
-
 ---Build a fixed-width paginated hint string (plain text, no colour).
 ---Prefer `hint_layout()` for status-bar use where colour is available.
 ---
@@ -617,10 +594,6 @@ M.hint = function(config, name, width, window)
   end
   return body .. indicator
 end
-
--- ──────────────────────────────────────────────────────────────────────────────
--- Public – hint layout (coloured wezterm format items)
--- ──────────────────────────────────────────────────────────────────────────────
 
 ---Build a fixed-width paginated hint as a **Layout instance**.
 ---
@@ -731,10 +704,6 @@ M.hint_layout = function(config, name, width, window, opts)
 
   return layout
 end
-
--- ──────────────────────────────────────────────────────────────────────────────
--- Public – hint scroll action
--- ──────────────────────────────────────────────────────────────────────────────
 
 ---Return a `wezterm.action_callback` that advances or retreats the hint page.
 ---
