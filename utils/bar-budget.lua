@@ -4,11 +4,11 @@
 --- Tracks three categories of column consumption so that every module can
 --- query how much space remains without duplicating measurement logic:
 ---
----   1. **Tab cells** – per-tab rendered widths published by `format-tab-title`
+---   1. **Tab cells** - per-tab rendered widths published by `format-tab-title`
 ---      via `record()` / `set_count()`.
----   2. **Left status** – columns consumed by the left-status render pass,
+---   2. **Left status** - columns consumed by the left-status render pass,
 ---      published by `Renderer.commit_left()` via `set_left_used()`.
----   3. **New-tab button** – 0 or 8 columns reserved when the button is shown,
+---   3. **New-tab button** - 0 or 8 columns reserved when the button is shown,
 ---      published by `Renderer.commit_left()` via `set_new_tab_button()`.
 ---
 --- The total screen width (`_total_screen_width`) is set **once per render

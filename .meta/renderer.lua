@@ -27,10 +27,10 @@ error "cannot require a meta file!"
 
 ---Degradation mode for cell rendering when the full cell does not fit.
 ---
----  * `"full"` – icon + text, no truncation.
----  * `"trim"` – icon + truncated text.
----  * `"text"` – text only, no icon.
----  * `"icon"` – icon only, no text.
+---  * `"full"` - icon + text, no truncation.
+---  * `"trim"` - icon + truncated text.
+---  * `"text"` - text only, no icon.
+---  * `"icon"` - icon only, no text.
 ---@alias CellRenderMode "full"|"trim"|"text"|"icon"
 
 -- luacheck: pop

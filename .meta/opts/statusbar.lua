@@ -80,7 +80,7 @@ error "cannot require a meta file!"
 ---
 ---@alias Opts.StatusBar.Module.Styler
 ---| { bg?: string, fg?: string, attributes?: string|string[] }
----| fun(theme: table): { bg?: string, fg?: string, attributes?: string|string[] }
+---| fun(theme: table, parent_style?: { bg?: string, fg?: string, attributes?: string|string[] }): { bg?: string, fg?: string, attributes?: string|string[] }
 ---
 ---@alias Opts.StatusBar.Module.Sep.Value
 ---| string

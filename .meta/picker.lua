@@ -34,13 +34,13 @@ error "cannot require a meta file!"
 ---
 ---Format picker description label
 ---@alias Picker.DescriptionFormatter
----| fun(desc: string, fuzzy: bool, icons: Opts.Utils.Picker.Defaults.Icons|table): string
+---| fun(desc: string, fuzzy: boolean, icons: Opts.Utils.Picker.Defaults.Icons|table): string
 
 ---Returns choice(s) provided by this module.
 ---@alias Picker.Module.Getter fun(): Picker.Choice|Picker.Choice[]
 
 ---Executes the selected choice action.
----@alias Picker.Module.PickHandler fun(config: Config, opts: Picker.CallbackOpts): nil
+---@alias Picker.Module.PickHandler fun(Overrides: table, opts: Picker.CallbackOpts): nil
 
 ---
 
@@ -77,7 +77,7 @@ error "cannot require a meta file!"
 ---@field public sort_by?            "id"|"label"                Sort choices by id or label (default: "id").
 ---@field public comp?               Picker.Comparator           Custom sort comparator (overrides sort_by).
 ---@field public format_choices?     Picker.ChoicesFormatter     Custom choice formatter.
----@field public fuzzy?              boolean                     Enable fuzzy matching (default: false).
+---@field public fuzzy?              boolean                     Enable fuzzy matching (default: true).
 ---@field public alphabet?           string                      Quick selection characters (default: "1234567890abcdefghilmnopqrstuvwxyz").
 ---@field public description?        string                      Help text for normal mode.
 ---@field public fuzzy_description?  string                      Help text for fuzzy mode.
@@ -85,7 +85,7 @@ error "cannot require a meta file!"
 
 ---Picker instance for interactive selection.
 ---@class Picker
----@field public  name                   string                      Picker module name.
+---@field public  sort_by                "id"|"label"                Sort key used by default comparator.
 ---@field public  title?                 string                      Picker window title.
 ---@field public  choices?               Picker.Choice[]             Public choices list.
 ---@field public  fuzzy?                 boolean                     Fuzzy matching enabled.
@@ -95,10 +95,12 @@ error "cannot require a meta file!"
 ---@field public  comp?                  Picker.Comparator           Sort comparator function.
 ---@field public  format_choices?        Picker.ChoicesFormatter     Choice formatter function.
 ---@field public  format_description?    Picker.DescriptionFormatter Custom description formatter
----@field private _choices               Picker.InternalChoice[]     Internal choice registry.
+---@field private _name                  string                      Picker module name.
+---@field private _choices               table<string, Picker.InternalChoice> Internal choice registry by choice id.
 ---@field private _log                   Logger                      Logger instance.
 ---@field private _build_choices         Picker.ChoicesBuilder       Choice builder function.
 ---@field private _dir                   string                      Absolute path to assets directory.
 ---@field private _initialized           boolean                     Lazy initialization flag.
+---@field private _event_registered      boolean                     Whether picker event has been registered.
 
 -- luacheck: pop

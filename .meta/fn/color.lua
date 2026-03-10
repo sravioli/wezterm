@@ -57,4 +57,7 @@ error "cannot require a meta file!"
 ---@field public launcher_label_fg               Fn.Color.Theme.ColorSpec Foreground for launcher labels.
 ---@field public tab_bar                         Fn.Color.Theme.TabBar    Tab bar configuration.
 
+---@class Fn.Color
+---@field public log Logger
+
 -- luacheck: pop

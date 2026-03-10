@@ -9,10 +9,4 @@ error "cannot require a meta file!"
 ---@field public levels table<string, integer> Map of level names to integer values.
 ---@field public names  table<integer, string> Map of integer values to level names.
 
----@enum Logger.Levels.Level
----| "DEBUG" # 0
----| "INFO"  # 1
----| "WARN"  # 2
----| "ERROR" # 3
-
 -- luacheck: pop

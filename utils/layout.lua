@@ -206,7 +206,7 @@ end
 ---@param attributes? table  Style attributes.
 ---@return Layout|nil self Updated layout instance.
 function M:prepend(background, foreground, text, attributes)
-  return M.add(self, "prepend", foreground, background, text, attributes)
+  return M.add(self, "prepend", background, foreground, text, attributes)
 end
 
 ---Clear all elements from layout.

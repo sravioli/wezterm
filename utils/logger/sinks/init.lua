@@ -1,7 +1,5 @@
 ---Utilities
 ---@class Logger.Sinks
----@field wt     Logger.Sink             wezterm sink
----@field memory Logger.Sinks.MemorySink memory sink
 local M = {}
 
 setmetatable(M, {
@@ -10,8 +8,8 @@ setmetatable(M, {
     local ok, mod = pcall(require, modname)
     if not ok then
       return require("utils.logger")
-        :new("Logger.Sinks")
-        :error("Unable to load module %s", modname)
+          :new("Logger.Sinks")
+          :error("Unable to load module %s", modname)
     end
 
     rawset(t, k, mod)
