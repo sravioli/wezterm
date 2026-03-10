@@ -3,9 +3,11 @@ overrides/*
 !overrides/opts/
 !overrides/config/
 !overrides/events/
+!overrides/mappings/
 
 overrides/opts/.gitkeep
 overrides/config/.gitkeep
+overrides/mappings/.gitkeep
 
 overrides/opts/*
 !overrides/opts/.gitkeep
@@ -15,4 +17,7 @@ overrides/config/*
 
 overrides/events/*
 !overrides/events/.gitkeep
+
+overrides/mappings/*
+!overrides/mappings/.gitkeep
 

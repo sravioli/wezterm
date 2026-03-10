@@ -49,7 +49,13 @@ function M:init()
 
   local ok, overrides = pcall(require, "overrides.config")
   if ok then
-    final_config = require("utils.fn.tbl").merge(final_config, overrides)
+    if overrides.keys ~= nil or overrides.key_tables ~= nil then
+      M.log:warn "`overrides.config` cannot define `keys` or `key_tables`; use `overrides.mappings`"
+      overrides.keys = nil
+      overrides.key_tables = nil
+    end
+
+    final_config = require("utils.fn.tbl").merge("force", final_config, overrides)
   end
 
   local wt = require "wezterm"
