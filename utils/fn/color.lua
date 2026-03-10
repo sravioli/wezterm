@@ -86,6 +86,8 @@ end
 ---@param name string Name of the color scheme to apply.
 M.set_scheme = function(Config, theme, name)
   Config.color_scheme = name
+  Config.color_schemes = Config.color_schemes or {}
+  Config.color_schemes[name] = theme
   Config.char_select_bg_color = theme.brights[6]
   Config.char_select_fg_color = theme.background
   Config.command_palette_bg_color = theme.brights[6]
