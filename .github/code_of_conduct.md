@@ -1,4 +1,4 @@
-# Code of Conduct - kanagawa.wezterm
+# Code of Conduct - sravioli/wezterm
 
 ## Our Pledge
 
