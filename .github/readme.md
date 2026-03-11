@@ -4,7 +4,7 @@
 
 A feature-rich, highly customizable [WezTerm](https://wezfurlong.org/wezterm/)
 configuration. Responsive status bar, Vim-style modal keybindings, interactive
-pickers, and a powerful override system — all in pure Lua.
+pickers, and a powerful override system - all in pure Lua.
 
 ## Installation
 
@@ -41,7 +41,7 @@ pickers, and a powerful override system — all in pure Lua.
     git clone https://github.com/sravioli/wezterm.git "$env:USERPROFILE/.config/wezterm"
     ~~~
 
-3. **Launch WezTerm** and press `Ctrl+Space` then `h` to enter **Help Mode** —
+3. **Launch WezTerm** and press `Ctrl+Space` then `h` to enter **Help Mode** -
    you'll see all available keybindings at a glance.
 
 > [!TIP]
@@ -56,7 +56,7 @@ pickers, and a powerful override system — all in pure Lua.
 https://github.com/user-attachments/assets/d8bd96f1-53d6-4fb0-9771-53ca8ecd604b
 
 The status bar adapts gracefully to terminal width. Each element has multiple
-fallback modes — from full detail down to icon-only — ensuring important
+fallback modes - from full detail down to icon-only - ensuring important
 information is always visible.
 
 > [!NOTE]
@@ -80,7 +80,7 @@ Six operational modes with inline key hints. The leader key is `<C-Space>`.
 | `<leader>s` | Search | Pattern matching and navigation |
 | `<leader>p` | Pick | Colorscheme, font, size, leading |
 
-Prompts are responsive — they paginate when the terminal is narrow.
+Prompts are responsive - they paginate when the terminal is narrow.
 
 <details>
 <summary>See all mode screenshots</summary>
@@ -98,10 +98,10 @@ Prompts are responsive — they paginate when the terminal is narrow.
 
 Four built-in pickers wrapping WezTerm's `InputSelector`:
 
-1. **Colorscheme** — 30+ themes with inline palette preview
-2. **Font** — 19 NerdFont families
-3. **Font size** — Preset sizes
-4. **Font leading** — Line spacing presets
+1. **Colorscheme** - 30+ themes with inline palette preview
+2. **Font** - 19 NerdFont families
+3. **Font size** - Preset sizes
+4. **Font leading** - Line spacing presets
 
 <details>
 <summary>See picker screenshots</summary>

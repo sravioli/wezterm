@@ -11,7 +11,7 @@ local tabseps = Icon.Sep.tb
 
 local SHELLS = { fish = true, bash = true, zsh = true, sh = true, nu = true }
 
--- Hoisted to module scope — the home directory never changes during a session.
+-- Hoisted to module scope - the home directory never changes during a session.
 -- Avoids per-tab-per-repaint calls through the (previously broken) cache layer.
 local HOME = fs.home()
 local HOME_BASENAME = fs.basename(HOME)

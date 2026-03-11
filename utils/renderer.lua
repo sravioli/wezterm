@@ -6,7 +6,7 @@ local str = require "utils.fn.str" ---@class Fn.String
 local budget = require "utils.bar-budget" ---@class BarBudget
 local wt = require "wezterm" ---@class Wezterm
 
--- Direct binding to the C function — bypasses the ANSI-strip regex in
+-- Direct binding to the C function - bypasses the ANSI-strip regex in
 -- str.column_width.  Safe here because all inputs at this layer are plain
 -- text (icons, separators, padding, resolved node values).  For strings
 -- that may contain ANSI codes (e.g. resolve_layout output), use
@@ -378,7 +378,7 @@ end
 
 --- Pre-compute the mode-invariant parts of a module's cell rendering.
 --- Called once per module; the result is passed to `build_cell_from_parts`
---- for each render-mode trial — avoiding redundant style / content / sep
+--- for each render-mode trial - avoiding redundant style / content / sep
 --- resolution per mode.
 ---@param module Opts.StatusBar.Module
 ---@return table parts
@@ -476,7 +476,7 @@ local function build_cell_sep_only(module, parts)
 end
 
 --- Attempt to build a cell for the given mode within `avail_cols`.
---- Convenience wrapper that resolves parts internally — use
+--- Convenience wrapper that resolves parts internally - use
 --- `resolve_cell_parts` + `build_cell_from_parts` when calling in a loop.
 ---@param name       string
 ---@param module     Opts.StatusBar.Module

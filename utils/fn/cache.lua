@@ -193,7 +193,7 @@ end
 ---
 ---Generates a unique key from `name` + serialised arguments, checks the cache
 ---first, and only executes the function on a miss.  Previous implementation
----always evaluated `fn(...)` before consulting the cache — defeating the
+---always evaluated `fn(...)` before consulting the cache - defeating the
 ---purpose entirely.
 ---
 ---@param name string              Namespace or context identifier for the key.

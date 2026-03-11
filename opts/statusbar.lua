@@ -176,7 +176,7 @@ local M = {
     --
     -- Width is derived from budget.right_available() which accounts for
     -- screen width, rendered tab cells, left-status columns, and the new-tab
-    -- button — so the hint fills exactly the remaining space.
+    -- button - so the hint fills exactly the remaining space.
     keys = function(window, _, theme, config)
       local keymapper = require "utils.keymapper"
       local renderer = require "utils.renderer"
