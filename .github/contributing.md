@@ -30,7 +30,7 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[sravioli/wezterm Code of Conduct](https://github.com/sravioli/wezterm/blob//CODE_OF_CONDUCT.md).
+[sravioli/wezterm Code of Conduct](https://github.com/sravioli/wezterm/blob/main/.github/code_of_conduct.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
 to .
 
