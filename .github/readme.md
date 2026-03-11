@@ -137,6 +137,11 @@ All customizable in `mappings/default.lua`.
 | **[Platform Setup](https://github.com/sravioli/wezterm/wiki/Platform-Setup)** | Windows, Linux, macOS specifics |
 | **[Contributing](https://github.com/sravioli/wezterm/wiki/Contributing)** | How to contribute |
 
+## License
+
+- **Code** in this repository is licensed under [GNU GPL v2.0](../LICENSE).
+- **Documentation and other non-code assets** are licensed under [CC BY-NC 4.0](../LICENSE-DOCS).
+
 ## Thanks
 
 - [@Wez](https://www.github.com/wez) for the awesome terminal.
