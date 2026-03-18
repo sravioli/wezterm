@@ -81,7 +81,7 @@ local M = {
 }
 
 ---@package
-M._log = require("utils.logger"):new "Utils.Keymapper"
+M._log = require("utils.logger").new "Utils.Keymapper"
 
 ---@package
 M.__check = function(lhs, rhs, tbl)
@@ -522,8 +522,10 @@ end
 ---@return string
 local function theme_cache_key(theme)
   return tostring(theme.foreground or "")
-    .. "|" .. tostring(theme.background or "")
-    .. "|" .. tostring(theme.ansi and theme.ansi[5] or "")
+    .. "|"
+    .. tostring(theme.background or "")
+    .. "|"
+    .. tostring(theme.ansi and theme.ansi[5] or "")
 end
 
 M.get_modes = function(theme)

@@ -20,7 +20,7 @@ local os_info = fs.platform()
 ---@field VendorMap Gpu.VendorMap
 local Gpu = {
   VendorMap = {},
-  log = Logger:new("GpuAdapters", true),
+  log = Logger.new("GpuAdapters", true),
   ENUMERATED_GPUS = wt.gui.enumerate_gpus(), ---@type GpuInfo[]
   AVAILABLE_BACKENDS = {
     windows = { "Dx12", "Vulkan", "Gl" },

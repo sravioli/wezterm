@@ -9,7 +9,7 @@ local tconcat, tinsert, tunpack = table.concat, table.insert, table.unpack or un
 ---@class Fn.Cache
 ---@field log Logger Logger instance for cache operations.
 local M = {}
-M.log = Logger:new "Fn.Cache"
+M.log = Logger.new "Fn.Cache"
 
 --~ {{{1 private functions
 

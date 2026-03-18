@@ -1,9 +1,9 @@
 ---@module 'utils.renderer'
 
+local budget = require "utils.bar-budget" ---@class BarBudget
 local fn = require "utils.fn" ---@class Fn
 local sb = require("utils.layout"):new "StatusBar" ---@class Layout
 local str = require "utils.fn.str" ---@class Fn.String
-local budget = require "utils.bar-budget" ---@class BarBudget
 local wt = require "wezterm" ---@class Wezterm
 
 -- Direct binding to the C function - bypasses the ANSI-strip regex in
@@ -14,7 +14,7 @@ local wt = require "wezterm" ---@class Wezterm
 local raw_cw = wt.column_width
 
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
-local log = require("utils.logger"):new("StatusBar", true) ---@class Logger
+local log = require("utils.logger").new("StatusBar", true) ---@class Logger
 
 ---@class Renderer
 local M = {
@@ -184,7 +184,8 @@ M.resolve_node = function(node)
     return ""
   end
 
-  local value = type(node.value) == "function" and node.value(M.window, M.pane) or node.value
+  local value = type(node.value) == "function" and node.value(M.window, M.pane)
+  or node.value
   local typ = type(value)
 
   if typ == "table" then

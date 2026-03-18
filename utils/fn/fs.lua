@@ -8,7 +8,7 @@ local ogetenv = os.getenv
 local tconcat = table.concat
 
 local schar, sfind, sgsub, smatch, ssub =
-    string.char, string.find, string.gsub, string.match, string.sub
+  string.char, string.find, string.gsub, string.match, string.sub
 
 local wt = require "wezterm" ---@class Wezterm
 
@@ -20,7 +20,7 @@ local M = {}
 ---@package
 ---
 ---Class logger
-M.log = require("utils.logger"):new "Fn.FileSystem"
+M.log = require("utils.logger").new "Fn.FileSystem"
 
 ---@package
 M.target_triple = cache.memoize("fs.target-triple", wt_triple)

@@ -149,7 +149,7 @@ function M:new(name, atomic)
   end
   return setmetatable({
     layout = {},
-    log = Logger:new(name, Opts.log.enabled, Opts.log.sinks),
+    log = Logger.new(name, Opts.log.enabled),
     name = name,
     atomic = is_atomic,
   }, { __index = self })

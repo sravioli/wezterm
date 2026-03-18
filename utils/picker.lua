@@ -15,7 +15,7 @@ local ioopen = io.open
 
 --~ {{{1 Persistence internals
 
-local _persist_log = Logger:new "Picker.Persist"
+local _persist_log = Logger.new "Picker.Persist"
 local _has_serde = wt.serde ~= nil
 local _has_bg_task = type(wt.background_task) == "function"
 if not _has_serde then
@@ -224,7 +224,7 @@ function M.new(opts)
   self._initialized = false
   self._dir = nil
   self._event_registered = false
-  self._log = Logger:new("Picker > " .. self.title, Opts.log.enabled, Opts.log.sinks)
+  self._log = Logger.new("Picker > " .. self.title, Opts.log.enabled)
   self._build_choices = function(internal_choices, comp, ctx)
     local choices = self.format_choices(internal_choices, ctx)
     table.sort(choices, comp)
