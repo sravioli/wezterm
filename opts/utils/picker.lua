@@ -12,6 +12,12 @@ return {
     sinks = { default_enabled = true },
   },
 
+  persistence = {
+    enabled = true,
+    path = nil, -- defaults to wt.config_dir .. "/picker-state.json"
+    reset_behavior = "clear", -- "clear" | "persist"
+  },
+
   assets_path_segments = { "picker", "assets" },
 
   defaults = {

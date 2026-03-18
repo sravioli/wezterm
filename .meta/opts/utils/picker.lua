@@ -4,8 +4,16 @@ error "cannot require a meta file!"
 -- luacheck: push ignore 631 (line is too long)
 
 ---@class Opts.Utils.Picker: Opts.Utils.Base
----@field public assets_path_segments? string[]                   List of path segments composing the base directory for loading picker modules.
----@field public defaults?             Opts.Utils.Picker.Defaults Default picker configuration, used when initializing a new Picker.
+---@field public assets_path_segments? string[]                       List of path segments composing the base directory for loading picker modules.
+---@field public persistence?          Opts.Utils.Picker.Persistence  Persistence configuration for picker selections.
+---@field public defaults?             Opts.Utils.Picker.Defaults     Default picker configuration, used when initializing a new Picker.
+---
+---
+---Persistence configuration for picker state across reloads.
+---@class Opts.Utils.Picker.Persistence
+---@field public enabled?        boolean             Enable persistence globally (default: true).
+---@field public path?           string|nil          Absolute path to the JSON state file (default: `wt.config_dir/picker-state.json`).
+---@field public reset_behavior? "clear"|"persist"  What to do when "Reset" is picked (default: "clear").
 ---
 ---
 ---@alias Opts.Utils.Picker.ComparatorFactory fun(sort_by: "id"|"label"): Picker.Comparator

@@ -4,11 +4,109 @@
 local tunpack = unpack or table.unpack
 
 local Logger = require "utils.logger" ---@class Logger
+local cache = require "utils.fn.cache" ---@class Fn.Cache
 local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 local tbl = require "utils.fn.tbl" ---@class Fn.Table
 local Opts = require("opts").utils.picker ---@class Opts.Utils.Picker
 
 local wt = require "wezterm" ---@class Wezterm
+
+local ioopen = io.open
+
+--~ {{{1 Persistence internals
+
+local _persist_log = Logger:new "Picker.Persist"
+local _has_serde = wt.serde ~= nil
+local _has_bg_task = type(wt.background_task) == "function"
+if not _has_serde then
+  _persist_log:warn "wezterm.serde not available, picker persistence disabled"
+end
+local _store = cache.ensure_global_tbl("__picker_store", { loaded = false, data = {} })
+
+---Resolve the JSON file path for picker state.
+---@return string path Absolute path to the persistence file.
+local function _resolve_path()
+  return Opts.persistence.path or fs.join_path(wt.config_dir, "picker-state.json")
+end
+
+---Load picker state from JSON file into the global store.
+---
+---Reads from disk only once per WezTerm process. Subsequent config reloads
+---reuse the `wt.GLOBAL` cache.
+local function _load_store()
+  if _store.loaded then
+    return
+  end
+
+  _store.loaded = true
+
+  if not _has_serde then
+    return
+  end
+
+  local path = _resolve_path()
+  local fh, open_err = ioopen(path, "r")
+  if not fh then
+    if open_err and not open_err:find "No such file" then
+      _persist_log:warn("unable to read %s: %s", path, open_err)
+    end
+    return
+  end
+
+  local content = fh:read "*a"
+  fh:close()
+
+  if not content or content == "" then
+    return
+  end
+
+  local ok, decoded = pcall(wt.serde.json_decode, content)
+  if not ok then
+    _persist_log:warn("invalid JSON in %s: %s", path, decoded)
+    return
+  end
+
+  if type(decoded) == "table" then
+    cache.clear_global(_store.data)
+    cache.sync_to_global(_store.data, decoded)
+  end
+end
+
+---Synchronous file write (fallback when `background_task` is unavailable).
+---@param path string     Absolute path to the JSON file.
+---@param encoded string  JSON-encoded string to write.
+local function _write_file(path, encoded)
+  local fh, open_err = ioopen(path, "w")
+  if not fh then
+    _persist_log:warn("unable to write %s: %s", path, open_err)
+    return
+  end
+  fh:write(encoded)
+  fh:close()
+end
+
+---Write the current store to disk as JSON.
+---
+---Uses `wezterm.background_task()` when available so the file I/O does not
+---block the UI callback.  Falls back to a synchronous write otherwise.
+local function _write_store()
+  if not _has_serde then
+    return
+  end
+
+  local path = _resolve_path()
+  local encoded = wt.serde.json_encode(_store.data)
+
+  if _has_bg_task then
+    wt.background_task(function()
+      _write_file(path, encoded)
+    end)
+  else
+    _write_file(path, encoded)
+  end
+end
+
+--~ }}}
 
 ---Convert filepath to Lua require path.
 ---
@@ -36,6 +134,76 @@ end
 
 ---@class Picker
 local M = {}
+
+-- ── Persistence API ───────────────────────────────────────────────────────────
+
+---Save a picker selection to the persistence store.
+---
+---@param picker_name string  Picker name (e.g. `"colorschemes"`).
+---@param entry table         `{ id = string, module = string }` — choice id and require path.
+function M.store_save(picker_name, entry)
+  _load_store()
+  _store.data[picker_name] = _store.data[picker_name] or {}
+  cache.clear_global(_store.data[picker_name])
+  cache.sync_to_global(_store.data[picker_name], entry)
+  _write_store()
+end
+
+---Retrieve the persisted entry for a picker.
+---
+---@param picker_name string Picker name.
+---@return table|nil entry   `{ id, module }` or nil.
+function M.store_get(picker_name)
+  _load_store()
+  return _store.data[picker_name]
+end
+
+---Clear persisted entry for one picker, or all pickers.
+---
+---@param picker_name? string Picker name. If nil, clears everything.
+function M.store_clear(picker_name)
+  _load_store()
+  if picker_name then
+    _store.data[picker_name] = nil
+  else
+    cache.clear_global(_store.data)
+  end
+  _write_store()
+end
+
+---Restore persisted picker selections into a config table.
+---
+---Intended for use with `Config:add()` at startup.  For each persisted entry,
+---loads the module and calls its `pick()` to build the config fragment.
+---
+---@return table config Config table with restored picker selections.
+function M.restore()
+  if not Opts.persistence.enabled or not _has_serde then
+    return {}
+  end
+
+  _load_store()
+
+  local restored = {}
+
+  for picker_name, entry in pairs(_store.data) do
+    if entry.module and entry.id then
+      local ok, mod = pcall(require, entry.module)
+      if ok and mod and mod.pick then
+        _persist_log:info("restoring %s = %s", picker_name, entry.id)
+        mod.pick(restored, { choice = { id = entry.id } })
+      else
+        _persist_log:warn(
+          "skipping %s: module '%s' unavailable",
+          picker_name,
+          entry.module
+        )
+      end
+    end
+  end
+
+  return restored
+end
 
 ---Create new picker instance.
 ---
@@ -70,6 +238,8 @@ function M.new(opts)
   self.description = pick_opt(opts.description, Opts.defaults.description)
   self.fuzzy_description =
     pick_opt(opts.fuzzy_description, Opts.defaults.fuzzy_description)
+
+  self.persist = pick_opt(opts.persist, Opts.persistence.enabled)
 
   self.comp = opts.comp or Opts.defaults.comp(self.sort_by)
   self.format_choices = opts.format_choices or Opts.defaults.format_choices
@@ -117,14 +287,20 @@ function M:register(name)
   if is_array(result) then
     for i = 1, #result do
       local item = normalize(result[i])
-      self._choices[item.id] =
-        { module = module, choice = { id = item.id, label = item.label } }
+      self._choices[item.id] = {
+        module = module,
+        module_path = name,
+        choice = { id = item.id, label = item.label },
+      }
       self._log:debug("registered item: %s", self._choices[item.id])
     end
   else
     result = normalize(result)
-    self._choices[result.id] =
-      { module = module, choice = { id = result.id, label = result.label } }
+    self._choices[result.id] = {
+      module = module,
+      module_path = name,
+      choice = { id = result.id, label = result.label },
+    }
     self._log:debug("registered item: %s", self._choices[result.id])
   end
 end
@@ -140,6 +316,18 @@ function M:select(Overrides, opts)
   end
 
   choice.module.pick(Overrides, opts)
+
+  if self.persist then
+    local id_lower = opts.choice.id:lower()
+    local label_lower = (opts.choice.label or ""):lower()
+    local is_reset = id_lower == "reset" or label_lower == "reset"
+
+    if is_reset and Opts.persistence.reset_behavior == "clear" then
+      M.store_clear(self._name)
+    else
+      M.store_save(self._name, { id = opts.choice.id, module = choice.module_path })
+    end
+  end
 end
 
 ---Invoke the picker UI action.

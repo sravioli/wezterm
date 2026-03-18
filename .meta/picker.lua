@@ -52,8 +52,9 @@ error "cannot require a meta file!"
 ---
 ---Internal choice wrapper linking module to choice data.
 ---@class Picker.InternalChoice
----@field public module Picker.Module Module containing the `pick` action handler.
----@field public choice Picker.Choice Choice metadata.
+---@field public module      Picker.Module Module containing the `pick` action handler.
+---@field public module_path string        Lua require path to the module.
+---@field public choice      Picker.Choice Choice metadata.
 ---
 ---
 ---Module interface for picker items.
@@ -65,9 +66,9 @@ error "cannot require a meta file!"
 ---
 ---Options passed to module's `pick()` handler.
 ---@class Picker.CallbackOpts
----@field public window Window        Active WezTerm window.
----@field public pane   Pane          Active WezTerm pane.
----@field public choice Picker.Choice Selected choice.
+---@field public window? Window        Active WezTerm window.
+---@field public pane?   Pane          Active WezTerm pane.
+---@field public choice  Picker.Choice Selected choice.
 ---
 ---
 ---Configuration for creating a new picker.
@@ -82,6 +83,7 @@ error "cannot require a meta file!"
 ---@field public description?        string                      Help text for normal mode.
 ---@field public fuzzy_description?  string                      Help text for fuzzy mode.
 ---@field public format_description? Picker.DescriptionFormatter Custom description formatter
+---@field public persist?            boolean                     Enable persistence for this picker (default: Opts.persistence.enabled).
 
 ---Picker instance for interactive selection.
 ---@class Picker
@@ -95,6 +97,7 @@ error "cannot require a meta file!"
 ---@field public  comp?                  Picker.Comparator           Sort comparator function.
 ---@field public  format_choices?        Picker.ChoicesFormatter     Choice formatter function.
 ---@field public  format_description?    Picker.DescriptionFormatter Custom description formatter
+---@field public  persist?               boolean                     Whether this picker persists selections across reloads.
 ---@field private _name                  string                      Picker module name.
 ---@field private _choices               table<string, Picker.InternalChoice> Internal choice registry by choice id.
 ---@field private _log                   Logger                      Logger instance.
@@ -102,5 +105,12 @@ error "cannot require a meta file!"
 ---@field private _dir                   string                      Absolute path to assets directory.
 ---@field private _initialized           boolean                     Lazy initialization flag.
 ---@field private _event_registered      boolean                     Whether picker event has been registered.
+
+---Persisted store entry for a single picker selection.
+---@class Picker.StoreEntry
+---@field public id     string Chosen item ID.
+---@field public module string Lua require path to the source module.
+
+---@alias Picker.StoreData table<string, Picker.StoreEntry>
 
 -- luacheck: pop

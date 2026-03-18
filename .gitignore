@@ -21,3 +21,4 @@ overrides/events/*
 overrides/mappings/*
 !overrides/mappings/.gitkeep
 
+picker-state.json

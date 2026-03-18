@@ -261,4 +261,32 @@ function M.has(key)
   return M.get(key) ~= nil
 end
 
+---Recursively assign data into a `wt.GLOBAL`-backed table.
+---
+---`wt.GLOBAL` requires sub-tables to be created at each nesting level and
+---scalar values assigned individually — bulk table assignment produces Value
+---userdata that `pairs()` cannot iterate.
+---
+---@param target table  The GLOBAL-backed table to write into.
+---@param source table  The decoded Lua table with the data.
+function M.sync_to_global(target, source)
+  for k, v in pairs(source) do
+    if type(v) == "table" then
+      target[k] = target[k] or {}
+      M.sync_to_global(target[k], v)
+    else
+      target[k] = v
+    end
+  end
+end
+
+---Remove all keys from a `wt.GLOBAL`-backed table.
+---
+---@param target table The GLOBAL-backed table to clear.
+function M.clear_global(target)
+  for k in pairs(target) do
+    target[k] = nil
+  end
+end
+
 return M
