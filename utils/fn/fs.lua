@@ -1,6 +1,6 @@
 ---@module 'utils.fn.fs'
 
-local cache = require "utils.fn.cache" ---@class Fn.Cache
+local cache = require "utils.fn.cache" ---@class memo.Cache
 local str = require "utils.fn.str" ---@class Fn.String
 
 local ioclose, ioopen = io.close, io.open
@@ -23,22 +23,29 @@ local M = {}
 M.log = require("utils.logger").new "Fn.FileSystem"
 
 ---@package
-M.target_triple = cache.memoize("fs.target-triple", wt_triple)
+cache.set("fs.target-triple", wt_triple)
+M.target_triple = wt_triple
 
 ---Get platform information.
 ---
 ---Identifies OS based on target triple. Memoized for performance.
 ---
 ---@return Fn.FileSystem.Platform platform Platform details (OS name, boolean flags).
-M.platform = cache.memoize("fs.platform", function()
-  local is_win = sfind(M.target_triple, "windows") ~= nil
-  local is_linux = sfind(M.target_triple, "linux") ~= nil
-  local is_mac = sfind(M.target_triple, "apple") ~= nil
-  local os = is_win and "windows" or is_linux and "linux" or is_mac and "mac" or "unknown"
-  return { os = os, is_win = is_win, is_linux = is_linux, is_mac = is_mac }
-end)
+M.platform = function()
+  return cache.compute("fs.platform", function()
+    local is_win = sfind(M.target_triple, "windows") ~= nil
+    local is_linux = sfind(M.target_triple, "linux") ~= nil
+    local is_mac = sfind(M.target_triple, "apple") ~= nil
+    local os = is_win and "windows"
+    or is_linux and "linux"
+      or is_mac and "mac"
+      or "unknown"
+    return { os = os, is_win = is_win, is_linux = is_linux, is_mac = is_mac }
+  end)
+end
 
-M.is_win = cache.memoize("fs.is-win", M.platform().is_win)
+cache.set("fs.is-win", M.platform().is_win)
+M.is_win = M.platform().is_win
 
 ---Get user home directory.
 ---
@@ -46,11 +53,14 @@ M.is_win = cache.memoize("fs.is-win", M.platform().is_win)
 ---slashes.
 ---
 ---@return string home Normalized home directory path.
-M.home = cache.memoize("fs.home", function()
-  return (sgsub((ogetenv "USERPROFILE" or ogetenv "HOME" or wt_home or ""), "\\", "/"))
-end)
+M.home = function()
+  return cache.compute("fs.home", function()
+    return (sgsub((ogetenv "USERPROFILE" or ogetenv "HOME" or wt_home or ""), "\\", "/"))
+  end)
+end
 
-M.path_separator = cache.memoize("fs.path-separator", M.is_win and "\\" or "/")
+cache.set("fs.path-separator", M.is_win and "\\" or "/")
+M.path_separator = M.is_win and "\\" or "/"
 
 ---Extract base name from path.
 ---
@@ -79,7 +89,7 @@ end
 ---@param directory string Starting directory path.
 ---@return string|nil git_root Root directory of the git repo, or nil if not found.
 M.find_git_dir = function(directory)
-  return cache.compute_cached("fs.find-git-dir", function()
+  return cache.compute("fs.find-git-dir", function()
     directory = sgsub(directory, "~", M.home())
     while directory do
       local handle = ioopen(directory .. "/.git/HEAD", "r")
@@ -196,7 +206,7 @@ end
 ---@return string shortened Abbreviated path.
 M.shorten_path = function(path, len)
   -- key must include both arguments so different inputs don't collide
-  return cache.compute_cached("fs.shorten_path", function()
+  return cache.compute("fs.shorten_path", function()
     local sep = M.path_separator
     local root_path = path:sub(1, 1) == sep
     if root_path then

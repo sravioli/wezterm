@@ -4,14 +4,12 @@
 local tunpack = unpack or table.unpack
 
 local Logger = require "utils.logger" ---@class Logger
-local cache = require "utils.fn.cache" ---@class Fn.Cache
 local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 local tbl = require "utils.fn.tbl" ---@class Fn.Table
 local Opts = require("opts").utils.picker ---@class Opts.Utils.Picker
 
 local wt = require "wezterm" ---@class Wezterm
-
-local ioopen = io.open
+local memo = wt.plugin.require "https://github.com/sravioli/memo.wz" ---@class memo.API
 
 --~ {{{1 Persistence internals
 
@@ -21,90 +19,42 @@ local _has_bg_task = type(wt.background_task) == "function"
 if not _has_serde then
   _persist_log:warn "wezterm.serde not available, picker persistence disabled"
 end
-local _store = cache.ensure_global_tbl("__picker_store", { loaded = false, data = {} })
 
----Resolve the JSON file path for picker state.
----@return string path Absolute path to the persistence file.
-local function _resolve_path()
-  return Opts.persistence.path or fs.join_path(wt.config_dir, "picker-state.json")
-end
-
----Load picker state from JSON file into the global store.
----
----Reads from disk only once per WezTerm process. Subsequent config reloads
----reuse the `wt.GLOBAL` cache.
-local function _load_store()
-  if _store.loaded then
-    return
-  end
-
-  _store.loaded = true
-
-  if not _has_serde then
-    return
-  end
-
-  local path = _resolve_path()
-  local fh, open_err = ioopen(path, "r")
-  if not fh then
-    if open_err and not open_err:find "No such file" then
-      _persist_log:warn("unable to read %s: %s", path, open_err)
+---Resolve the default persistence path outside `config_dir` so that writes
+---do not trigger a WezTerm configuration reload.
+---  Windows:     %LOCALAPPDATA%\wezterm\picker-state.json
+---  Linux/macOS: $XDG_STATE_HOME/wezterm/picker-state.json  (~/.local/state/wezterm/)
+---@return string
+local function _default_state_path()
+  local ogetenv = os.getenv
+  local dir
+  if fs.is_win then
+    dir = ogetenv "LOCALAPPDATA" or ogetenv "APPDATA"
+    if dir then
+      dir = fs.join_path(dir, "wezterm")
     end
-    return
-  end
-
-  local content = fh:read "*a"
-  fh:close()
-
-  if not content or content == "" then
-    return
-  end
-
-  local ok, decoded = pcall(wt.serde.json_decode, content)
-  if not ok then
-    _persist_log:warn("invalid JSON in %s: %s", path, decoded)
-    return
-  end
-
-  if type(decoded) == "table" then
-    cache.clear_global(_store.data)
-    cache.sync_to_global(_store.data, decoded)
-  end
-end
-
----Synchronous file write (fallback when `background_task` is unavailable).
----@param path string     Absolute path to the JSON file.
----@param encoded string  JSON-encoded string to write.
-local function _write_file(path, encoded)
-  local fh, open_err = ioopen(path, "w")
-  if not fh then
-    _persist_log:warn("unable to write %s: %s", path, open_err)
-    return
-  end
-  fh:write(encoded)
-  fh:close()
-end
-
----Write the current store to disk as JSON.
----
----Uses `wezterm.background_task()` when available so the file I/O does not
----block the UI callback.  Falls back to a synchronous write otherwise.
-local function _write_store()
-  if not _has_serde then
-    return
-  end
-
-  local path = _resolve_path()
-  local encoded = wt.serde.json_encode(_store.data)
-
-  if _has_bg_task then
-    wt.background_task(function()
-      _write_file(path, encoded)
-    end)
   else
-    _write_file(path, encoded)
+    local xdg = ogetenv "XDG_STATE_HOME"
+    if xdg then
+      dir = fs.join_path(xdg, "wezterm")
+    else
+      local home = ogetenv "HOME"
+      if home then
+        dir = fs.join_path(home, ".local", "state", "wezterm")
+      end
+    end
   end
+  dir = dir or wt.config_dir
+  return fs.join_path(dir, "picker-state.json")
 end
+
+---@type memo.state.Store
+local _store = memo.state.new {
+  path = Opts.persistence.path or _default_state_path(),
+  auto_load = true,
+  auto_save = true,
+  async = _has_bg_task,
+}
 
 --~ }}}
 
@@ -142,11 +92,7 @@ local M = {}
 ---@param picker_name string  Picker name (e.g. `"colorschemes"`).
 ---@param entry table         `{ id = string, module = string }` — choice id and require path.
 function M.store_save(picker_name, entry)
-  _load_store()
-  _store.data[picker_name] = _store.data[picker_name] or {}
-  cache.clear_global(_store.data[picker_name])
-  cache.sync_to_global(_store.data[picker_name], entry)
-  _write_store()
+  _store:set(picker_name, entry)
 end
 
 ---Retrieve the persisted entry for a picker.
@@ -154,21 +100,18 @@ end
 ---@param picker_name string Picker name.
 ---@return table|nil entry   `{ id, module }` or nil.
 function M.store_get(picker_name)
-  _load_store()
-  return _store.data[picker_name]
+  return _store:get(picker_name)
 end
 
 ---Clear persisted entry for one picker, or all pickers.
 ---
 ---@param picker_name? string Picker name. If nil, clears everything.
 function M.store_clear(picker_name)
-  _load_store()
   if picker_name then
-    _store.data[picker_name] = nil
+    _store:delete(picker_name)
   else
-    cache.clear_global(_store.data)
+    _store:clear()
   end
-  _write_store()
 end
 
 ---Restore persisted picker selections into a config table.
@@ -182,11 +125,9 @@ function M.restore()
     return {}
   end
 
-  _load_store()
-
   local restored = {}
 
-  for picker_name, entry in pairs(_store.data) do
+  for picker_name, entry in pairs(_store:restore()) do
     if entry.module and entry.id then
       local ok, mod = pcall(require, entry.module)
       if ok and mod and mod.pick then

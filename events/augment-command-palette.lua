@@ -41,7 +41,7 @@ wt.on("augment-command-palette", function(_window, _pane)
       brief = "Invalidate cache",
       icon = "md_cached",
       action = wt.action_callback(function(_, _, _)
-        require("utils.fn.cache").forget()
+        require("utils.fn.cache").clear()
       end),
     },
   }

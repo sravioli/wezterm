@@ -1,9 +1,9 @@
 local sfind, sformat, sgsub, ssub, srep =
-    string.find, string.format, string.gsub, string.sub, string.rep
+  string.find, string.format, string.gsub, string.sub, string.rep
 
 local tremove, tinsert, tconcat = table.remove, table.insert, table.concat
 
-local cache = require "utils.fn.cache" ---@class Fn.Cache
+local cache = require "utils.fn.cache" ---@class memo.Cache
 local wt = require "wezterm" ---@class Wezterm
 
 ---@class Fn.String
@@ -165,7 +165,7 @@ end
 ---@param opts? SplitOpts|table Optional splitting behavior.
 ---@return string[] parts       List of substrings.
 M.split = function(s, sep, opts)
-  return cache.compute_cached("str.split", function()
+  return cache.compute("str.split", function()
     local t = {}
     for c in M.gsplit(s, sep, opts) do
       t[#t + 1] = c

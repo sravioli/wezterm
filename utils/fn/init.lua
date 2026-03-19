@@ -1,5 +1,5 @@
 ---@class Fn
----@field g     Fn.Cache
+---@field cache memo.Cache
 ---@field fs    Fn.FileSystem
 ---@field key   Fn.Keymap
 ---@field maths Fn.Maths

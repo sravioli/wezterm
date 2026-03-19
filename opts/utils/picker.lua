@@ -14,7 +14,7 @@ return {
 
   persistence = {
     enabled = true,
-    path = nil, -- defaults to wt.config_dir .. "/picker-state.json"
+    path = nil, -- defaults to %LOCALAPPDATA%/wezterm/ or $XDG_STATE_HOME/wezterm/
     reset_behavior = "clear", -- "clear" | "persist"
   },
 

@@ -658,7 +658,7 @@ end
 
 --- Two-pass pagination: first determine total page count (at full `width`), then
 --- repack at `width − indicator_width` so the `[N/M]` indicator always fits.
---- Reads and writes the current page index via `utils.fn.cache`.
+--- Reads and writes the current page index via `memo.cache`.
 ---
 ---@param  entries  table[]
 ---@param  width    number
@@ -694,7 +694,7 @@ local function current_page(entries, width, window, name)
   local stored = cache.get(var_key)
   local page = (type(stored) == "number") and stored or 1
   page = math.max(1, math.min(page, total))
-  cache.memoize(var_key, page)
+  cache.set(var_key, page)
 
   -- Build the right-padded indicator so the total field width is stable.
   local indicator = sformat(" [%d/%d]", page, total)
@@ -940,7 +940,7 @@ M.hint_action = function(name, direction)
     -- Advance; current_page() will clamp to [1, total] on the next render.
     page = math.max(1, page + direction)
 
-    cache.memoize(var_key, page)
+    cache.set(var_key, page)
 
     -- Force update-status to re-fire so the hint repaints immediately.
     window:set_right_status ""
