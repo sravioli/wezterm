@@ -62,10 +62,10 @@ local _store = memo.state.new {
 
 ---Convert filepath to Lua require path.
 ---
----@param path string File system path.
+---@param p string File system path.
 ---@return string require_path Lua module path.
-local function path_to_module(path)
-  return (path:sub(#wt.config_dir + 2):gsub("%.lua$", ""):gsub(path.separator, "."))
+local function path_to_module(p)
+  return (p:sub(#wt.config_dir + 2):gsub("%.lua$", ""):gsub(path.separator, "."))
 end
 
 ---Normalize item to the `choices` format.
