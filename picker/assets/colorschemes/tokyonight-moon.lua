@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/folke/tokyonight.nvim
 ---@module "picker.assets.colorschemes.tokyonight-moon"
 
-
-
 ---@class Picker.Module
 local M = {}
 

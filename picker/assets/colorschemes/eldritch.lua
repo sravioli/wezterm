@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/eldritch-theme/wezterm
 ---@module "picker.assets.colorschemes.eldritch"
 
-
-
 ---@class Picker.Module
 local M = {}
 

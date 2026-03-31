@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/olivercederborg/poimandres.nvim
 ---@module "picker.assets.colorschemes.poimandres"
 
-
-
 ---@class Picker.Module
 local M = {}
 

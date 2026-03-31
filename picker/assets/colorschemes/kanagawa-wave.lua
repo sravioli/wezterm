@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/rebelot/kanagawa.nvim
 ---@module "picker.assets.colorschemes.kanagawa-wave"
 
-
-
 ---@class Picker.Module
 local M = {}
 

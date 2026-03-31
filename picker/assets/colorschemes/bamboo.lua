@@ -1,7 +1,5 @@
 ---@module "picker.assets.colorschemes.bamboo"
 
-
-
 ---@class Picker.Module
 local M = {}
 

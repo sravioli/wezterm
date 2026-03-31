@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/catppuccin/wezterm
 ---@module "picker.assets.colorschemes.catppuccin-mocha"
 
-
-
 ---@class Picker.Module
 local M = {}
 

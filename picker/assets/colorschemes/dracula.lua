@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/dracula/wezterm
 ---@module "picker.assets.colorschemes.dracula"
 
-
-
 ---@class Picker.Module
 local M = {}
 

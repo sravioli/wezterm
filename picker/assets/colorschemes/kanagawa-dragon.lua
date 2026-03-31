@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/rebelot/kanagawa.nvim
 ---@module "picker.assets.colorschemes.kanagawa-dragon"
 
-
-
 ---@class Picker.Module
 local M = {}
 

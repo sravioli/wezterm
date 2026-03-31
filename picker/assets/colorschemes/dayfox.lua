@@ -1,8 +1,6 @@
 ---Ported from https://www.github.com/EdenEast/nightfox.nvim
 ---@module "picker.assets.colorschemes.dayfox"
 
-
-
 ---@class Picker.Module
 local M = {}
 

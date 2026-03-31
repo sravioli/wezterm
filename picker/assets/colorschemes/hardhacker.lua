@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/hardhackerlabs/theme-wezterm
 ---@module "picker.assets.colorschemes.hardhacker"
 
-
-
 ---@class Picker.Module
 local M = {}
 

@@ -1,8 +1,6 @@
 ---Ported from: https://github.com/neapsix/wezterm
 ---@module "picker.assets.colorschemes.rose-pine-dawn"
 
-
-
 ---@class Picker.Module
 local M = {}
 
