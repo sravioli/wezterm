@@ -3,9 +3,7 @@ local color = require "utils.fn.color" ---@class Fn.Color
 
 local Config = {}
 
-local kanagawa = require "plugs.kanagawa" ---@class kanagawa.API
-
-kanagawa.apply_to_config(Config, { scheme = "wave" })
+require("plugs.kanagawa").apply_to_config(Config, { scheme = "wave" })
 
 local theme = Config.color_schemes[Config.color_scheme]
 
