@@ -2,6 +2,11 @@
 
 ![Configuration showcase](./imgs/showcase.png)
 
+> [!IMPORTANT]
+>
+> Version **7.0.0** is currently under active development on the
+> [`feat/v7.0.0`](https://github.com/sravioli/wezterm/tree/feat/v7.0.0) branch.
+
 ## Installation
 
 > [!NOTE]
