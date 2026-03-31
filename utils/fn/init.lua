@@ -7,7 +7,7 @@ setmetatable(M, {
     local modname = "utils.fn." .. k
     local ok, mod = pcall(require, modname)
     if not ok then
-      return require("utils.logger").new("Fn"):error("Unable to load module %s", modname)
+      return require("plugs.log").new("Fn"):error("Unable to load module %s", modname)
     end
 
     rawset(t, k, mod)

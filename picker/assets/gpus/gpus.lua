@@ -4,7 +4,7 @@ local warp = require "plugs.warp" ---@class Warp.Api
 local wt = require "wezterm" ---@class Wezterm
 local fs = warp.filesystem ---@class Warp.FileSystem
 
-local Logger = require "utils.logger" ---@class Logger
+local Logger = require "plugs.log" ---@class Logger
 
 local os_info = fs.platform()
 

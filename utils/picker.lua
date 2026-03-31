@@ -3,7 +3,7 @@
 -- selene: allow(incorrect_standard_library_use)
 local tunpack = unpack or table.unpack
 
-local Logger = require "utils.logger" ---@class Logger
+local Logger = require "plugs.log" ---@class Logger
 local Opts = require("opts").utils.picker ---@class Opts.Utils.Picker
 
 local warp = require "plugs.warp" ---@class Warp.Api

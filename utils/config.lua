@@ -5,7 +5,7 @@ local Opts = require("opts").utils.config ---@class Opts.Utils.Config
 ---@class Configuration
 local M = {
   modules = {},
-  log = require("utils.logger").new("Config", Opts.log.enabled),
+  log = require("plugs.log").new("Config", Opts.log.enabled),
 }
 M.__index = M
 

@@ -83,7 +83,7 @@ local M = {
 }
 
 ---@package
-M._log = require("utils.logger").new "Utils.Keymapper"
+M._log = require("plugs.log").new "Utils.Keymapper"
 
 ---@package
 M.__check = function(lhs, rhs, tbl)

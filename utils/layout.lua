@@ -1,6 +1,6 @@
 ---@module "utils.layout"
 
-local Logger = require "utils.logger" ---@class Logger
+local Logger = require "plugs.log" ---@class Logger
 local wt = require "wezterm" ---@class Wezterm
 
 local Opts = require("opts").utils.layout ---@class Opts.Utils.Layout

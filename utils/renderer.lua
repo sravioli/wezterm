@@ -15,7 +15,7 @@ local str = warp.string ---@class Warp.String
 local raw_cw = wt.column_width
 
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
-local log = require("utils.logger").new("StatusBar", true) ---@class Logger
+local log = require("plugs.log").new("StatusBar", true) ---@class Logger
 
 ---@class Renderer
 local M = {

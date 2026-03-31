@@ -13,7 +13,7 @@ local M = {}
 
 ---Internal logger instance.
 ---@package
-M.log = require("utils.logger").new "Fn.Color"
+M.log = require("plugs.log").new "Fn.Color"
 
 ---Load color schemes lazily via `__index`.
 ---Schemes are loaded on first access by name, avoiding the startup cost of
