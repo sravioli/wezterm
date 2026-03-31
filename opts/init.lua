@@ -10,7 +10,7 @@ local opts = {
 
 local ok, overrides = pcall(require, "overrides.opts")
 if ok then
-  opts = require("utils.fn.tbl").merge("force", opts, overrides)
+  opts = require("plugs.warp").table.merge("force", opts, overrides)
 end
 
 return opts

@@ -55,7 +55,7 @@ function M:init()
       overrides.key_tables = nil
     end
 
-    final_config = require("utils.fn.tbl").merge("force", final_config, overrides)
+    final_config = require("plugs.warp").table.merge("force", final_config, overrides)
   end
 
   local wt = require "wezterm"

@@ -1,6 +1,5 @@
 ---@class Fn
 ---@field color Fn.Color
----@field tbl   Fn.Table
 local M = {}
 
 setmetatable(M, {

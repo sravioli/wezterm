@@ -1,10 +1,10 @@
 ---@module 'utils.renderer'
 
 local budget = require "utils.bar-budget" ---@class BarBudget
-local merge = require("utils.fn.tbl").merge
 local sb = require("utils.layout"):new "StatusBar" ---@class Layout
 local warp = require "plugs.warp" ---@class Warp.Api
 local wt = require "wezterm" ---@class Wezterm
+local merge = warp.table.merge
 local str = warp.string ---@class Warp.String
 
 -- Direct binding to the C function - bypasses the ANSI-strip regex in
