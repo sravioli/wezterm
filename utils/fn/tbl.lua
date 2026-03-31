@@ -1,27 +1,15 @@
 ---@module 'utils.fn.tbl'
+---
+---Custom deep merge with in-place mutation and `combine` support.
+---For standard table utilities use `warp.table` / `warp.list` directly.
 
--- selene: allow(incorrect_standard_library_use)
-local tunpack = unpack or table.unpack
+local warp = require "plugs.warp" ---@class Warp.Api
+local is_list = warp.table.islist
 
 ---@class Fn.Table
 local M = {}
 
----Check if a table is a list (consecutive integer keys starting from 1).
----A table is considered a list if all its keys are consecutive integers starting
----from 1, with no gaps or non-integer keys.
----
----@param tbl table The table to check.
----@return boolean `true` if the table is a list, `false` otherwise.
-M.is_list = function(tbl)
-  local i = 0
-  for _ in pairs(tbl) do
-    i = i + 1
-    if tbl[i] == nil then
-      return false
-    end
-  end
-  return true
-end
+-- ── merge ──────────────────────────────────────────────────────────────
 
 ---Append items from one list into another, skipping duplicates.
 ---
@@ -43,8 +31,6 @@ local function combine_list(tbl, other)
 end
 
 ---Handle a conflict when a key exists in both the base and incoming table.
----Raises an error for `"error"` behavior, skips for `"keep"`, and overwrites for `"force"`.
----No-ops when the key does not exist in the base table for `"keep"` and `"error"` behaviors.
 ---
 ---@param tbl table The base table.
 ---@param key any The conflicting key.
@@ -59,8 +45,7 @@ local function handle_conflict(tbl, key, value, behavior)
   end
 end
 
----Recurse into a nested table or overwrite the existing value, depending on
----whether both the base and incoming values are non-empty, non-list tables.
+---Recurse into a nested table or overwrite the existing value.
 ---
 ---@param opts Tbl.MergeOpts Merge options.
 ---@param tbl table The base table.
@@ -69,7 +54,7 @@ end
 ---@param other_tbl table The full incoming table (used for recursion).
 local function recurse_or_overwrite(opts, tbl, key, value, other_tbl)
   local should_recurse = next(value) ~= nil
-    and not M.is_list(value)
+    and not is_list(value)
     and type(tbl[key] or false) == "table"
 
   if should_recurse then
@@ -80,8 +65,6 @@ local function recurse_or_overwrite(opts, tbl, key, value, other_tbl)
 end
 
 ---Merge a single table value into the base table at the given key.
----If `opts.combine` is enabled and both values are lists, the incoming list is
----appended to the base list without duplicates. Otherwise, recurse or overwrite.
 ---
 ---@param opts Tbl.MergeOpts Merge options.
 ---@param tbl table The base table.
@@ -89,7 +72,7 @@ end
 ---@param value table The incoming table value.
 ---@param other_tbl table The full incoming table (used for recursion).
 local function merge_table_value(opts, tbl, key, value, other_tbl)
-  if opts.combine and M.is_list(value) and type(tbl[key]) == "table" then
+  if opts.combine and is_list(value) and type(tbl[key]) == "table" then
     combine_list(tbl[key], value)
   else
     recurse_or_overwrite(opts, tbl, key, value, other_tbl)
@@ -97,8 +80,6 @@ local function merge_table_value(opts, tbl, key, value, other_tbl)
 end
 
 ---Merge a single key-value pair into the base table.
----Raises an error early for `"error"` behavior, then delegates to
----`merge_table_value` for table values or `handle_conflict` for scalar values.
 ---
 ---@param opts Tbl.MergeOpts Merge options.
 ---@param tbl table The base table.
@@ -120,12 +101,6 @@ local function merge_value(opts, tbl, key, value, other_tbl)
 end
 
 ---Perform deep recursive merge of tables.
----
----Merges content of subsequent tables into the base table recursively.
----Non-empty, non-list tables are merged recursively. Lists (tables indexed by
----consecutive integers starting from 1) are treated as literals and overwritten,
----unless `opts.combine` is enabled, in which case they are concatenated without
----duplicates.
 ---
 ---@param opts Tbl.MergeOpts|"error"|"keep"|"force" Merge opts, or behavior string shorthand.
 ---@param tbl table The base table to merge values into.
@@ -151,44 +126,6 @@ M.merge = function(opts, tbl, ...)
   end
 
   return tbl
-end
-
----Compute Cartesian product of multiple tables.
----
----Returns table containing all possible combinations of elements from the input tables.
----
----@param sets table Table containing sub-tables (sets) for the product calculation.
----@return table cartesian Table of all possible combinations.
-M.cartesian = function(sets)
-  local res = { {} }
-  for i = 1, #sets do
-    local temp = {}
-    for j = 1, #sets[i] do
-      for k = 1, #res do
-        temp[#temp + 1] = { sets[i][j], tunpack(res[k]) }
-      end
-    end
-    res = temp
-  end
-  return res
-end
-
----Reverse array elements of table.
----
----Creates a new table containing the array part of the input table in reverse order.
----
----@param tbl table Table to reverse.
----@return table reversed New table with reversed array elements.
-M.reverse = function(tbl)
-  local reversed = {}
-  for i = #tbl, 1, -1 do
-    reversed[#reversed + 1] = tbl[i]
-  end
-  return reversed
-end
-
-M.is_empty = function(tbl)
-  return not tbl or #tbl == 0
 end
 
 return M

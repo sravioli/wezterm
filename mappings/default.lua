@@ -59,14 +59,12 @@ key.maps(Config, {
     "char select",
   },
 
-
   { '<C-S-">', act.SplitHorizontal { domain = "CurrentPaneDomain" }, "vsplit" },
   { "<C-S-%>", act.SplitVertical { domain = "CurrentPaneDomain" }, "hsplit" },
   { "<C-M-h>", act.ActivatePaneDirection "Left", "move left" },
   { "<C-M-j>", act.ActivatePaneDirection "Down", "move down" },
   { "<C-M-k>", act.ActivatePaneDirection "Up", "move up" },
   { "<C-M-l>", act.ActivatePaneDirection "Right", "move right" },
-
 
   {
     "<leader>h",

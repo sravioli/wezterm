@@ -26,8 +26,8 @@
 
 local wt = require "wezterm" ---@class Wezterm
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
-local sbr = require "utils.renderer" ---@class Renderer
 local budget = require "utils.bar-budget" ---@class BarBudget
+local sbr = require "utils.renderer" ---@class Renderer
 
 local cleared = false
 

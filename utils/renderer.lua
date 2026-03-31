@@ -1,16 +1,17 @@
 ---@module 'utils.renderer'
 
 local budget = require "utils.bar-budget" ---@class BarBudget
-local fn = require "utils.fn" ---@class Fn
+local merge = require("utils.fn.tbl").merge
 local sb = require("utils.layout"):new "StatusBar" ---@class Layout
-local str = require "utils.fn.str" ---@class Fn.String
+local warp = require "plugs.warp" ---@class Warp.Api
 local wt = require "wezterm" ---@class Wezterm
+local str = warp.string ---@class Warp.String
 
 -- Direct binding to the C function - bypasses the ANSI-strip regex in
--- str.column_width.  Safe here because all inputs at this layer are plain
+-- str.width.  Safe here because all inputs at this layer are plain
 -- text (icons, separators, padding, resolved node values).  For strings
 -- that may contain ANSI codes (e.g. resolve_layout output), use
--- str.column_width instead.
+-- str.width instead.
 local raw_cw = wt.column_width
 
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
@@ -54,14 +55,14 @@ local function truncate(s, max_cols, ellipsis)
   if max_cols <= 0 then
     return ""
   end
-  if str.column_width(s) <= max_cols then
+  if str.width(s) <= max_cols then
     return s
   end
 
-  local ew = str.column_width(ellipsis)
+  local ew = str.width(ellipsis)
   local result, w = {}, 0
   for cp in s:gmatch "[^\128-\191][\128-\191]*" do
-    local cpw = str.column_width(cp)
+    local cpw = str.width(cp)
     if w + cpw + ew > max_cols then
       break
     end
@@ -174,7 +175,7 @@ M.style_node = function(node, parent_style)
     return node.style(M.theme, style)
   end
   if typ == "table" then
-    return fn.tbl.merge({ behavior = "force", combine = true }, node.style, style)
+    return merge({ behavior = "force", combine = true }, node.style, style)
   end
   return style
 end
@@ -185,13 +186,13 @@ M.resolve_node = function(node)
   end
 
   local value = type(node.value) == "function" and node.value(M.window, M.pane)
-  or node.value
+    or node.value
   local typ = type(value)
 
   if typ == "table" then
     return value
   end
-  return fn.str.pad(value, node.padding or 0)
+  return str.pad(value, node.padding or 0)
 end
 
 M.prepare_node = function(node, parent_style)
@@ -568,7 +569,7 @@ local function resolve_layout(layout)
   if type(layout) == "function" then
     _layout_ctx.layout = require "utils.layout"
     _layout_ctx.theme = M.theme
-    _layout_ctx.fn = require "utils.fn"
+    _layout_ctx.warp = warp
     _layout_ctx.window = M.window
     _layout_ctx.pane = M.pane
     layout = layout(_layout_ctx)
@@ -663,7 +664,7 @@ local function render_module(name, module, components)
 
   if module.layout then
     formatted = resolve_layout(module.layout)
-    consumed = str.column_width(formatted)
+    consumed = str.width(formatted)
 
     -- Respect the budget: if the resolved layout is too wide and the module
     -- allows hiding, drop it rather than overflowing.

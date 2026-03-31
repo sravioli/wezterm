@@ -2,10 +2,12 @@
 
 local Icon = require "utils.icons" ---@class Icons
 local Layout = require "utils.layout" ---@class Layout
-local fs = require "utils.fn.fs" ---@class Fn.FileSystem
-local str = require "utils.fn.str" ---@class Fn.String
 local budget = require "utils.bar-budget" ---@class BarBudget
+local warp = require "plugs.warp" ---@class Warp.Api
 local wt = require "wezterm" ---@class Wezterm
+local fs = warp.filesystem ---@class Warp.FileSystem
+local path = warp.path ---@class Warp.Path
+local str = warp.string ---@class Warp.String
 
 local tabseps = Icon.Sep.tb
 
@@ -13,11 +15,11 @@ local SHELLS = { fish = true, bash = true, zsh = true, sh = true, nu = true }
 
 -- Hoisted to module scope - the home directory never changes during a session.
 -- Avoids per-tab-per-repaint calls through the (previously broken) cache layer.
-local HOME = fs.home()
+local HOME = fs.home
 local HOME_BASENAME = fs.basename(HOME)
 
 local function truncate(text, budget, callback)
-  if str.column_width(text) <= budget then
+  if str.width(text) <= budget then
     return text
   end
 
@@ -45,9 +47,9 @@ local function format_shell(process, rest, title_budget)
   local cwd = (rest and rest ~= "") and rest or "~"
 
   local prefix = (Icon.Progs[process] or "") .. " in "
-  local prefix_width = str.column_width(prefix)
+  local prefix_width = str.width(prefix)
 
-  cwd = truncate(cwd, title_budget - prefix_width, fs.shorten_path_to_fit)
+  cwd = truncate(cwd, title_budget - prefix_width, path.shorten_to)
   return prefix .. cwd
 end
 
@@ -58,7 +60,7 @@ local function format_neovim(pane, title_budget)
 
   local prefix = (Icon.Progs["nvim"] or "") .. " (" .. Icon.Folder .. " "
   local suffix = ")"
-  local decoration_width = str.column_width(prefix .. suffix)
+  local decoration_width = str.width(prefix .. suffix)
 
   cwd = truncate(cwd, title_budget - decoration_width, truncate_with_ellipsis)
   return prefix .. cwd .. suffix
@@ -133,7 +135,7 @@ wt.on("format-tab-title", function(tab, tabs, _, config, hover, max_width)
   -- ── Calculate exact budget for the title text ────────────────────────────
   -- Measure exactly how much space the separators, spaces, and tab indices take
   local static_decorations = left_sep .. " " .. tab_idx .. " " .. right_sep
-  local static_width = str.column_width(static_decorations)
+  local static_width = str.width(static_decorations)
 
   -- Prevent negative budgets if max_width is extremely squeezed
   local title_budget = math.max(0, max_width - static_width)
@@ -153,7 +155,7 @@ wt.on("format-tab-title", function(tab, tabs, _, config, hover, max_width)
 
   -- Pass pre-computed width (plain-text parts sum) so `record()` skips the
   -- expensive ANSI-strip + column_width call on the full rendered string.
-  budget.record(idx, static_width + str.width(title))
+  budget.record(idx, static_width + str.col_width(title))
   budget.set_count(#tabs)
 
   return rendered

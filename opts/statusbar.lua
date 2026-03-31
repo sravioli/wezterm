@@ -2,9 +2,13 @@
 
 local wt = require "wezterm"
 local color_parse, timefmt = wt.color.parse, wt.strftime
+local warp = require "plugs.warp" ---@class Warp.Api
+local fs = warp.filesystem ---@class Warp.FileSystem
+local maths = warp.maths ---@class Warp.Maths
+
+local mfloor = math.floor
 
 local cond = require "utils.conditions" ---@class Conditions
-local fn = require "utils.fn" ---@class Fn
 local icons = require "utils.icons" ---@class Icons
 
 ---Build a four-stop colour palette from the theme's accent colour.
@@ -212,7 +216,7 @@ local M = {
 
     -- cwd is the leftmost data cell → palette[1] (darkest)
     cwd = function(_, pane, theme, config)
-      local cwd = fn.fs.get_cwd(pane, true)
+      local cwd = fs.get_cwd(pane, true)
       local palette, text_fg = make_palette(theme)
 
       return {
@@ -248,7 +252,7 @@ local M = {
 
     -- hostname → palette[2], prev = cwd (palette[1])
     hostname = function(_, pane, theme, _)
-      local hostname = fn.fs.get_hostname(pane)
+      local hostname = fs.get_hostname(pane)
       local palette, text_fg = make_palette(theme)
 
       return {
@@ -331,7 +335,7 @@ local M = {
       end
 
       local charge = bat.state_of_charge * 100
-      local charge_r = fn.maths.toint(fn.maths.mround(charge, 10))
+      local charge_r = mfloor(maths.round_to(charge, 10))
       local bat_ico = icons.Bat[bat.state][tostring(charge_r)]
       local bat_lvl = tostring(math.floor(charge + 0.5)) .. "%"
       local palette, text_fg = make_palette(theme)

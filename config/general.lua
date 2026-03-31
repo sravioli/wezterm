@@ -1,5 +1,7 @@
+local warp = require "plugs.warp" ---@class Warp.Api
+local fs = warp.filesystem ---@class Warp.FileSystem
+
 local Icons = require "utils.icons" ---@class Icons
-local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 
 local Config = {}
 
@@ -46,7 +48,7 @@ if fs.is_win then
   }
 end
 
-Config.default_cwd = fs.home()
+Config.default_cwd = fs.home
 
 -- ref: https://wezfurlong.org/wezterm/config/lua/SshDomain.html
 Config.ssh_domains = {}

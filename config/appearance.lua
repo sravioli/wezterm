@@ -3,8 +3,7 @@ local color = require "utils.fn.color" ---@class Fn.Color
 
 local Config = {}
 
-local kanagawa =
-  require("wezterm").plugin.require "https://github.com/sravioli/kanagawa.wz" ---@class kanagawa.API
+local kanagawa = require "plugs.kanagawa" ---@class kanagawa.API
 
 kanagawa.apply_to_config(Config, { scheme = "wave" })
 

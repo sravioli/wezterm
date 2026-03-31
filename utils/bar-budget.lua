@@ -21,7 +21,8 @@
 --- conservative upper-bound estimate using `_tab_max_width` so the right
 --- status never overflows.
 
-local str = require "utils.fn.str" ---@class Fn.String
+local warp = require "plugs.warp" ---@class Warp.Api
+local str = warp.string ---@class Warp.String
 
 ---@class BarBudget
 local M = {
@@ -63,7 +64,7 @@ function M.record(index, width_or_rendered)
   if type(width_or_rendered) == "number" then
     new_w = width_or_rendered
   else
-    new_w = str.column_width(width_or_rendered)
+    new_w = str.width(width_or_rendered)
   end
 
   local old_w = M._widths[index] or 0

@@ -1,6 +1,7 @@
 ---@module "picker.colorscheme"
 
-local str = require "utils.fn.str" ---@class Fn.String
+local warp = require "plugs.warp" ---@class Warp.Api
+local str = warp.string ---@class Warp.String
 local wt = require "wezterm" ---@class Wezterm
 
 local Layout = require "utils.layout" ---@class Layout
@@ -15,7 +16,7 @@ return Picker.new {
 
     local max_label_len = 0
     for _, item in pairs(__choices) do
-      local len = str.column_width(item.choice.label --[[@as string]])
+      local len = str.width(item.choice.label --[[@as string]])
       max_label_len = len > max_label_len and len or max_label_len
     end
 
@@ -30,7 +31,7 @@ return Picker.new {
       local layout = Layout:new "ColorschemeChoices"
 
       layout:append(nil, fg, label)
-      layout:append(nil, fg, (" "):rep((max_label_len - str.column_width(label)) + 2))
+      layout:append(nil, fg, (" "):rep((max_label_len - str.width(label)) + 2))
 
       for i = 1, #colors.ansi do
         local color = colors.ansi[i]

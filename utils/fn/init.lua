@@ -1,9 +1,5 @@
 ---@class Fn
----@field cache memo.Cache
----@field fs    Fn.FileSystem
----@field key   Fn.Keymap
----@field maths Fn.Maths
----@field str   Fn.String
+---@field color Fn.Color
 ---@field tbl   Fn.Table
 local M = {}
 

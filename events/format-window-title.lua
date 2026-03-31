@@ -1,6 +1,7 @@
 ---@module "events.augment-window-title"
 
-local fs = require "utils.fn.fs" ---@class Fn.FileSystem
+local warp = require "plugs.warp" ---@class Warp.Api
+local fs = warp.filesystem ---@class Warp.FileSystem
 local wt = require "wezterm" ---@class Wezterm
 
 ---@param tab TabInformation

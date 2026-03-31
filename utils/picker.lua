@@ -4,12 +4,14 @@
 local tunpack = unpack or table.unpack
 
 local Logger = require "utils.logger" ---@class Logger
-local fs = require "utils.fn.fs" ---@class Fn.FileSystem
-local tbl = require "utils.fn.tbl" ---@class Fn.Table
 local Opts = require("opts").utils.picker ---@class Opts.Utils.Picker
 
+local warp = require "plugs.warp" ---@class Warp.Api
 local wt = require "wezterm" ---@class Wezterm
-local memo = wt.plugin.require "https://github.com/sravioli/memo.wz" ---@class memo.API
+local fs = warp.filesystem ---@class Warp.FileSystem
+local path = warp.path ---@class Warp.Path
+local tbl = warp.table ---@class Warp.Table
+local memo = require "plugs.memo" ---@class memo.API
 
 --~ {{{1 Persistence internals
 
@@ -31,21 +33,21 @@ local function _default_state_path()
   if fs.is_win then
     dir = ogetenv "LOCALAPPDATA" or ogetenv "APPDATA"
     if dir then
-      dir = fs.join_path(dir, "wezterm")
+      dir = path.concat(dir, "wezterm")
     end
   else
     local xdg = ogetenv "XDG_STATE_HOME"
     if xdg then
-      dir = fs.join_path(xdg, "wezterm")
+      dir = path.concat(xdg, "wezterm")
     else
       local home = ogetenv "HOME"
       if home then
-        dir = fs.join_path(home, ".local", "state", "wezterm")
+        dir = path.concat(home, ".local", "state", "wezterm")
       end
     end
   end
   dir = dir or wt.config_dir
-  return fs.join_path(dir, "picker-state.json")
+  return path.concat(dir, "picker-state.json")
 end
 
 ---@type memo.state.Store
@@ -63,7 +65,7 @@ local _store = memo.state.new {
 ---@param path string File system path.
 ---@return string require_path Lua module path.
 local function path_to_module(path)
-  return (path:sub(#wt.config_dir + 2):gsub("%.lua$", ""):gsub(fs.path_separator, "."))
+  return (path:sub(#wt.config_dir + 2):gsub("%.lua$", ""):gsub(path.separator, "."))
 end
 
 ---Normalize item to the `choices` format.
@@ -187,8 +189,8 @@ function M.new(opts)
   self.format_description = opts.format_description or Opts.defaults.format_description
 
   -- Store directory path for lazy loading
-  local assets_path = fs.join_path(wt.config_dir, tunpack(Opts.assets_path_segments))
-  self._dir = fs.join_path(assets_path, opts.name)
+  local assets_path = path.concat(wt.config_dir, tunpack(Opts.assets_path_segments))
+  self._dir = path.concat(assets_path, opts.name)
 
   return self
 end
@@ -204,7 +206,7 @@ function M:_initialize()
   self._log:info "initializing..."
   local paths = wt.read_dir(self._dir)
   ---@cast paths -string, +string[]
-  if not paths or tbl.is_empty(paths) then
+  if not paths or tbl.isempty(paths) then
     self._log:error("Unable to read list files in %s. Is the path correct?", self._dir)
     self._initialized = true
     return

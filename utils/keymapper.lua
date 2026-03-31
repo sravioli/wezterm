@@ -1,6 +1,8 @@
 ---@module 'utils.keymapper'
 
-local str = require "utils.fn.str" ---@class Fn.String
+local warp = require "plugs.warp" ---@class Warp.Api
+local wt = require "wezterm" ---@class Wezterm
+local str = warp.string ---@class Warp.String
 
 local sgsub, ssub, smatch, sformat = string.gsub, string.sub, string.match, string.format
 local tconcat = table.concat
@@ -21,7 +23,7 @@ local _modes_cache = nil
 
 ---@alias KeyTableDefFn fun(theme: table): KeyTableDef
 
-local wt = require "wezterm" ---@class Wezterm
+local memo = require "plugs.memo" ---@class memo.API
 
 ---@class Keymapper
 local M = {
@@ -631,14 +633,14 @@ end
 ---@param  budget number
 ---@return {lhs:string, desc:string}[][]  pages
 local function pack_pages(raw, budget)
-  local sep_w = str.column_width " / "
+  local sep_w = str.width " / "
   if #raw == 0 then
     return {}
   end
 
   local pages, page, used = {}, {}, 0
   for _, item in ipairs(raw) do
-    local iw = str.column_width(item.lhs .. " " .. item.desc)
+    local iw = str.width(item.lhs .. " " .. item.desc)
     if #page > 0 and used + sep_w + iw > budget then
       pages[#pages + 1] = page
       page, used = { item }, iw
@@ -668,7 +670,7 @@ end
 ---@return string                            indicator  e.g. `" [2/4]"` or `""`
 ---@return integer                           ind_w      column width of the indicator field
 local function current_page(entries, width, window, name)
-  local cache = require "utils.fn.cache"
+  local cache = memo.cache
   local raw = collect_raw(entries)
 
   -- First pass: full-width probe to discover total page count.
@@ -683,7 +685,7 @@ local function current_page(entries, width, window, name)
 
   -- Reserve space for the widest possible indicator, e.g. " [4/4]".
   local max_ind = sformat(" [%d/%d]", total, total)
-  local ind_w = str.column_width(max_ind)
+  local ind_w = str.width(max_ind)
 
   -- Second pass: repack with the indicator reservation in place.
   local pages = pack_pages(raw, width - ind_w)
@@ -698,7 +700,7 @@ local function current_page(entries, width, window, name)
 
   -- Build the right-padded indicator so the total field width is stable.
   local indicator = sformat(" [%d/%d]", page, total)
-  local pad = ind_w - str.column_width(indicator)
+  local pad = ind_w - str.width(indicator)
   if pad > 0 then
     indicator = indicator .. string.rep(" ", pad)
   end
@@ -784,14 +786,14 @@ M.hint = function(config, name, width, window)
   end
 
   local sep = " / "
-  local sep_w = str.column_width(sep)
+  local sep_w = str.width(sep)
   local budget = width - ind_w
   local parts = {}
   local used = 0
 
   for _, item in ipairs(items) do
     local s = item.lhs .. " " .. item.desc
-    local sw = str.column_width(s)
+    local sw = str.width(s)
     local need = sw + (#parts > 0 and sep_w or 0)
     if used + need > budget then
       break
@@ -804,7 +806,7 @@ M.hint = function(config, name, width, window)
   end
 
   local body = tconcat(parts, sep)
-  local bw = str.column_width(body)
+  local bw = str.width(body)
   if bw < budget then
     body = string.rep(" ", budget - bw) .. body
   end
@@ -865,13 +867,13 @@ M.hint_layout = function(config, name, width, window, opts)
 
   -- ── Fit items to budget ───────────────────────────────────────────────────
   local sep_str = " / "
-  local sep_w = str.column_width(sep_str)
+  local sep_w = str.width(sep_str)
   local budget = width - ind_w
   local used = 0
   local selected = {}
 
   for i, item in ipairs(items) do
-    local item_w = str.column_width(item.lhs) + 1 + str.column_width(item.desc)
+    local item_w = str.width(item.lhs) + 1 + str.width(item.desc)
     local need = item_w + (i > 1 and sep_w or 0)
     if used + need > budget then
       break
@@ -929,7 +931,7 @@ end
 
 M.hint_action = function(name, direction)
   return wt.action_callback(function(window, pane)
-    local cache = require "utils.fn.cache"
+    local cache = memo.cache
     local active_pane = window:active_pane()
     local pane_id = active_pane and active_pane:pane_id() or pane:pane_id()
     local active_name = window:active_key_table() or name

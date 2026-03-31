@@ -1,9 +1,10 @@
 ---@module 'picker.assets.gpus.gpus'
 
+local warp = require "plugs.warp" ---@class Warp.Api
 local wt = require "wezterm" ---@class Wezterm
+local fs = warp.filesystem ---@class Warp.FileSystem
 
 local Logger = require "utils.logger" ---@class Logger
-local fs = require "utils.fn.fs" ---@class Fn.FileSystem
 
 local os_info = fs.platform()
 
