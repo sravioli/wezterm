@@ -11,7 +11,16 @@ local str = warp.string ---@class Warp.String
 
 local tabseps = Icon.Sep.tb
 
-local SHELLS = { fish = true, bash = true, zsh = true, sh = true, nu = true }
+local SHELLS = {
+  fish = true,
+  bash = true,
+  zsh = true,
+  sh = true,
+  nu = true,
+  pwsh = true,
+  powershell = true,
+  cmd = true,
+}
 
 -- Hoisted to module scope - the home directory never changes during a session.
 -- Avoids per-tab-per-repaint calls through the (previously broken) cache layer.
@@ -45,11 +54,15 @@ end
 
 local function format_shell(process, rest, title_budget)
   local cwd = (rest and rest ~= "") and rest or "~"
+  cwd = cwd:gsub("^in%s+", "")
+  if cwd == "" then
+    cwd = "~"
+  end
 
   local prefix = (Icon.Progs[process] or "") .. " in "
   local prefix_width = str.width(prefix)
 
-  cwd = truncate(cwd, title_budget - prefix_width, path.shorten_to)
+  cwd = truncate(cwd, title_budget - prefix_width, str.truncate_right)
   return prefix .. cwd
 end
 
