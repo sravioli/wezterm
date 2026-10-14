@@ -1,5 +1,6 @@
 ---@module 'utils.renderer'
 
+local conditions = require "utils.conditions" ---@class Conditions
 local budget = require "utils.bar-budget" ---@class BarBudget
 local ribbon = require "plugs.ribbon" ---@class Ribbon.Api
 local warp = require "plugs.warp" ---@class Warp.Api
@@ -137,21 +138,12 @@ end
 -- Style / node helpers
 -- ---------------------------------------------------------------------------
 
---- Evaluate mod.cond: supports nil (treat as false), function, or plain value.
----@param mod Opts.StatusBar.Module|Opts.StatusBar.Module.Component
----@return boolean
-local function resolve_cond(mod)
-  local cond = mod.cond
-  if type(cond) == "function" then
-    return cond(M.window, M.pane)
-  end
-  return cond ---@diagnostic disable-line: return-type-mismatch
-end
-
 ---@param mod Opts.StatusBar.Module|Opts.StatusBar.Module.Component|nil
 ---@return boolean
 M.enabled = function(mod)
-  return mod ~= nil and mod.enabled == true and resolve_cond(mod) == true
+  return mod ~= nil
+    and mod.enabled == true
+    and conditions.predicate(mod.cond, M.window, M.pane) == true
 end
 
 M.has_style = function(mod)
