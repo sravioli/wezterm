@@ -10,6 +10,13 @@ local lantern = require "plugs.lantern" ---@class Lantern
 
 local M = {}
 
+local function hint_page(direction)
+  return act.Multiple {
+    key.hint_action(nil, direction),
+    act.EmitEvent "chord-hint-page-changed",
+  }
+end
+
 local function native_mode(name, enter, spec)
   local mode = key.mode(name, spec)
 
@@ -28,8 +35,8 @@ end, function(theme)
     meta = { i = icon.copy, txt = "COPY", bg = theme.brights[3], pad = 5 },
     keys = {
       { "<ESC>", act.CopyMode "Close", "exit" },
-      { "<C-S-A-Left>", key.hint_action(nil, -1), "" },
-      { "<C-S-A-Right>", key.hint_action(nil, 1), "" },
+      { "<C-S-A-Left>", hint_page(-1), "" },
+      { "<C-S-A-Right>", hint_page(1), "" },
       {
         "y",
         act.Multiple {
@@ -88,8 +95,8 @@ end, function(theme)
     meta = { i = icon.search, txt = "SEARCH", bg = theme.brights[4], pad = 5 },
     keys = {
       { "<ESC>", act.CopyMode "Close", "exit" },
-      { "<C-S-A-Left>", key.hint_action(nil, -1), "" },
-      { "<C-S-A-Right>", key.hint_action(nil, 1), "" },
+      { "<C-S-A-Left>", hint_page(-1), "" },
+      { "<C-S-A-Right>", hint_page(1), "" },
       { "<C-n>", act.CopyMode "NextMatch", "next" },
       { "<C-N>", act.CopyMode "PriorMatch", "prev" },
       { "<C-r>", act.CopyMode "CycleMatchType", "cycle type" },
@@ -108,8 +115,8 @@ M.font = key.mode("font_mode", function(theme)
     meta = { i = icon.font, txt = "FONT", bg = theme.ansi[7], pad = 4 },
     keys = {
       { "<ESC>", "PopKeyTable", "exit" },
-      { "<C-S-A-Left>", key.hint_action(nil, -1), "" },
-      { "<C-S-A-Right>", key.hint_action(nil, 1), "" },
+      { "<C-S-A-Left>", hint_page(-1), "" },
+      { "<C-S-A-Right>", hint_page(1), "" },
       { "+", act.IncreaseFontSize, "increase size" },
       { "-", act.DecreaseFontSize, "decrease size" },
       { "0", act.ResetFontSize, "reset size" },
@@ -123,8 +130,8 @@ M.window = key.mode("window_mode", function(theme)
     meta = { i = icon.window, txt = "WINDOW", bg = theme.ansi[6], pad = 4 },
     keys = {
       { "<ESC>", "PopKeyTable", "exit" },
-      { "<C-S-A-Left>", key.hint_action(nil, -1), "" },
-      { "<C-S-A-Right>", key.hint_action(nil, 1), "" },
+      { "<C-S-A-Left>", hint_page(-1), "" },
+      { "<C-S-A-Right>", hint_page(1), "" },
       { "q", act.CloseCurrentPane { confirm = true }, "close" },
 
       ---pane navigation
@@ -161,8 +168,8 @@ M.help = key.mode("help_mode", function(theme)
     meta = { i = icon.help, txt = "NORMAL", bg = theme.ansi[5], pad = 5 },
     keys = {
       { "<ESC>", "PopKeyTable", "exit" },
-      { "<C-S-A-Left>", key.hint_action(nil, -1), "" },
-      { "<C-S-A-Right>", key.hint_action(nil, 1), "" },
+      { "<C-S-A-Left>", hint_page(-1), "" },
+      { "<C-S-A-Right>", hint_page(1), "" },
 
       ---tabs
       { "<C-Tab>", act.ActivateTabRelative(1), "next tab" },
@@ -220,8 +227,8 @@ M.lantern = key.mode("lantern_mode", function(theme)
     meta = { i = icon.lantern, txt = "LANTERN", bg = theme.ansi[2], pad = 3 },
     keys = {
       { "<ESC>", "PopKeyTable", "exit" },
-      { "<C-S-A-Left>", key.hint_action(nil, -1), "" },
-      { "<C-S-A-Right>", key.hint_action(nil, 1), "" },
+      { "<C-S-A-Left>", hint_page(-1), "" },
+      { "<C-S-A-Right>", hint_page(1), "" },
       { "c", lantern.light.colorscheme(), "colorscheme" },
       { "f", lantern.light.font(), "font" },
       { "s", lantern.light.font_size(), "font size" },

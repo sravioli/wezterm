@@ -31,7 +31,7 @@ local sbr = require "utils.renderer" ---@class Renderer
 
 local cleared = false
 
-wt.on("update-status", function(window, pane)
+local function update_status(window, pane)
   -- ── Disabled ─────────────────────────────────────────────────────────────
   if not Opts.enabled then
     if not cleared then
@@ -67,4 +67,7 @@ wt.on("update-status", function(window, pane)
 
   window:set_left_status(left)
   window:set_right_status(right)
-end)
+end
+
+wt.on("update-status", update_status)
+wt.on("chord-hint-page-changed", update_status)
