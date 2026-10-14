@@ -149,7 +149,7 @@ local M = {
 
         return {
           enabled = true,
-          cond = cond.mode_active,
+          cond = true,
           padding = { left = 1 },
           style = function(t)
             return { bg = mode.bg, fg = t.background }
@@ -198,7 +198,7 @@ local M = {
 
       return {
         enabled = true,
-        cond = cond.mode_active,
+        cond = true,
 
         -- Use the `layout` field (function form) so the hint is rendered as a
         -- wezterm FormatItem array with per-segment colour and attributes.

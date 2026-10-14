@@ -493,7 +493,7 @@ local function build_cell_flexible(name, module, avail_cols)
   for _, mode in ipairs(RENDER_MODES) do
     local result, w = build_cell_from_parts(module, parts, mode, avail_cols)
     if w >= 0 then
-      log:info(
+      log:debug(
         "[%s] mode: %-4s  used: %d/%d  cell: %s",
         name,
         mode,
@@ -506,13 +506,13 @@ local function build_cell_flexible(name, module, avail_cols)
   end
 
   if module.can_hide then
-    log:info("[%s] hidden - no space remaining", name)
+    log:debug("[%s] hidden - no space remaining", name)
     return "", 0
   end
 
   -- Last resort: force icon-only even when it exceeds the budget.
   local result, w = build_cell_from_parts(module, parts, "icon", nil)
-  log:info("[%s] forced icon-only  width: %d  cell: %s", name, w, result)
+  log:debug("[%s] forced icon-only  width: %d  cell: %s", name, w, result)
   return result, math.max(w, 0)
 end
 
@@ -526,7 +526,7 @@ end
 ---@return string formatted
 ---@return integer width
 M.format_cell = function(name, module, avail_cols)
-  log:info(
+  log:debug(
     "[%s] icon: %s\ttext: %s",
     name,
     module.icon and tostring(module.icon.value) or "-",
@@ -535,7 +535,7 @@ M.format_cell = function(name, module, avail_cols)
 
   if not Opts.flexible or not avail_cols then
     local result, w = build_cell(name, module, "full", nil)
-    log:info("[%s] cell: %s", name, result)
+    log:debug("[%s] cell: %s", name, result)
     return result, w
   end
 
@@ -629,11 +629,11 @@ local function render_group(names, avail_cols)
   end
 
   if #components == 0 then
-    log:info("[group] nothing fits in %d cols", avail_cols)
+    log:debug("[group] nothing fits in %d cols", avail_cols)
     return "", 0
   end
 
-  log:info("[group] greedy fit  used: %d/%d", total_used, avail_cols)
+  log:debug("[group] greedy fit  used: %d/%d", total_used, avail_cols)
   return table.concat(components), total_used
 end
 
@@ -703,7 +703,7 @@ M.render_layout = function(layout)
       -- ── Single named module: existing path ───────────────────────────────
       local name = entry
       local module = Opts.modules[name]
-      log:info("name %s", name)
+      log:debug("name %s", name)
 
       if type(module) == "function" then
         module = module(M.window, M.pane, M.theme, M.config)
