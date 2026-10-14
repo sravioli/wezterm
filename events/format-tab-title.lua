@@ -35,17 +35,55 @@ local function process_icon(process)
   return sigil.icon(process, { fallback = false }) or ""
 end
 
-local function truncate(text, budget, callback)
-  if str.width(text) <= budget then
+local function truncate(text, max_cells, callback)
+  if str.width(text) <= max_cells then
     return text
   end
 
-  return budget <= 1 and "" or callback(text, budget)
+  return max_cells <= 1 and "" or callback(text, max_cells)
 end
 
 --- Helper to safely truncate a string with an ellipsis if it exceeds the budget
-local function truncate_with_ellipsis(text, budget)
-  return wt.truncate_right(text, budget) .. "…"
+local function truncate_with_ellipsis(text, max_cells)
+  if max_cells <= 0 then
+    return ""
+  end
+
+  if max_cells == 1 then
+    return "…"
+  end
+
+  return wt.truncate_right(text, max_cells - 1) .. "…"
+end
+
+local function format_copilot_idle(pane, title_budget)
+  local cwd_url = pane.current_working_dir or pane:get_current_working_dir()
+  local cwd = (cwd_url and cwd_url.file_path) or "~"
+  cwd = cwd:gsub("^" .. HOME, "~"):gsub(HOME_BASENAME, "󰋜 ")
+
+  local icon = process_icon "GitHub Copilot"
+  local prefix = icon .. " (" .. Icon.Folder .. " "
+  local suffix = ")"
+  local decoration_width = str.width(prefix .. suffix)
+
+  cwd = truncate(cwd, title_budget - decoration_width, truncate_with_ellipsis)
+  return prefix .. cwd .. suffix
+end
+
+local function format_copilot_chat(title, title_budget)
+  local chat_title =
+    title:gsub("^🤖%s*[-:]*%s*", ""):gsub("^GitHub Copilot%s*[-:]*%s*", "")
+
+  if chat_title == "" then
+    chat_title = "GitHub Copilot"
+  end
+
+  local icon = process_icon "GitHub Copilot"
+  local prefix = icon .. " "
+
+  chat_title =
+    truncate(chat_title, title_budget - str.width(prefix), truncate_with_ellipsis)
+  return prefix .. chat_title
 end
 
 local function parse_title(title)
@@ -95,6 +133,16 @@ end
 local function resolve_title(pane, raw_title, title_budget)
   local title = raw_title:gsub("^Copy mode: ", "")
   title = title:gsub("^" .. HOME, "~"):gsub(HOME_BASENAME, "󰋜 ")
+
+  -- GitHub Copilot idle pane title.
+  if title == "GitHub Copilot" then
+    return format_copilot_idle(pane, title_budget)
+  end
+
+  -- GitHub Copilot job/session title (usually starts with the robot emoji).
+  if title:match "^🤖" or title:match "^GitHub Copilot%s*[-:]" then
+    return format_copilot_chat(title, title_budget)
+  end
 
   local process, rest = parse_title(title)
 
