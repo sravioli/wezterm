@@ -57,7 +57,7 @@ end --~~}}}
 ---@param Config table Configuration object to update.
 ---@param theme Color.Theme Theme object containing specific tab states.
 M.set_tab_button = function(Config, theme)
-  Config.tab_bar_style = {}
+  Config.tab_bar_style = Config.tab_bar_style or {}
   local sep = Icon.Sep.tb
 
   local states = { "new_tab", "new_tab_hover" }
