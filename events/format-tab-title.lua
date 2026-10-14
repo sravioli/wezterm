@@ -1,6 +1,7 @@
 ---@module "events.format-tab-title"
 
 local Ribbon = require "plugs.ribbon" ---@class Ribbon.Api
+local Opts = require("opts").tabtitle ---@class Opts.TabTitle
 local budget = require "utils.bar-budget" ---@class BarBudget
 local sigil = require "plugs.sigil" ---@class Sigil.Api
 local warp = require "plugs.warp" ---@class Warp.Api
@@ -35,25 +36,16 @@ local function process_icon(process)
   return sigil.icon(process, { fallback = false }) or ""
 end
 
-local function truncate(text, max_cells, callback)
-  if str.width(text) <= max_cells then
+local function truncate(text, max_cells, kind)
+  if str.fits(text, max_cells) then
     return text
   end
-
-  return max_cells <= 1 and "" or callback(text, max_cells)
-end
-
---- Helper to safely truncate a string with an ellipsis if it exceeds the budget
-local function truncate_with_ellipsis(text, max_cells)
-  if max_cells <= 0 then
+  if max_cells <= 1 then
     return ""
   end
 
-  if max_cells == 1 then
-    return "…"
-  end
-
-  return wt.truncate_right(text, max_cells - 1) .. "…"
+  local mode = Opts.truncate and Opts.truncate[kind] or "right"
+  return str.truncate(mode, text, max_cells)
 end
 
 local function format_copilot_idle(pane, title_budget)
@@ -66,7 +58,7 @@ local function format_copilot_idle(pane, title_budget)
   local suffix = ")"
   local decoration_width = str.width(prefix .. suffix)
 
-  cwd = truncate(cwd, title_budget - decoration_width, truncate_with_ellipsis)
+  cwd = truncate(cwd, title_budget - decoration_width, "copilot_idle")
   return prefix .. cwd .. suffix
 end
 
@@ -81,8 +73,7 @@ local function format_copilot_chat(title, title_budget)
   local icon = process_icon "GitHub Copilot"
   local prefix = icon .. " "
 
-  chat_title =
-    truncate(chat_title, title_budget - str.width(prefix), truncate_with_ellipsis)
+  chat_title = truncate(chat_title, title_budget - str.width(prefix), "copilot_chat")
   return prefix .. chat_title
 end
 
@@ -108,7 +99,7 @@ local function format_shell(process, rest, title_budget)
   local prefix = process_icon(process) .. " in "
   local prefix_width = str.width(prefix)
 
-  cwd = truncate(cwd, title_budget - prefix_width, str.truncate_right)
+  cwd = truncate(cwd, title_budget - prefix_width, "shell")
   return prefix .. cwd
 end
 
@@ -121,7 +112,7 @@ local function format_neovim(pane, title_budget)
   local suffix = ")"
   local decoration_width = str.width(prefix .. suffix)
 
-  cwd = truncate(cwd, title_budget - decoration_width, truncate_with_ellipsis)
+  cwd = truncate(cwd, title_budget - decoration_width, "neovim")
   return prefix .. cwd .. suffix
 end
 
@@ -162,7 +153,7 @@ local function resolve_title(pane, raw_title, title_budget)
     title = process_icon(process) .. " " .. (rest or "")
   end
 
-  return truncate(title, title_budget, truncate_with_ellipsis)
+  return truncate(title, title_budget, "default")
 end
 
 -- ---------------------------------------------------------------------------

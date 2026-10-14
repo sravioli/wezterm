@@ -6,6 +6,7 @@ error "cannot require a meta file!"
 ---@class Opts
 ---@field public utils?     Opts.Utils
 ---@field public statusbar? Opts.StatusBar
+---@field public tabtitle?  Opts.TabTitle
 ---@field public config?    Opts.Config
 ---@field public events?    Opts.Events
 

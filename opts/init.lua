@@ -5,6 +5,7 @@ local opts = {
   utils = require "opts.utils",
   config = require "opts.config",
   statusbar = require "opts.statusbar",
+  tabtitle = require "opts.tabtitle",
   events = require "opts.events",
 }
 
