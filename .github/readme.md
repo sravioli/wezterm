@@ -115,6 +115,13 @@ Built-in pickers wrap WezTerm's `InputSelector` through
 10. **Font ligatures** - Standard, discretionary, or disabled ligatures
 11. **Tab bar style** - Native, retro, or powerline tab styling
 
+Startup uses WezTerm's automatic GPU selection unless Lantern restores a
+saved selection. Adapter discovery runs when the GPU picker opens, not while
+loading the base config. Legacy vendor-only selections require one discovery
+pass to migrate to an adapter descriptor.
+To keep an explicit adapter, select it in the GPU picker or set
+`webgpu_preferred_adapter` in `overrides.config`.
+
 <details>
 <summary>See picker screenshots</summary>
 
