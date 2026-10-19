@@ -323,6 +323,9 @@ local M = {
         text = {
           enabled = true,
           value = timefmt "%a %b %-d %H:%M",
+          -- shorter forms tried before dropping to icon-only (longest first)
+          variants = { timefmt "%b %-d %H:%M", timefmt "%a %H:%M", timefmt "%H:%M" },
+          trim = false,
           padding = { left = 1 },
         },
       }
