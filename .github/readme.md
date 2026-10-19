@@ -60,6 +60,10 @@ The status bar adapts to the available terminal width. Each element has
 fallback modes, from full detail down to icon-only, so important information can
 stay visible in narrower windows.
 
+The left status shows an expand icon and `ZOOM` in a rounded segment while a
+pane is zoomed, including during modal keybindings. The segment disappears
+when the pane is unzoomed.
+
 > [!NOTE]
 >
 > Compare to the stock WezTerm status bar:

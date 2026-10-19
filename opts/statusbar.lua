@@ -82,6 +82,7 @@ local M = {
   layout = {
     left = {
       "leader",
+      "zoomed",
       "workspace",
       "mode",
     },
@@ -92,6 +93,42 @@ local M = {
   },
 
   modules = {
+    zoomed = {
+      enabled = true,
+      cond = function(window)
+        local tab = window:active_tab()
+        if not tab then
+          return false
+        end
+        for _, info in ipairs(tab:panes_with_info()) do
+          if info.is_zoomed then
+            return true
+          end
+        end
+        return false
+      end,
+      padding = { left = 1 },
+      style = function(theme)
+        return { bg = theme.ansi[4], fg = theme.background }
+      end,
+      icon = {
+        enabled = true,
+        value = wt.nerdfonts.md_arrow_expand_all,
+      },
+      text = {
+        enabled = true,
+        value = "ZOOM",
+        padding = { left = 1, right = 1 },
+        style = { attributes = "i" },
+        trim = false,
+      },
+      sep = {
+        enabled = true,
+        value = icons.Sep.ws,
+        invert_bg_fg = true,
+      },
+    },
+
     workspace = {
       enabled = true,
       padding = { left = 1 },

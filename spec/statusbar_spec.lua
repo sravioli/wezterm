@@ -7,7 +7,7 @@ local wezterm = dofile(("plugins/chord.wz/spec/mocks/wezterm.lua"):gsub("/", sep
 local chord = require "chord.api"
 
 describe("picker status integration", function()
-  local saved, options, config, theme, renderer, handlers
+  local saved, options, config, theme, renderer, handlers, saved_nerdfonts
   local modules = {
     "plugs.chord",
     "plugs.warp",
@@ -40,6 +40,8 @@ describe("picker status integration", function()
       },
     })
     wezterm.color = { parse = function() end }
+    saved_nerdfonts = wezterm.nerdfonts
+    wezterm.nerdfonts = { md_arrow_expand_all = "expand" }
     package.loaded["plugs.chord"] = chord
     package.loaded["plugs.warp"] = { filesystem = {}, maths = {} }
     package.loaded["plugs.sigil"] = {
@@ -72,6 +74,7 @@ describe("picker status integration", function()
   end)
 
   after_each(function()
+    wezterm.nerdfonts = saved_nerdfonts
     for _, name in ipairs(modules) do
       package.loaded[name] = saved[name]
     end
@@ -118,6 +121,54 @@ describe("picker status integration", function()
     },
       pane
   end
+
+  it("shows the zoom badge only for a zoomed pane in the active tab", function()
+    local zoomed = options.modules.zoomed
+    local panes = {
+      { is_active = false, is_zoomed = false },
+      { is_active = true, is_zoomed = false },
+    }
+    local tab = {
+      panes_with_info = function()
+        return panes
+      end,
+    }
+    local win = {
+      active_tab = function()
+        return tab
+      end,
+    }
+
+    assert.equal("zoomed", options.layout.left[2])
+    assert.is_true(zoomed.enabled)
+    assert.equal("ZOOM", zoomed.text.value)
+    assert.is_true(zoomed.icon.enabled)
+    assert.equal(wezterm.nerdfonts.md_arrow_expand_all, zoomed.icon.value)
+    assert.is_true(zoomed.sep.enabled)
+    assert.same(options.modules.workspace.sep, zoomed.sep)
+    assert.same({ left = 1 }, zoomed.padding)
+    assert.same({ left = 1, right = 1 }, zoomed.text.padding)
+    assert.same({ attributes = "i" }, zoomed.text.style)
+    assert.same({ bg = theme.ansi[4], fg = theme.background }, zoomed.style(theme))
+    assert.is_false(zoomed.cond(win))
+
+    panes[2].is_zoomed = true
+    assert.is_true(zoomed.cond(win))
+    win.active_key_table = function()
+      return "window_mode"
+    end
+    assert.is_true(zoomed.cond(win))
+
+    panes = { { is_active = true, is_zoomed = false } }
+    assert.is_false(zoomed.cond(win))
+    panes = { { is_active = true, is_zoomed = true } }
+    assert.is_true(zoomed.cond(win))
+    panes[1].is_zoomed = false
+    assert.is_false(zoomed.cond(win))
+
+    tab = nil
+    assert.is_false(zoomed.cond(win))
+  end)
 
   it(
     "renders temporary hints with the actual remaining budget and restores ordinary modes",
