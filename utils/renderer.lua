@@ -13,6 +13,7 @@ local str = warp.string ---@class Warp.String
 -- icons, separators, padding, and resolved node values. Use str.width for
 -- strings that may contain ANSI codes, such as resolve_layout output.
 local raw_cw = wt.column_width
+local find = string.find
 
 local Opts = require("opts").statusbar ---@class Opts.StatusBar
 local log = require("plugs.log").new("StatusBar", true) ---@class Logger
@@ -55,14 +56,17 @@ local function truncate(s, max_cols, ellipsis)
   if max_cols <= 0 then
     return ""
   end
-  if str.width(s) <= max_cols then
+  local width = (find(s, "\27", 1, true) or find(ellipsis, "\27", 1, true))
+      and str.width
+    or visible_width
+  if width(s) <= max_cols then
     return s
   end
 
-  local ew = str.width(ellipsis)
+  local ew = width(ellipsis)
   local result, w = {}, 0
   for cp in s:gmatch "[^\128-\191][\128-\191]*" do
-    local cpw = str.width(cp)
+    local cpw = width(cp)
     if w + cpw + ew > max_cols then
       break
     end
@@ -679,28 +683,6 @@ end
 ---@field cur      GroupCandidate
 ---@field visible  boolean
 
----@param  module Opts.StatusBar.Module
----@param  parts  table
----@param  icon   string
----@param  text   string
----@return string formatted
----@return integer width
-local function build_with(module, parts, icon, text)
-  local fmt = assemble_cell(
-    module,
-    icon,
-    text,
-    parts.icon_style,
-    parts.text_style,
-    parts.sep,
-    parts.sep_style,
-    parts.pad_left,
-    parts.pad_right,
-    parts.style
-  )
-  return fmt, parts.overhead + visible_width(icon) + visible_width(text)
-end
-
 --- Resolve `text.variants` (shorter alternatives, longest first) to padded strings.
 ---@param  node Opts.StatusBar.Module.Text|nil
 ---@return string[]
@@ -722,8 +704,14 @@ end
 ---@param  t integer text columns
 ---@return GroupCandidate
 local function build_trim(e, t)
-  local fmt, w = build_with(e.module, e.parts, e.icon, truncate(e.text, t))
-  return { fmt = fmt, w = w, texty = true, info = trim_info(t, e.trim.full) }
+  local text = truncate(e.text, t)
+  return {
+    icon = e.icon,
+    text = text,
+    w = e.trim.base + visible_width(text),
+    texty = true,
+    info = trim_info(t, e.trim.full),
+  }
 end
 
 --- Resolve every enabled module of a group into its candidate forms: full,
@@ -748,8 +736,13 @@ local function collect_entries(names)
 
       local cands = {}
       local function add(i, t, info)
-        local fmt, w = build_with(module, parts, i, t)
-        cands[#cands + 1] = { fmt = fmt, w = w, texty = t ~= "", info = info }
+        cands[#cands + 1] = {
+          icon = i,
+          text = t,
+          w = parts.overhead + visible_width(i) + visible_width(t),
+          texty = t ~= "",
+          info = info,
+        }
       end
 
       if has_text then
@@ -784,8 +777,14 @@ local function collect_entries(names)
 
       local hidden
       if module.can_hide then
-        local fmt, w = build_cell_sep_only(module, parts)
-        hidden = { fmt = fmt, w = w, texty = false, info = 0 }
+        local sep_only = parts.sep.left ~= nil or parts.sep.right ~= nil
+        hidden = {
+          fmt = not sep_only and "" or nil,
+          sep_only = sep_only,
+          w = sep_only and parts.overhead or 0,
+          texty = false,
+          info = 0,
+        }
       else
         hidden = { fmt = "", w = 0, texty = false, info = 0 }
       end
@@ -805,6 +804,7 @@ local function collect_entries(names)
         visible = true,
       }
       entry.cur = entry.min
+      entry.has_text_candidate = has_text
       entries[#entries + 1] = entry
     end
   end
@@ -872,8 +872,27 @@ end
 local function join_entries(entries)
   local out = {}
   for _, e in ipairs(entries) do
-    if e.cur.fmt ~= "" then
-      out[#out + 1] = e.cur.fmt
+    local candidate = e.cur
+    if candidate.fmt == nil then
+      if candidate.sep_only then
+        candidate.fmt = build_cell_sep_only(e.module, e.parts)
+      else
+        candidate.fmt = assemble_cell(
+          e.module,
+          candidate.icon,
+          candidate.text,
+          e.parts.icon_style,
+          e.parts.text_style,
+          e.parts.sep,
+          e.parts.sep_style,
+          e.parts.pad_left,
+          e.parts.pad_right,
+          e.parts.style
+        )
+      end
+    end
+    if candidate.fmt ~= "" then
+      out[#out + 1] = candidate.fmt
     end
   end
   return table.concat(out)
@@ -890,27 +909,23 @@ end
 local function render_group_balanced(names, avail_cols)
   local entries = collect_entries(names)
   local total = entries_width(entries)
-
-  while total > avail_cols do
-    local victim
-    for _, e in ipairs(entries) do
-      if e.visible then
-        if
-          not victim
-          or (e.module.can_hide and not victim.module.can_hide)
-          or (
-            (e.module.can_hide == victim.module.can_hide)
-            and (
-              e.priority < victim.priority
-              or (e.priority == victim.priority and e.index > victim.index)
-            )
-          )
-        then
-          victim = e
-        end
-      end
+  local hide_order = {}
+  for _, entry in ipairs(entries) do
+    hide_order[#hide_order + 1] = entry
+  end
+  table.sort(hide_order, function(a, b)
+    local a_hideable, b_hideable = a.module.can_hide == true, b.module.can_hide == true
+    if a_hideable ~= b_hideable then
+      return a_hideable
     end
-    if not victim then
+    if a.priority ~= b.priority then
+      return a.priority < b.priority
+    end
+    return a.index > b.index
+  end)
+
+  for _, victim in ipairs(hide_order) do
+    if total <= avail_cols then
       break
     end
     victim.visible = false
@@ -956,13 +971,36 @@ end
 local function render_group_exhaustive(names, avail_cols)
   local entries = collect_entries(names)
   local n = #entries
+
+  local full_width = 0
+  for _, entry in ipairs(entries) do
+    full_width = full_width + entry.cands[1].w
+  end
+  if full_width <= avail_cols then
+    for _, entry in ipairs(entries) do
+      entry.cur = entry.cands[1]
+    end
+    local used = entries_width(entries)
+    return join_entries(entries), used
+  end
+
   local pick, trims, infos = {}, {}, {}
   local best, best_alloc, best_vec
   local bv, bt, bw = -1, -1, -1
+  local alloc, cur, vec = {}, {}, {}
+  local upper_vectors = {}
+  local suffix_text_candidates = {}
+  suffix_text_candidates[n + 1] = 0
+  for i = n, 1, -1 do
+    suffix_text_candidates[i] = suffix_text_candidates[i + 1]
+      + (entries[i].has_text_candidate and 1 or 0)
+  end
 
   local function leaf(width, visible, texty)
     local leftover = avail_cols - width
-    local alloc, cur = {}, {}
+    for i = #vec, 1, -1 do
+      vec[i] = nil
+    end
     for _, idx in ipairs(trims) do
       alloc[idx] = entries[idx].trim.min
       cur[idx] = trim_info(alloc[idx], entries[idx].trim.full)
@@ -983,7 +1021,6 @@ local function render_group_exhaustive(names, avail_cols)
     end
     local used = avail_cols - leftover
 
-    local vec = {}
     for i = 1, n do
       if infos[i] then
         vec[#vec + 1] = infos[i]
@@ -1005,14 +1042,62 @@ local function render_group_exhaustive(names, avail_cols)
     end
     if better then
       bv, bt, bw, best_vec = visible, texty, used, vec
-      best = { table.unpack(pick, 1, n) }
-      best_alloc = alloc
+      best, best_alloc, best_vec = {}, {}, {}
+      for i = 1, n do
+        best[i] = pick[i]
+      end
+      for _, idx in ipairs(trims) do
+        best_alloc[idx] = alloc[idx]
+      end
+      for i = 1, #vec do
+        best_vec[i] = vec[i]
+      end
     end
   end
 
   local function search(i, width, visible, texty)
     if width > avail_cols then
       return
+    end
+    if best then
+      local max_visible = visible + n - i + 1
+      if max_visible < bv then
+        return
+      end
+      local max_texty = texty + suffix_text_candidates[i]
+      if max_visible == bv and max_texty < bt then
+        return
+      end
+      if max_visible == bv and max_texty == bt then
+        local bound = upper_vectors[i]
+        if not bound then
+          bound = {}
+          upper_vectors[i] = bound
+        else
+          for j = #bound, 1, -1 do
+            bound[j] = nil
+          end
+        end
+        for j = 1, i - 1 do
+          local selected = pick[j]
+          if selected == "trim" then
+            local trim = entries[j].trim
+            bound[#bound + 1] = trim_info(trim.max, trim.full)
+          elseif type(selected) == "table" and selected.texty then
+            bound[#bound + 1] = selected.info
+          end
+        end
+        for j = i, n do
+          if entries[j].has_text_candidate then
+            bound[#bound + 1] = 1
+          end
+        end
+        table.sort(bound)
+        local comparison = leximin_cmp(bound, best_vec)
+        if comparison < 0 or (comparison == 0 and avail_cols <= bw) then
+          return
+        end
+      end
     end
     if i > n then
       return leaf(width, visible, texty)
