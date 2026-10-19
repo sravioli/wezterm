@@ -4,7 +4,7 @@
 
 local wt = require "wezterm" ---@class Wezterm
 local act = wt.action
-local chord = wt.plugin.require "https://github.com/sravioli/chord.wz"
+local chord = require "chord.api"
 
 chord.setup {
   hints = {
@@ -193,6 +193,25 @@ function chord.palette(opts)
     palette_config or {},
     with_theme(palette_config, opts or command_palette_options())
   )
+end
+
+function chord.use_harbor_status_hints()
+  local harbor = require "plugs.harbor"
+  harbor.set_picker_adapter {
+    keys = chord.table {
+      { "<C-S-A-Left>", chord.hint_action(nil, -1), "previous hints" },
+      { "<C-S-A-Right>", chord.hint_action(nil, 1), "next hints" },
+    },
+    open = function(window, pane, session)
+      return chord.temporary.begin(window, pane, {
+        name = session.key_table,
+        keys = session.bindings,
+        meta = function(theme)
+          return { i = "H", txt = "HARBOR", bg = theme.ansi[5] }
+        end,
+      })
+    end,
+  }
 end
 
 return chord

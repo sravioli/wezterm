@@ -236,6 +236,13 @@ This is a modular WezTerm configuration written in Lua. The main pieces are:
 
 #### Testing changes
 
+Run the picker/status integration regression specs from the config root with
+`busted spec/statusbar_spec.lua`. They use Chord's existing Busted mock and
+the local `plugins/chord.wz` checkout, with no GUI or new test dependencies.
+Load the actual configuration with `wezterm --config-file wezterm.lua show-keys
+--lua` after integration changes. Plugin-specific suites and lint commands
+are documented in each plugin checkout.
+
 WezTerm **live-reloads** the configuration whenever a file changes. To debug:
 
 1. Press `Ctrl+Shift+L` to open the **debug overlay** - this shows logs, errors, and Lua print output.

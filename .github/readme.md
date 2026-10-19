@@ -159,6 +159,23 @@ Global bindings live in `mappings/default.lua`; modal tables live in
 | **[Platform Setup](https://github.com/sravioli/wezterm/wiki/Platform-Setup)** | Windows, Linux, macOS specifics |
 | **[Contributing](https://github.com/sravioli/wezterm/wiki/Contributing)** | How to contribute |
 
+### Harbor picker status hints
+
+The Harbor picker uses the short, left-aligned `Search: ` input and opts into
+`picker.hint_position = "status"`. `chord.use_harbor_status_hints()` installs the
+optional adapter before `harbor.apply_to_config(config)`; the status renderer
+uses Chord's temporary per-window bindings and normal width budget.
+`Ctrl+Shift+Alt+Left`/`Right` page the hints. Closing the picker restores
+ordinary modal/status content. The adapter does not enable the bar or alter its
+layout: hints require `opts.statusbar.enabled` and a visible tab/status bar
+with room for the `keys` module.
+
+Standalone Harbor defaults to `"top"`; use `"none"` or `picker.hints = false`
+to suppress generated hints. Explicit descriptions remain separate from
+search input, and native InputSelector replaces its description row while
+filtering. See each plugin README for adapter setup and limitations. Lantern's
+preview prototype is unchanged.
+
 ## License
 
 - **Code** in this repository is licensed under [GNU GPL v2.0](../LICENSE).

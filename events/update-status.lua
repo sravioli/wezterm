@@ -29,19 +29,19 @@ local Opts = require("opts").statusbar ---@class Opts.StatusBar
 local budget = require "utils.bar-budget" ---@class BarBudget
 local sbr = require "utils.renderer" ---@class Renderer
 
-local cleared = false
+local cleared = {}
 
 local function update_status(window, pane)
   -- ── Disabled ─────────────────────────────────────────────────────────────
   if not Opts.enabled then
-    if not cleared then
+    if not cleared[window:window_id()] then
       window:set_left_status ""
       window:set_right_status ""
-      cleared = true
+      cleared[window:window_id()] = true
     end
     return
   end
-  cleared = false
+  cleared[window:window_id()] = nil
 
   local Config = window:effective_config()
   local Overrides = window:get_config_overrides() or {}
@@ -71,3 +71,4 @@ end
 
 wt.on("update-status", update_status)
 wt.on("chord-hint-page-changed", update_status)
+wt.on("chord-temporary-changed", update_status)

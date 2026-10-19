@@ -142,12 +142,13 @@ local M = {
     },
 
     mode = function(window, _pane, theme)
-      local modes = require("plugs.chord").get_modes(theme)
+      local chord = require "plugs.chord"
+      local temporary = chord.temporary.get(window, theme)
+      local modes = chord.get_modes(theme)
       local active_mode = window:active_key_table()
 
-      if active_mode then
-        local mode = modes[active_mode]
-
+      local mode = temporary and temporary.meta or modes[active_mode]
+      if mode then
         return {
           enabled = true,
           cond = true,
@@ -186,13 +187,14 @@ local M = {
       local chord = require "plugs.chord"
       local renderer = require "utils.renderer"
       local modes = chord.get_modes(theme)
+      local temporary = chord.temporary.get(window, theme)
       local active = window:active_key_table()
 
       if not active then
         return { enabled = false }
       end
 
-      local mode = modes[active]
+      local mode = temporary and temporary.meta or modes[active]
       if not mode then
         return { enabled = false }
       end
