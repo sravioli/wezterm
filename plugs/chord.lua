@@ -207,7 +207,7 @@ function chord.use_harbor_status_hints()
         name = session.key_table,
         keys = session.bindings,
         meta = function(theme)
-          return { i = "H", txt = "HARBOR", bg = theme.ansi[5] }
+          return { i = wt.nerdfonts.md_anchor, txt = "HARBOR", bg = theme.ansi[5] }
         end,
       })
     end,
