@@ -77,6 +77,7 @@ local M = {
   position = "bottom",
   fancy = false,
   flexible = true,
+  fit = "exhaustive",
 
   layout = {
     left = {

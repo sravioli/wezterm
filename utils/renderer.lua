@@ -591,7 +591,7 @@ end
 ---@param  avail_cols integer
 ---@return string     formatted
 ---@return integer    consumed
-local function render_group(names, avail_cols)
+local function render_group_greedy(names, avail_cols)
   local remaining = avail_cols
   local components = {}
   local total_used = 0
@@ -635,6 +635,435 @@ local function render_group(names, avail_cols)
 
   log:debug("[group] greedy fit  used: %d/%d", total_used, avail_cols)
   return table.concat(components), total_used
+end
+
+-- ── Group fitting: balanced / exhaustive ─────────────────────────────────────
+
+local DEFAULT_MIN_TEXT = 5
+local INFO_EPS = 1e-6
+-- A truncated text is worth less than its length suggests (the ellipsis and the
+-- cut-off part hide the identity of the value).
+local TRIM_PENALTY = 0.25
+
+---@param  t    integer shown text columns (ellipsis included)
+---@param  full integer full text columns
+---@return number
+local function trim_info(t, full)
+  return math.max(0, (t - 1) / full - TRIM_PENALTY)
+end
+
+---@class GroupCandidate
+---@field fmt   string
+---@field w     integer  total columns
+---@field texty boolean  shows (part of) the text
+---@field info  number   fraction of the full text conveyed (0..1)
+
+---@class GroupTrim
+---@field base integer  columns used by everything except the text
+---@field min  integer  minimum text columns
+---@field max  integer  maximum text columns (one less than the full text)
+---@field full integer  full text columns
+
+---@class GroupEntry
+---@field name     string
+---@field module   Opts.StatusBar.Module
+---@field parts    table
+---@field icon     string
+---@field text     string
+---@field index    integer
+---@field priority number
+---@field cands    GroupCandidate[]  fixed-width forms, widest first
+---@field trim     GroupTrim|nil     variable-width truncated form
+---@field min      GroupCandidate
+---@field hidden   GroupCandidate
+---@field cur      GroupCandidate
+---@field visible  boolean
+
+---@param  module Opts.StatusBar.Module
+---@param  parts  table
+---@param  icon   string
+---@param  text   string
+---@return string formatted
+---@return integer width
+local function build_with(module, parts, icon, text)
+  local fmt = assemble_cell(
+    module,
+    icon,
+    text,
+    parts.icon_style,
+    parts.text_style,
+    parts.sep,
+    parts.sep_style,
+    parts.pad_left,
+    parts.pad_right,
+    parts.style
+  )
+  return fmt, parts.overhead + visible_width(icon) + visible_width(text)
+end
+
+--- Resolve `text.variants` (shorter alternatives, longest first) to padded strings.
+---@param  node Opts.StatusBar.Module.Text|nil
+---@return string[]
+local function resolve_variants(node)
+  local out = {}
+  if not node or not node.enabled or type(node.variants) ~= "table" then
+    return out
+  end
+  for _, v in ipairs(node.variants) do
+    local s = M.resolve_node { enabled = true, value = v, padding = node.padding }
+    if type(s) == "string" and s ~= "" then
+      out[#out + 1] = s
+    end
+  end
+  return out
+end
+
+---@param  e GroupEntry
+---@param  t integer text columns
+---@return GroupCandidate
+local function build_trim(e, t)
+  local fmt, w = build_with(e.module, e.parts, e.icon, truncate(e.text, t))
+  return { fmt = fmt, w = w, texty = true, info = trim_info(t, e.trim.full) }
+end
+
+--- Resolve every enabled module of a group into its candidate forms: full,
+--- shorter `text.variants`, icon-only, a variable-width truncation (unless
+--- `text.trim == false`) and hidden.
+---@param  names string[]
+---@return GroupEntry[]
+local function collect_entries(names)
+  local entries = {}
+  for idx, name in ipairs(names) do
+    local module = Opts.modules[name]
+    if type(module) == "function" then
+      module = module(M.window, M.pane, M.theme, M.config)
+    end
+
+    if M.enabled(module) then
+      local parts = resolve_cell_parts(module)
+      local icon = type(parts.icon_val) == "string" and parts.icon_val or ""
+      local text = type(parts.text_val) == "string" and parts.text_val or ""
+      local has_icon, has_text = icon ~= "", text ~= ""
+      local full_w = visible_width(text)
+
+      local cands = {}
+      local function add(i, t, info)
+        local fmt, w = build_with(module, parts, i, t)
+        cands[#cands + 1] = { fmt = fmt, w = w, texty = t ~= "", info = info }
+      end
+
+      if has_text then
+        add(icon, text, 1)
+        for _, v in ipairs(resolve_variants(module.text)) do
+          local vw = visible_width(v)
+          if vw < full_w then
+            add(icon, v, vw / full_w)
+          end
+        end
+      end
+      if has_icon or not has_text then
+        add(icon, "", 0)
+      end
+      table.sort(cands, function(a, b)
+        if a.w ~= b.w then
+          return a.w > b.w
+        end
+        return a.info > b.info
+      end)
+
+      local trim
+      local min_text = module.min_text or DEFAULT_MIN_TEXT
+      if has_text and module.text.trim ~= false and full_w - 1 >= min_text then
+        trim = {
+          base = parts.overhead + visible_width(icon),
+          min = min_text,
+          max = full_w - 1,
+          full = full_w,
+        }
+      end
+
+      local hidden
+      if module.can_hide then
+        local fmt, w = build_cell_sep_only(module, parts)
+        hidden = { fmt = fmt, w = w, texty = false, info = 0 }
+      else
+        hidden = { fmt = "", w = 0, texty = false, info = 0 }
+      end
+
+      local entry = {
+        name = name,
+        module = module,
+        parts = parts,
+        icon = icon,
+        text = text,
+        index = idx,
+        priority = module.priority or 0,
+        cands = cands,
+        trim = trim,
+        min = cands[#cands],
+        hidden = hidden,
+        visible = true,
+      }
+      entry.cur = entry.min
+      entries[#entries + 1] = entry
+    end
+  end
+  return entries
+end
+
+---@param  entries GroupEntry[]
+---@return integer
+local function entries_width(entries)
+  local total = 0
+  for _, e in ipairs(entries) do
+    total = total + e.cur.w
+  end
+  return total
+end
+
+--- Hand leftover columns to visible modules by priority (desc), then layout
+--- order. Each module takes its widest form that fits: full, a shorter
+--- variant, or a truncation showing at least `min_text` text columns.
+---@param  entries  GroupEntry[]
+---@param  leftover integer
+---@return integer  leftover
+local function grow_entries(entries, leftover)
+  local order = {}
+  for _, e in ipairs(entries) do
+    if e.visible then
+      order[#order + 1] = e
+    end
+  end
+  table.sort(order, function(a, b)
+    if a.priority ~= b.priority then
+      return a.priority > b.priority
+    end
+    return a.index < b.index
+  end)
+
+  for _, e in ipairs(order) do
+    if leftover <= 0 then
+      break
+    end
+    local limit = e.cur.w + leftover
+    local best = e.cur
+    for _, c in ipairs(e.cands) do
+      if c.w <= limit then
+        if c.w > best.w then
+          best = c
+        end
+        break
+      end
+    end
+    if e.trim then
+      local t = math.min(e.trim.max, limit - e.trim.base)
+      if t >= e.trim.min and e.trim.base + t > best.w then
+        best = build_trim(e, t)
+      end
+    end
+    leftover = leftover - (best.w - e.cur.w)
+    e.cur = best
+  end
+  return leftover
+end
+
+---@param  entries GroupEntry[]
+---@return string
+local function join_entries(entries)
+  local out = {}
+  for _, e in ipairs(entries) do
+    if e.cur.fmt ~= "" then
+      out[#out + 1] = e.cur.fmt
+    end
+  end
+  return table.concat(out)
+end
+
+--- Shrink every module to its minimum before hiding anything. Modules are
+--- hidden only when all minimums still overflow: `can_hide` modules first,
+--- then lowest priority, then rightmost. Leftover space is redistributed by
+--- priority.
+---@param  names      string[]
+---@param  avail_cols integer
+---@return string     formatted
+---@return integer    consumed
+local function render_group_balanced(names, avail_cols)
+  local entries = collect_entries(names)
+  local total = entries_width(entries)
+
+  while total > avail_cols do
+    local victim
+    for _, e in ipairs(entries) do
+      if e.visible then
+        if
+          not victim
+          or (e.module.can_hide and not victim.module.can_hide)
+          or (
+            (e.module.can_hide == victim.module.can_hide)
+            and (
+              e.priority < victim.priority
+              or (e.priority == victim.priority and e.index > victim.index)
+            )
+          )
+        then
+          victim = e
+        end
+      end
+    end
+    if not victim then
+      break
+    end
+    victim.visible = false
+    total = total - victim.cur.w + victim.hidden.w
+    victim.cur = victim.hidden
+    log:debug("[group] hiding %s", victim.name)
+  end
+
+  grow_entries(entries, avail_cols - total)
+  local used = entries_width(entries)
+  log:debug("[group] balanced fit  used: %d/%d", used, avail_cols)
+  return join_entries(entries), used
+end
+
+--- Compare two ascending-sorted info vectors lexicographically (leximin).
+---@param  a number[]
+---@param  b number[]
+---@return integer  1 when `a` is fairer, -1 when `b` is, 0 when equal
+local function leximin_cmp(a, b)
+  for k = 1, math.max(#a, #b) do
+    local x, y = a[k] or -1, b[k] or -1
+    if math.abs(x - y) > INFO_EPS then
+      return x > y and 1 or -1
+    end
+  end
+  return 0
+end
+
+--- Search every combination of candidate forms and keep the one preserving
+--- the most information, compared in order:
+---   1. visible modules
+---   2. modules showing (part of) their text
+---   3. fairness (leximin): the module showing the smallest fraction of its
+---      text is compared first, then the next one, and so on - so cells grow
+---      together instead of one filling up while another stays short
+---   4. total width
+--- Truncated forms absorb the leftover columns of each combination one column
+--- at a time, always to the one currently showing the least.
+---@param  names      string[]
+---@param  avail_cols integer
+---@return string     formatted
+---@return integer    consumed
+local function render_group_exhaustive(names, avail_cols)
+  local entries = collect_entries(names)
+  local n = #entries
+  local pick, trims, infos = {}, {}, {}
+  local best, best_alloc, best_vec
+  local bv, bt, bw = -1, -1, -1
+
+  local function leaf(width, visible, texty)
+    local leftover = avail_cols - width
+    local alloc, cur = {}, {}
+    for _, idx in ipairs(trims) do
+      alloc[idx] = entries[idx].trim.min
+      cur[idx] = trim_info(alloc[idx], entries[idx].trim.full)
+    end
+    while leftover > 0 do
+      local low
+      for _, idx in ipairs(trims) do
+        if alloc[idx] < entries[idx].trim.max and (not low or cur[idx] < cur[low]) then
+          low = idx
+        end
+      end
+      if not low then
+        break
+      end
+      alloc[low] = alloc[low] + 1
+      cur[low] = trim_info(alloc[low], entries[low].trim.full)
+      leftover = leftover - 1
+    end
+    local used = avail_cols - leftover
+
+    local vec = {}
+    for i = 1, n do
+      if infos[i] then
+        vec[#vec + 1] = infos[i]
+      end
+    end
+    for _, idx in ipairs(trims) do
+      vec[#vec + 1] = cur[idx]
+    end
+    table.sort(vec)
+
+    local better
+    if visible ~= bv then
+      better = visible > bv
+    elseif texty ~= bt then
+      better = texty > bt
+    else
+      local c = leximin_cmp(vec, best_vec)
+      better = c > 0 or (c == 0 and used > bw)
+    end
+    if better then
+      bv, bt, bw, best_vec = visible, texty, used, vec
+      best = { table.unpack(pick, 1, n) }
+      best_alloc = alloc
+    end
+  end
+
+  local function search(i, width, visible, texty)
+    if width > avail_cols then
+      return
+    end
+    if i > n then
+      return leaf(width, visible, texty)
+    end
+    local e = entries[i]
+    for _, c in ipairs(e.cands) do
+      pick[i], infos[i] = c, c.info
+      search(i + 1, width + c.w, visible + 1, texty + (c.texty and 1 or 0))
+    end
+    if e.trim then
+      pick[i], infos[i] = "trim", nil
+      trims[#trims + 1] = i
+      search(i + 1, width + e.trim.base + e.trim.min, visible + 1, texty + 1)
+      trims[#trims] = nil
+    end
+    pick[i], infos[i] = e.hidden, nil
+    search(i + 1, width + e.hidden.w, visible, texty)
+    infos[i] = nil
+  end
+
+  search(1, 0, 0, 0)
+
+  if not best then
+    return render_group_balanced(names, avail_cols)
+  end
+
+  for i, e in ipairs(entries) do
+    if best[i] == "trim" then
+      e.cur, e.visible = build_trim(e, best_alloc[i]), true
+    else
+      e.cur, e.visible = best[i], best[i] ~= e.hidden
+    end
+  end
+  local used = entries_width(entries)
+  log:debug("[group] exhaustive fit  used: %d/%d", used, avail_cols)
+  return join_entries(entries), used
+end
+
+local GROUP_STRATEGIES = {
+  greedy = render_group_greedy,
+  balanced = render_group_balanced,
+  exhaustive = render_group_exhaustive,
+}
+
+---@param  names      string[]
+---@param  avail_cols integer
+---@return string     formatted
+---@return integer    consumed
+local function render_group(names, avail_cols)
+  local strategy = GROUP_STRATEGIES[Opts.fit or "balanced"] or render_group_balanced
+  return strategy(names, avail_cols)
 end
 
 --- Render one module and append to `components` when it produces output.
@@ -690,7 +1119,7 @@ M.render_layout = function(layout)
     local entry = layout[i]
 
     if type(entry) == "table" then
-      -- ── Sub-layout group: best-fit cartesian selection ──────────────────
+      -- ── Sub-layout group: fitted by `Opts.fit` strategy ─────────────────
       local avail = Opts.flexible and (M.width.available - M.width.used) or math.huge
       local formatted, consumed = render_group(entry, avail)
       if formatted ~= "" then

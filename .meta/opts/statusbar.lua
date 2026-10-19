@@ -14,6 +14,7 @@ error "cannot require a meta file!"
 ---@field public position? "top"|"bottom"                         Screen position of status bar.
 ---@field public fancy?    boolean                                Use the fancy tab bar.
 ---@field public flexible? boolean                                Allow the status bar to shrink when space is tight.
+---@field public fit?      Opts.StatusBar.Fit                     Strategy used to fit module groups into the available width.
 ---@field public padding?  number|{ left: number, right: number } Component padding applied after text and icon are combined.
 ---@field public style?    Opts.StatusBar.Module.Styler           Component style applied to both icon and text.
 ---@field public layout?   Opts.StatusBar.Layout                  Structural arrangement of status bar components.
@@ -28,6 +29,12 @@ error "cannot require a meta file!"
 ---
 ---@alias Opts.StatusBar.Layout.Item
 ---| (string | string[])
+---
+---
+---@alias Opts.StatusBar.Fit
+---| "balanced"   # Shrink every group module to its minimum before hiding any; redistribute leftover by priority (default).
+---| "greedy"     # Left-to-right: each module takes the widest form that fits the remaining space.
+---| "exhaustive" # Try every combination; keep the one preserving the most information (visible modules, then texts shown, then fraction of each text).
 ---
 ---
 ---@alias Opts.StatusBar.Modules
@@ -48,6 +55,8 @@ error "cannot require a meta file!"
 ---@field public style?    Opts.StatusBar.Module.Styler           Module style.
 ---@field public layout?   Opts.StatusBar.Module.Layout           Static or dynamic layout of the module.
 ---@field public can_hide? boolean                                Whether the module may be hidden.
+---@field public priority? number                                 Group fitting: higher keeps extra width first and is hidden last (default 0; ties follow layout order).
+---@field public min_text? integer                                Group fitting: minimum text columns for a trimmed form to be used (default 5).
 ---@field public padding?  number|{ left: number, right: number } Component padding.
 ---
 ---
@@ -62,6 +71,8 @@ error "cannot require a meta file!"
 ---
 ---
 ---@class Opts.StatusBar.Module.Text: Opts.StatusBar.Module.Component
+---@field public variants? (string|Opts.StatusBar.Module.ValueProvider)[] Group fitting: shorter alternatives to `value`, longest first.
+---@field public trim?     boolean                                       Group fitting: allow truncating the text with an ellipsis (default true).
 ---
 ---
 ---@class Opts.StatusBar.Module.Sep : Opts.StatusBar.Module.Component
