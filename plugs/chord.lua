@@ -4,7 +4,7 @@
 
 local wt = require "wezterm" ---@class Wezterm
 local act = wt.action
-local chord = require "chord.api"
+local chord = wt.plugin.require "https://github.com/sravioli/chord.wz"
 
 chord.setup {
   hints = {
