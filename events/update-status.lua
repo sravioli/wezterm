@@ -29,19 +29,27 @@ local Opts = require("opts").statusbar ---@class Opts.StatusBar
 local budget = require "utils.bar-budget" ---@class BarBudget
 local sbr = require "utils.renderer" ---@class Renderer
 
-local cleared = {}
+local window_status = setmetatable({}, { __mode = "k" })
 
 local function update_status(window, pane)
+  local status = window_status[window]
+  if not status then
+    status = {}
+    window_status[window] = status
+  end
+
   -- ── Disabled ─────────────────────────────────────────────────────────────
   if not Opts.enabled then
-    if not cleared[window:window_id()] then
+    if not status.cleared then
       window:set_left_status ""
       window:set_right_status ""
-      cleared[window:window_id()] = true
+      status.left = ""
+      status.right = ""
+      status.cleared = true
     end
     return
   end
-  cleared[window:window_id()] = nil
+  status.cleared = nil
 
   local Config = window:effective_config()
   local Overrides = window:get_config_overrides() or {}
@@ -64,9 +72,18 @@ local function update_status(window, pane)
 
   -- ── Right status ─────────────────────────────────────────────────────────
   local right = sbr.render_layout(Opts.layout.right)
+  local right_is_dynamic = window:active_key_table() ~= nil
 
-  window:set_left_status(left)
-  window:set_right_status(right)
+  if status.left ~= left then
+    window:set_left_status(left)
+    status.left = left
+  end
+  -- Chord paging can clear right status directly while a key table is active.
+  if right_is_dynamic or status.right_dynamic or status.right ~= right then
+    window:set_right_status(right)
+    status.right = right
+  end
+  status.right_dynamic = right_is_dynamic
 end
 
 wt.on("update-status", update_status)

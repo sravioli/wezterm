@@ -109,9 +109,11 @@ describe("picker status integration", function()
       end,
       set_left_status = function(self, text)
         self.left = text
+        self.left_writes = (self.left_writes or 0) + 1
       end,
       set_right_status = function(self, text)
         self.right = text
+        self.right_writes = (self.right_writes or 0) + 1
       end,
     },
       pane
@@ -201,5 +203,75 @@ describe("picker status integration", function()
       assert.is_false(options.enabled)
       release()
     end
+  end)
+
+  it("writes only changed output and clears disabled status once", function()
+    require "events.update-status"
+    local win, pane = window(205, nil)
+    local left, right = "left", "right"
+    renderer.render_layout = function(layout)
+      return layout == options.layout.left and left or right
+    end
+
+    wezterm.emit("update-status", win, pane)
+    wezterm.emit("update-status", win, pane)
+    assert.equal(1, win.left_writes)
+    assert.equal(1, win.right_writes)
+
+    left = "left changed"
+    wezterm.emit("update-status", win, pane)
+    assert.equal(2, win.left_writes)
+    assert.equal(1, win.right_writes)
+
+    options.enabled = false
+    wezterm.emit("update-status", win, pane)
+    wezterm.emit("update-status", win, pane)
+    assert.equal("", win.left)
+    assert.equal("", win.right)
+    assert.equal(3, win.left_writes)
+    assert.equal(2, win.right_writes)
+
+    options.enabled = true
+    wezterm.emit("update-status", win, pane)
+    assert.equal("left changed", win.left)
+    assert.equal("right", win.right)
+    assert.equal(4, win.left_writes)
+    assert.equal(3, win.right_writes)
+  end)
+
+  it("does not retain closed window objects in status state", function()
+    require "events.update-status"
+    local ref = setmetatable({}, { __mode = "v" })
+    do
+      local win, pane = window(206, nil)
+      ref[1] = win
+      wezterm.emit("update-status", win, pane)
+    end
+    collectgarbage "collect"
+    assert.is_nil(ref[1])
+  end)
+
+  it("republishes right output for active key tables", function()
+    require "events.update-status"
+    local win, pane = window(207, "mode")
+    renderer.render_layout = function(layout)
+      return layout == options.layout.left and "left" or "right"
+    end
+
+    wezterm.emit("update-status", win, pane)
+    wezterm.emit("update-status", win, pane)
+    assert.equal(1, win.left_writes)
+    assert.equal(2, win.right_writes)
+
+    win:set_right_status ""
+    wezterm.emit("update-status", win, pane)
+    assert.equal("right", win.right)
+    assert.equal(4, win.right_writes)
+
+    win.active = nil
+    win:set_right_status ""
+    wezterm.emit("update-status", win, pane)
+    assert.equal("right", win.right)
+    assert.equal(6, win.right_writes)
   end)
 end)
