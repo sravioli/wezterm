@@ -10,7 +10,7 @@ local config = require("config")
   :init()
 
 lantern.rekindle(config)
-chord.use_harbor_status_hints()
+-- chord.use_harbor_status_hints()
 
 local ok, overrides = pcall(require, "overrides.mappings")
 if ok then
