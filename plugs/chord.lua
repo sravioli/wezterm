@@ -14,7 +14,7 @@ chord.setup {
 
   command = {
     key = "<leader><Space>",
-    desc = "command picker",
+    desc = "key search",
     title = "Commands",
     fuzzy = true,
     description = "Select command.",
@@ -33,16 +33,6 @@ chord.setup {
       include_table = true,
       mode_fg = "#1a1b26",
     },
-  },
-
-  overlay = {
-    key = "<leader>?",
-    desc = "key help",
-    title = "Key bindings",
-    fuzzy = true,
-    description = "Select binding.",
-    fuzzy_description = "Search: ",
-    sources = { "registered", "keys", "key_table" },
   },
 
   log = {
@@ -201,7 +191,6 @@ register_commands()
 
 function chord.apply(config)
   chord.command.apply(config, with_theme(config))
-  chord.overlay.apply(config)
   palette_config = config
   leader_hints = nil
   report_conflicts(config)
@@ -209,9 +198,10 @@ function chord.apply(config)
   return config
 end
 
----Leader bindings with a description, as `{ lhs, desc }` without the
----`<leader>` prefix (`w window mode`, not `<leader>w window mode`).
----@return { lhs: string, desc: string }[]
+---Leader bindings with a description, as `{ lhs, desc, mode? }` without the
+---`<leader>` prefix (`w window mode`, not `<leader>w window mode`). `mode` is
+---the name of a binding described as "<name> mode".
+---@return { lhs: string, desc: string, mode?: string }[]
 local function leader_items()
   if leader_hints then
     return leader_hints
@@ -221,17 +211,23 @@ local function leader_items()
     local mods = entry.mods or ""
     if mods:find("LEADER", 1, true) and entry.desc and entry.desc ~= "" then
       local copy = { key = entry.key, mods = mods:gsub("LEADER|?", ""):gsub("|$", "") }
-      leader_hints[#leader_hints + 1] =
-        { lhs = chord.__entry_lhs(copy), desc = entry.desc }
+      leader_hints[#leader_hints + 1] = {
+        lhs = chord.__entry_lhs(copy),
+        desc = entry.desc,
+        mode = entry.desc:match "^(.-) mode$",
+      }
     end
   end
   return leader_hints
 end
 
 ---Leader bindings as one right-aligned hint line, without paging: the
----leader is one-shot, so a paging key would end it. Every binding starts as
----its key alone; bindings then gain their description's first word, then the
----full description, in order, while the line still fits.
+---leader is one-shot, so a paging key would end it.
+---
+---Modes come first as mnemonics (`modes: [w]indow [f]ont`); the other
+---bindings follow, separated by " / ". Those start as their key alone and
+---gain their description's first word, then the full description, in order,
+---while the line still fits.
 ---@param width integer columns available
 ---@param theme table resolved colour scheme
 ---@param accent string key colour
@@ -239,11 +235,53 @@ end
 function chord.leader_hint_layout(width, theme, accent)
   local ribbon = require "plugs.ribbon"
   local bg, fg = tostring(theme.tab_bar.background), tostring(theme.foreground)
+  local dim = theme.brights and tostring(theme.brights[1]) or fg
   accent = tostring(accent)
-  local gap = "  "
   local cw = wt.column_width
-  local items = leader_items()
+  local sep, group_gap, prefix = " / ", " │ ", "modes:"
 
+  local modes, others = {}, {}
+  for _, item in ipairs(leader_items()) do
+    if item.mode then
+      modes[#modes + 1] = item
+    else
+      others[#others + 1] = item
+    end
+  end
+
+  -- ── Modes: "[w]indow" when the key starts the name, else "[p] lantern".
+  local function mnemonic(item)
+    if item.mode:sub(1, #item.lhs):lower() == item.lhs:lower() then
+      return item.mode:sub(#item.lhs + 1), cw(item.mode) + 2
+    end
+    return " " .. item.mode, cw(item.lhs) + 3 + cw(item.mode)
+  end
+  local mode_parts, used = {}, 0
+  if #modes > 0 then
+    local full = cw(prefix)
+    for _, item in ipairs(modes) do
+      local _, w = mnemonic(item)
+      full = full + 1 + w
+    end
+    local bracket = full <= width
+    used = cw(prefix)
+    for _, item in ipairs(modes) do
+      local rest, w = mnemonic(item)
+      if not bracket then
+        rest, w = nil, cw(item.lhs)
+      end
+      if used + 1 + w > width then
+        break
+      end
+      mode_parts[#mode_parts + 1] = { lhs = item.lhs, rest = rest, bracket = bracket }
+      used = used + 1 + w
+    end
+    if #mode_parts == 0 then
+      used = 0
+    end
+  end
+
+  -- ── Other bindings, upgraded in order while they fit.
   local function label(item, level)
     if level == 1 then
       return item.desc
@@ -256,42 +294,29 @@ function chord.leader_hint_layout(width, theme, accent)
     local desc = label(item, level)
     return cw(item.lhs) + (desc and (1 + cw(desc)) or 0)
   end
-
-  -- Keys only, dropping trailing bindings if even those do not fit.
-  local shown, used = {}, 0
-  for _, item in ipairs(items) do
-    local need = cost(item, 3) + (#shown > 0 and cw(gap) or 0)
+  local shown = {}
+  for _, item in ipairs(others) do
+    local gap = #shown > 0 and sep or (used > 0 and group_gap or "")
+    local need = cw(gap) + cost(item, 3)
     if used + need > width then
       break
     end
-    shown[#shown + 1] = { item = item, level = 3 }
+    shown[#shown + 1] = { item = item, level = 3, gap = gap }
     used = used + need
   end
   for _, level in ipairs { 2, 1 } do
-    for _, s in ipairs(shown) do
-      local delta = cost(s.item, level) - cost(s.item, s.level)
+    for _, entry in ipairs(shown) do
+      local delta = cost(entry.item, level) - cost(entry.item, entry.level)
       if used + delta > width then
         break
       end
-      s.level, used = level, used + delta
+      entry.level, used = level, used + delta
     end
   end
 
-  local labels = {}
-  for i, s in ipairs(shown) do
-    labels[i] =
-      { lhs = s.item.lhs, desc = label(s.item, s.level), gap = i > 1 and gap or nil }
-  end
-
+  -- ── Render.
   local layout = ribbon:new("LeaderHints", true)
-  if used < width then
-    layout:append(bg, fg, string.rep(" ", width - used))
-  end
-  for _, label in ipairs(labels) do
-    if label.gap then
-      layout:append(bg, fg, label.gap, "Normal")
-    end
-    local lhs = label.lhs
+  local function key(lhs)
     if lhs:sub(1, 1) == "<" and lhs:sub(-1) == ">" then
       layout:append(bg, fg, "<", "Bold")
       layout:append(bg, accent, lhs:sub(2, -2), "Normal")
@@ -299,8 +324,32 @@ function chord.leader_hint_layout(width, theme, accent)
     else
       layout:append(bg, accent, lhs, "Bold")
     end
-    if label.desc then
-      layout:append(bg, fg, " " .. label.desc, "Italic")
+  end
+  if used < width then
+    layout:append(bg, fg, string.rep(" ", width - used))
+  end
+  if #mode_parts > 0 then
+    layout:append(bg, dim, prefix, "Normal")
+    for _, part in ipairs(mode_parts) do
+      layout:append(bg, fg, " ", "Normal")
+      if part.bracket then
+        layout:append(bg, fg, "[", "Bold")
+        key(part.lhs)
+        layout:append(bg, fg, "]", "Bold")
+        layout:append(bg, fg, part.rest, "Italic")
+      else
+        key(part.lhs)
+      end
+    end
+  end
+  for _, entry in ipairs(shown) do
+    if entry.gap ~= "" then
+      layout:append(bg, dim, entry.gap, "Normal")
+    end
+    key(entry.item.lhs)
+    local desc = label(entry.item, entry.level)
+    if desc then
+      layout:append(bg, fg, " " .. desc, "Italic")
     end
   end
   return layout

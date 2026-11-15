@@ -67,7 +67,7 @@ key.maps(Config, {
   { "<C-M-k>", act.ActivatePaneDirection "Up", "move up" },
   { "<C-M-l>", act.ActivatePaneDirection "Right", "move right" },
 
-  modes.help:activate("<leader>h", "help", { one_shot = true }),
+  modes.help:activate("<leader>h", "help mode", { one_shot = true }),
   modes.window:activate("<leader>w", "window mode"),
   modes.font:activate("<leader>f", "font mode"),
   modes.copy:activate("<leader>c", "copy mode"),

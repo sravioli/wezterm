@@ -212,7 +212,7 @@ M.help = key.mode("help_mode", function(theme)
       { "<C-M-l>", act.ActivatePaneDirection "Right", "move right" },
 
       ---key-table entry points
-      M.help:activate("<leader>h", "help", { one_shot = true }),
+      M.help:activate("<leader>h", "help mode", { one_shot = true }),
       M.window:activate("<leader>w", "window mode"),
       M.font:activate("<leader>f", "font mode"),
       M.copy:activate("<leader>c", "copy mode"),
