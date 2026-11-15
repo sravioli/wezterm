@@ -84,77 +84,96 @@ local function invalidate_cache_action()
   end)
 end
 
-local function register_commands()
+---Config commands, shared by Chord's command picker and WezTerm's palette.
+---@return table[]
+local function commands()
   local lantern = require "plugs.lantern" ---@class Lantern
 
-  chord.command.clear()
-  chord.command.register_many {
+  return {
     {
       id = "rename-tab",
+      icon = "md_rename_box",
       label = "Rename tab",
       action = rename_tab_action(),
     },
     {
       id = "lantern-colorscheme",
+      icon = "md_palette",
       label = "Lantern: colorscheme",
       action = lantern.light.colorscheme(),
     },
     {
       id = "lantern-font",
+      icon = "md_format_font",
       label = "Lantern: font",
       action = lantern.light.font(),
     },
     {
       id = "lantern-font-size",
+      icon = "md_format_font_size_decrease",
       label = "Lantern: font size",
       action = lantern.light.font_size(),
     },
     {
       id = "lantern-font-leading",
+      icon = "fa_text_height",
       label = "Lantern: line height",
       action = lantern.light.font_leading(),
     },
     {
       id = "lantern-gpu",
+      icon = "md_expansion_card",
       label = "Lantern: GPU",
       action = lantern.light.gpu(),
     },
     {
       id = "lantern-window-opacity",
+      icon = "md_opacity",
       label = "Lantern: window opacity",
       action = lantern.light.window_opacity(),
     },
     {
       id = "lantern-window-padding",
+      icon = "md_dock_window",
       label = "Lantern: window padding",
       action = lantern.light.window_padding(),
     },
     {
       id = "lantern-cursor-style",
+      icon = "md_cursor_text",
       label = "Lantern: cursor style",
       action = lantern.light.cursor_style(),
     },
     {
       id = "lantern-inactive-pane-opacity",
+      icon = "md_blur_on",
       label = "Lantern: inactive pane opacity",
       action = lantern.light.inactive_pane_opacity(),
     },
     {
       id = "lantern-font-ligatures",
+      icon = "md_format_text",
       label = "Lantern: font ligatures",
       action = lantern.light.font_ligatures(),
     },
     {
       id = "lantern-tab-bar-style",
+      icon = "md_tab",
       label = "Lantern: tab bar style",
       action = lantern.light.tab_bar_style(),
     },
     {
       id = "invalidate-cache",
+      icon = "md_cached",
       label = "Invalidate cache",
       action = invalidate_cache_action(),
     },
   }
+end
+
+local function register_commands()
+  chord.command.clear()
+  chord.command.register_many(commands())
 end
 
 local function command_palette_options()
@@ -186,6 +205,16 @@ function chord.apply(config)
   report_conflicts(config)
 
   return config
+end
+
+---Config commands as WezTerm command-palette entries (with icons).
+---@return table[]
+function chord.palette_commands()
+  local entries = {}
+  for _, cmd in ipairs(commands()) do
+    entries[#entries + 1] = { brief = cmd.label, icon = cmd.icon, action = cmd.action }
+  end
+  return entries
 end
 
 function chord.palette(opts)
