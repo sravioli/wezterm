@@ -74,6 +74,11 @@ key.maps(Config, {
   modes.search:activate("<leader>s", "search mode"),
   modes.lantern:activate("<leader>p", "lantern mode", { one_shot = true }),
 
+  -- ── Harbor ──────────────────────────────────────────────────────────────
+  { "<leader>o", require("plugs.harbor").action.pick(), "harbor picker" },
+  { "<leader>b", require("plugs.harbor").action.previous(), "previous workspace" },
+  { "<C-S-q>", require("plugs.harbor").action.quit(), "save workspaces and quit" },
+
   -- ── F-key tab activation (F1-F24) ────────────────────────────────────────
   tunpack(fkey_mappings),
 })
