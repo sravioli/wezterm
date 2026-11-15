@@ -77,6 +77,15 @@ M.mode_inactive = function(window, _)
   return window:active_key_table() == nil
 end
 
+---Check whether no key hints are showing: no key table and no leader.
+---
+---@param window table WezTerm window object.
+---@param _ any Unused pane parameter.
+---@return boolean idle True when neither a key table nor the leader is active.
+M.hints_inactive = function(window, _)
+  return window:active_key_table() == nil and window:leader_is_active() ~= true
+end
+
 ---Check whether the active workspace name is not empty.
 ---
 ---@param window table WezTerm window object.

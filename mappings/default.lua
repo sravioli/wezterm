@@ -13,7 +13,7 @@ local tunpack = unpack or table.unpack
 local Config = {}
 
 Config.disable_default_key_bindings = false
-Config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
+Config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1500 }
 
 -- ── Tab activation via F-keys (F1-F24) ───────────────────────────────────────
 -- Built programmatically and merged into the mappings table below so that

@@ -52,6 +52,7 @@ chord.setup {
 }
 
 local palette_config
+local leader_hints
 
 local function active_theme(config)
   if type(config) ~= "table" or type(config.color_schemes) ~= "table" then
@@ -202,9 +203,35 @@ function chord.apply(config)
   chord.command.apply(config, with_theme(config))
   chord.overlay.apply(config)
   palette_config = config
+  leader_hints = nil
   report_conflicts(config)
 
   return config
+end
+
+---Leader bindings with a description, shaped for `chord.hint_layout`.
+---
+---The leader prefix is dropped from the copies so hints read `w window mode`
+---rather than `<leader>w window mode`.
+---@return { keys: table[] }
+function chord.leader_hint_config()
+  if leader_hints then
+    return leader_hints
+  end
+  local keys = {}
+  for _, entry in ipairs((palette_config or {}).keys or {}) do
+    local mods = entry.mods or ""
+    if mods:find("LEADER", 1, true) and entry.desc and entry.desc ~= "" then
+      local copy = {}
+      for k, v in pairs(entry) do
+        copy[k] = v
+      end
+      copy.mods = mods:gsub("LEADER|?", ""):gsub("|$", "")
+      keys[#keys + 1] = copy
+    end
+  end
+  leader_hints = { keys = keys }
+  return leader_hints
 end
 
 ---Config commands as WezTerm command-palette entries (with icons).

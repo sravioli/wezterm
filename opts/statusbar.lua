@@ -227,6 +227,21 @@ local M = {
       local temporary = chord.temporary.get(window, theme)
       local active = window:active_key_table()
 
+      -- Leader held: list the leader bindings (modes, pickers, ...).
+      if not active and window:leader_is_active() then
+        return {
+          enabled = true,
+          cond = true,
+          layout = function(ctx)
+            local width = math.max(0, renderer.width.available - renderer.width.used)
+            return chord.hint_layout(chord.leader_hint_config(), nil, width, window, {
+              theme = ctx.theme,
+              mode_bg = ctx.theme.ansi[2],
+            })
+          end,
+        }
+      end
+
       if not active then
         return { enabled = false }
       end
@@ -261,7 +276,7 @@ local M = {
 
       return {
         enabled = true,
-        cond = cond.mode_inactive,
+        cond = cond.hints_inactive,
         can_hide = true,
         style = function()
           return { bg = palette[1], fg = text_fg }
@@ -297,7 +312,7 @@ local M = {
 
       return {
         enabled = true,
-        cond = cond.mode_inactive,
+        cond = cond.hints_inactive,
         can_hide = true,
         style = function()
           return { bg = palette[2], fg = text_fg }
@@ -339,7 +354,7 @@ local M = {
 
       return {
         enabled = true,
-        cond = cond.mode_inactive,
+        cond = cond.hints_inactive,
         style = function()
           return { bg = palette[3], fg = text_fg }
         end,
@@ -385,7 +400,7 @@ local M = {
 
       return {
         enabled = true,
-        cond = cond.mode_inactive,
+        cond = cond.hints_inactive,
         can_hide = true,
         style = function()
           return { bg = palette[4], fg = text_fg }
