@@ -234,10 +234,7 @@ local M = {
           cond = true,
           layout = function(ctx)
             local width = math.max(0, renderer.width.available - renderer.width.used)
-            return chord.hint_layout(chord.leader_hint_config(), nil, width, window, {
-              theme = ctx.theme,
-              mode_bg = ctx.theme.ansi[2],
-            })
+            return chord.leader_hint_layout(width, ctx.theme, ctx.theme.ansi[2])
           end,
         }
       end

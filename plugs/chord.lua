@@ -209,29 +209,97 @@ function chord.apply(config)
   return config
 end
 
----Leader bindings with a description, shaped for `chord.hint_layout`.
----
----The leader prefix is dropped from the copies so hints read `w window mode`
----rather than `<leader>w window mode`.
----@return { keys: table[] }
-function chord.leader_hint_config()
+---Leader bindings with a description, as `{ lhs, desc }` without the
+---`<leader>` prefix (`w window mode`, not `<leader>w window mode`).
+---@return { lhs: string, desc: string }[]
+local function leader_items()
   if leader_hints then
     return leader_hints
   end
-  local keys = {}
+  leader_hints = {}
   for _, entry in ipairs((palette_config or {}).keys or {}) do
     local mods = entry.mods or ""
     if mods:find("LEADER", 1, true) and entry.desc and entry.desc ~= "" then
-      local copy = {}
-      for k, v in pairs(entry) do
-        copy[k] = v
-      end
-      copy.mods = mods:gsub("LEADER|?", ""):gsub("|$", "")
-      keys[#keys + 1] = copy
+      local copy = { key = entry.key, mods = mods:gsub("LEADER|?", ""):gsub("|$", "") }
+      leader_hints[#leader_hints + 1] =
+        { lhs = chord.__entry_lhs(copy), desc = entry.desc }
     end
   end
-  leader_hints = { keys = keys }
   return leader_hints
+end
+
+---Leader bindings as one right-aligned hint line, without paging: the
+---leader is one-shot, so a paging key would end it. Labels shrink to fit
+---(full description, then its first word, then keys only).
+---@param width integer columns available
+---@param theme table resolved colour scheme
+---@param accent string key colour
+---@return table ribbon layout
+function chord.leader_hint_layout(width, theme, accent)
+  local ribbon = require "plugs.ribbon"
+  local bg, fg = tostring(theme.tab_bar.background), tostring(theme.foreground)
+  local dim = theme.brights and tostring(theme.brights[1]) or fg
+  accent = tostring(accent)
+  local sep = " / "
+  local items = leader_items()
+
+  local tiers = {
+    function(item)
+      return item.desc
+    end,
+    function(item)
+      return item.desc:match "^%S+" or item.desc
+    end,
+    function()
+      return nil
+    end,
+  }
+
+  local labels, used
+  for i, tier in ipairs(tiers) do
+    local gap = i == #tiers and " " or sep
+    labels, used = {}, 0
+    for j, item in ipairs(items) do
+      local desc = tier(item)
+      local need = wt.column_width(item.lhs) + (desc and (1 + wt.column_width(desc)) or 0)
+      if j > 1 then
+        need = need + wt.column_width(gap)
+      end
+      if used + need > width then
+        if i < #tiers then
+          labels = nil
+        end
+        break
+      end
+      labels[#labels + 1] = { lhs = item.lhs, desc = desc, gap = j > 1 and gap or nil }
+      used = used + need
+    end
+    if labels then
+      break
+    end
+  end
+
+  local layout = ribbon:new("LeaderHints", true)
+  if used < width then
+    layout:append(bg, fg, string.rep(" ", width - used))
+  end
+  for _, label in ipairs(labels) do
+    if label.gap then
+      layout:append(bg, dim, label.gap, "Normal")
+    end
+    local lhs = label.lhs
+    if lhs:sub(1, 1) == "<" and lhs:sub(-1) == ">" then
+      layout:append(bg, fg, "<", "Bold")
+      layout:append(bg, accent, lhs:sub(2, -2), "Normal")
+      layout:append(bg, fg, ">", "Bold")
+    else
+      layout:append(bg, accent, lhs, "Bold")
+    end
+    if label.desc then
+      layout:append(bg, fg, " " .. label.desc, "Italic")
+    end
+  end
+  return layout
 end
 
 ---Config commands as WezTerm command-palette entries (with icons).
