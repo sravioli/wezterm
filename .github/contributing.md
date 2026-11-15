@@ -243,6 +243,20 @@ Load the actual configuration with `wezterm --config-file wezterm.lua show-keys
 --lua` after integration changes. Plugin-specific suites and lint commands
 are documented in each plugin checkout.
 
+Normal loads return a plain config table. WezTerm still rejects values of the
+wrong type, but a misspelled key is not reported as an error. The strict
+`config_builder` catches it and suggests the right name. It costs about 160 ms
+per load, because every assignment rebuilds the whole config, so it only runs
+when `WEZTERM_STRICT=1` is set. Validate strictly after editing `config/` or
+`overrides/config.lua`:
+
+```sh
+! WEZTERM_STRICT=1 wezterm ls-fonts --text a 2>&1 >/dev/null | grep ERROR
+```
+
+WezTerm exits 0 even when the config is invalid, so the command checks for an
+`ERROR` line instead: it prints the problem and fails when one is found.
+
 WezTerm **live-reloads** the configuration whenever a file changes. To debug:
 
 1. Press `Ctrl+Shift+L` to open the **debug overlay** - this shows logs, errors, and Lua print output.
