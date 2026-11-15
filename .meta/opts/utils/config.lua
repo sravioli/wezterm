@@ -15,7 +15,7 @@ error "cannot require a meta file!"
 ---
 ---
 ---@class Opts.Utils.Config.Builder
----@field public enabled?     boolean Whether to use the WezTerm config builder.
+---@field public enabled?     boolean Whether to use the WezTerm config builder (default: only when `WEZTERM_STRICT=1`).
 ---@field public strict_mode? boolean Whether to enable strict mode for the config builder.
 
 -- luacheck: pop
