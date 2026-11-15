@@ -229,8 +229,9 @@ local function leader_items()
 end
 
 ---Leader bindings as one right-aligned hint line, without paging: the
----leader is one-shot, so a paging key would end it. Labels shrink to fit
----(full description, then its first word, then keys only).
+---leader is one-shot, so a paging key would end it. Every binding starts as
+---its key alone; bindings then gain their description's first word, then the
+---full description, in order, while the line still fits.
 ---@param width integer columns available
 ---@param theme table resolved colour scheme
 ---@param accent string key colour
@@ -238,45 +239,48 @@ end
 function chord.leader_hint_layout(width, theme, accent)
   local ribbon = require "plugs.ribbon"
   local bg, fg = tostring(theme.tab_bar.background), tostring(theme.foreground)
-  local dim = theme.brights and tostring(theme.brights[1]) or fg
   accent = tostring(accent)
-  local sep = " / "
+  local gap = "  "
+  local cw = wt.column_width
   local items = leader_items()
 
-  local tiers = {
-    function(item)
+  local function label(item, level)
+    if level == 1 then
       return item.desc
-    end,
-    function(item)
+    elseif level == 2 then
       return item.desc:match "^%S+" or item.desc
-    end,
-    function()
-      return nil
-    end,
-  }
-
-  local labels, used
-  for i, tier in ipairs(tiers) do
-    local gap = i == #tiers and " " or sep
-    labels, used = {}, 0
-    for j, item in ipairs(items) do
-      local desc = tier(item)
-      local need = wt.column_width(item.lhs) + (desc and (1 + wt.column_width(desc)) or 0)
-      if j > 1 then
-        need = need + wt.column_width(gap)
-      end
-      if used + need > width then
-        if i < #tiers then
-          labels = nil
-        end
-        break
-      end
-      labels[#labels + 1] = { lhs = item.lhs, desc = desc, gap = j > 1 and gap or nil }
-      used = used + need
     end
-    if labels then
+    return nil
+  end
+  local function cost(item, level)
+    local desc = label(item, level)
+    return cw(item.lhs) + (desc and (1 + cw(desc)) or 0)
+  end
+
+  -- Keys only, dropping trailing bindings if even those do not fit.
+  local shown, used = {}, 0
+  for _, item in ipairs(items) do
+    local need = cost(item, 3) + (#shown > 0 and cw(gap) or 0)
+    if used + need > width then
       break
     end
+    shown[#shown + 1] = { item = item, level = 3 }
+    used = used + need
+  end
+  for _, level in ipairs { 2, 1 } do
+    for _, s in ipairs(shown) do
+      local delta = cost(s.item, level) - cost(s.item, s.level)
+      if used + delta > width then
+        break
+      end
+      s.level, used = level, used + delta
+    end
+  end
+
+  local labels = {}
+  for i, s in ipairs(shown) do
+    labels[i] =
+      { lhs = s.item.lhs, desc = label(s.item, s.level), gap = i > 1 and gap or nil }
   end
 
   local layout = ribbon:new("LeaderHints", true)
@@ -285,7 +289,7 @@ function chord.leader_hint_layout(width, theme, accent)
   end
   for _, label in ipairs(labels) do
     if label.gap then
-      layout:append(bg, dim, label.gap, "Normal")
+      layout:append(bg, fg, label.gap, "Normal")
     end
     local lhs = label.lhs
     if lhs:sub(1, 1) == "<" and lhs:sub(-1) == ">" then
