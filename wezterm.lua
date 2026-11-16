@@ -5,6 +5,7 @@ require "events" -- loads plugs.chord, which sets log.wz's threshold to "warn"
 require "plugs.log"
 
 require "plugs.beacon"
+require "plugs.stargaze"
 
 local chord = require "plugs.chord" ---@class Chord
 local lantern = require "plugs.lantern" ---@class Lantern
