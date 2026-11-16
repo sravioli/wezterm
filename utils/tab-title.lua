@@ -3,7 +3,6 @@
 -- Tab title rules (Copilot, shells, Neovim) used as mosaic's `tabs.title`
 -- hook: `fun(tab, max_cells): string`. mosaic draws the rest of the tab.
 
-local Opts = require("opts").tabtitle ---@class Opts.TabTitle
 local sigil = require "plugs.sigil" ---@class Sigil.Api
 local warp = require "plugs.warp" ---@class Warp.Api
 local fs = warp.filesystem ---@class Warp.FileSystem
@@ -35,7 +34,7 @@ local function process_icon(process)
   return sigil.icon(process, { fallback = false }) or ""
 end
 
-local function truncate(text, max_cells, kind)
+local function truncate(text, max_cells)
   if str.fits(text, max_cells) then
     return text
   end
@@ -43,8 +42,7 @@ local function truncate(text, max_cells, kind)
     return ""
   end
 
-  local mode = Opts.truncate and Opts.truncate[kind] or "right"
-  return str.truncate(mode, text, max_cells)
+  return str.truncate("right", text, max_cells)
 end
 
 local function format_copilot_idle(pane, title_budget)
@@ -57,7 +55,7 @@ local function format_copilot_idle(pane, title_budget)
   local suffix = ")"
   local decoration_width = str.width(prefix .. suffix)
 
-  cwd = truncate(cwd, title_budget - decoration_width, "copilot_idle")
+  cwd = truncate(cwd, title_budget - decoration_width)
   return prefix .. cwd .. suffix
 end
 
@@ -72,7 +70,7 @@ local function format_copilot_chat(title, title_budget)
   local icon = process_icon "GitHub Copilot"
   local prefix = icon .. " "
 
-  chat_title = truncate(chat_title, title_budget - str.width(prefix), "copilot_chat")
+  chat_title = truncate(chat_title, title_budget - str.width(prefix))
   return prefix .. chat_title
 end
 
@@ -98,7 +96,7 @@ local function format_shell(process, rest, title_budget)
   local prefix = process_icon(process) .. " in "
   local prefix_width = str.width(prefix)
 
-  cwd = truncate(cwd, title_budget - prefix_width, "shell")
+  cwd = truncate(cwd, title_budget - prefix_width)
   return prefix .. cwd
 end
 
@@ -111,7 +109,7 @@ local function format_neovim(pane, title_budget)
   local suffix = ")"
   local decoration_width = str.width(prefix .. suffix)
 
-  cwd = truncate(cwd, title_budget - decoration_width, "neovim")
+  cwd = truncate(cwd, title_budget - decoration_width)
   return prefix .. cwd .. suffix
 end
 
@@ -152,7 +150,7 @@ local function resolve_title(pane, raw_title, title_budget)
     title = process_icon(process) .. " " .. (rest or "")
   end
 
-  return truncate(title, title_budget, "default")
+  return truncate(title, title_budget)
 end
 
 ---@param  tab       table   TabInformation
