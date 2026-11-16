@@ -4,9 +4,7 @@
 
 local wt = require "wezterm" ---@class Wezterm
 
--- Local checkout until the repository is published; switch to
--- "https://github.com/sravioli/harbor.wz" afterwards.
-local harbor = wt.plugin.require "file:///home/srv/source/lua/wezterm-plugins/harbor.wz"
+local harbor = wt.plugin.require "https://github.com/sravioli/harbor.wz"
 
 harbor.setup {
   picker = { hint_position = "status" },

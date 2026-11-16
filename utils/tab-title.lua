@@ -1,16 +1,15 @@
----@module "events.format-tab-title"
+---@module "utils.tab-title"
 
-local Ribbon = require "plugs.ribbon" ---@class Ribbon.Api
+-- Tab title rules (Copilot, shells, Neovim) used as mosaic's `tabs.title`
+-- hook: `fun(tab, max_cells): string`. mosaic draws the rest of the tab.
+
 local Opts = require("opts").tabtitle ---@class Opts.TabTitle
-local budget = require "utils.bar-budget" ---@class BarBudget
 local sigil = require "plugs.sigil" ---@class Sigil.Api
 local warp = require "plugs.warp" ---@class Warp.Api
-local wt = require "wezterm" ---@class Wezterm
 local fs = warp.filesystem ---@class Warp.FileSystem
 local str = warp.string ---@class Warp.String
 
 local Icon = sigil.symbols()
-local tabseps = Icon.Sep.tb
 
 local SHELLS = {
   fish = true,
@@ -156,67 +155,11 @@ local function resolve_title(pane, raw_title, title_budget)
   return truncate(title, title_budget, "default")
 end
 
--- ---------------------------------------------------------------------------
--- Event
--- ---------------------------------------------------------------------------
-
-wt.on("format-tab-title", function(tab, tabs, _, config, hover, max_width)
-  if config.use_fancy_tab_bar or not config.enable_tab_bar then
-    return ""
-  end
-
-  local theme = config.color_schemes[config.color_scheme]
-  local bg = theme.tab_bar.background
-  local fg, attributes
-  local idx = tab.tab_index
-
-  if tab.is_active then
-    fg, attributes = theme.ansi[5], {}
-  elseif hover then
-    fg, attributes = theme.tab_bar.inactive_tab_hover.bg_color, {}
-  else
-    fg, attributes = theme.brights[1], {}
-  end
-
-  local unseen = false
-  for _, p in ipairs(tab.panes) do
-    if p.has_unseen_output then
-      unseen = true
-      break
-    end
-  end
-
+---@param  tab       table   TabInformation
+---@param  max_cells integer columns available for the title
+---@return string
+return function(tab, max_cells)
   local pane = tab.active_pane
   local raw_title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title or pane.title
-  local tab_idx = (unseen and Icon.Notification or Icon.Nums[idx + 1] or "")
-  local left_sep = idx == 0 and tabseps.leftmost or tabseps.left
-  local right_sep = Icon.Sep.block .. tabseps.right
-
-  -- ── Calculate exact budget for the title text ────────────────────────────
-  -- Measure exactly how much space the separators, spaces, and tab indices take
-  local static_decorations = left_sep .. " " .. tab_idx .. " " .. right_sep
-  local static_width = str.width(static_decorations)
-
-  -- Prevent negative budgets if max_width is extremely squeezed
-  local title_budget = math.max(0, max_width - static_width)
-
-  -- Pass the accurate budget to the resolver
-  local title = resolve_title(pane, raw_title, title_budget)
-  -- ─────────────────────────────────────────────────────────────────────────
-
-  local cell = Ribbon:new "TabTitle"
-  cell:append(bg, fg, left_sep, attributes)
-  cell:append(fg, fg, " ", nil)
-  cell:append(fg, bg, tab_idx .. " ", attributes)
-  cell:append(fg, bg, title, attributes)
-  cell:append(bg, fg, right_sep, attributes)
-
-  local rendered = cell:format()
-
-  -- Pass pre-computed width (plain-text parts sum) so `record()` skips the
-  -- expensive ANSI-strip + column_width call on the full rendered string.
-  budget.record(idx, static_width + str.col_width(title))
-  budget.set_count(#tabs)
-
-  return rendered
-end)
+  return resolve_title(pane, raw_title, max_cells)
+end

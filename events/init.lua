@@ -12,12 +12,6 @@ if Opts.format_window_title.enabled then
   require "events.format-window-title"
 end
 
-if Opts.update_status.enabled then
-  require "events.update-status"
-end
-
 if pcall(require, "overrides.events") then
   require "overrides.events"
 end
-
-require "events.format-tab-title"

@@ -1,5 +1,4 @@
 local Opts = require("opts").config ---@class Opts.Config
-local color = require "utils.color" ---@class Color
 
 local Config = {}
 
@@ -79,7 +78,5 @@ Config.skip_close_confirmation_for_processes_named = {
   "powershell.exe",
 }
 Config.window_close_confirmation = "AlwaysPrompt"
-
-color.set_tab_button(Config, theme)
 
 return Config

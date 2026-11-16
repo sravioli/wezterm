@@ -4,8 +4,9 @@
 
 local lantern = require("wezterm").plugin.require "https://github.com/sravioli/lantern.wz"
 
+-- The new-tab button follows the mosaic preset, also on scheme switches.
 local function set_tab_button(cfg, theme)
-  require("utils.color").set_tab_button(cfg, theme)
+  require("plugs.mosaic").set_new_tab_button(cfg, theme)
 end
 
 lantern.setup {

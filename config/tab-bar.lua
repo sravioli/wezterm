@@ -11,6 +11,6 @@ Config.switch_to_last_active_tab_when_closing_tab = false
 Config.tab_and_split_indices_are_zero_based = false
 Config.tab_bar_at_bottom = Opts.position == "bottom"
 Config.tab_max_width = 30
-Config.use_fancy_tab_bar = Opts.fancy
+Config.use_fancy_tab_bar = false
 
 return Config

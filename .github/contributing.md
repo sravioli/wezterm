@@ -219,7 +219,7 @@ This is a modular WezTerm configuration written in Lua. The main pieces are:
 - **`mappings/`** - Keybindings using Vim-style notation (`<C-S-a>`, `<leader>w`). Split into `default.lua` (global keys) and `modes.lua` (modal key tables).
 - **`opts/`** - Central configuration registry. Controls feature flags, statusbar modules, and local config-builder options. Optional features check `Opts.X.enabled` before loading.
 - **`plugs/`** - Central plugin wrappers. Consumer modules require `plugs.<name>` instead of calling `wezterm.plugin.require()` directly.
-- **`utils/`** - Shared utilities that remain local to this config: config builder, renderer, bar budget, conditions, color helpers, and assertion helpers.
+- **`utils/`** - Shared utilities that remain local to this config: config builder, tab titles, and assertion helpers.
 - **`plugins/`** - Local source checkouts for standalone `.wz` plugins. Published plugins are loaded through `plugs/`.
 - **`overrides/`** - **User customization layer.** Each subdirectory (`config/`, `events/`, `mappings/`, `opts/`) is loaded with `pcall(require, "overrides.<module>")`. If the file exists it's merged in, otherwise it's silently skipped.
 
@@ -236,9 +236,6 @@ This is a modular WezTerm configuration written in Lua. The main pieces are:
 
 #### Testing changes
 
-Run the picker/status integration regression specs from the config root with
-`busted spec/statusbar_spec.lua`. They use Chord's existing Busted mock and
-the local `plugins/chord.wz` checkout, with no GUI or new test dependencies.
 Load the actual configuration with `wezterm --config-file wezterm.lua show-keys
 --lua` after integration changes. Plugin-specific suites and lint commands
 are documented in each plugin checkout.
