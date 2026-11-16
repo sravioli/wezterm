@@ -2,7 +2,7 @@ local log = require("wezterm").plugin.require "https://github.com/sravioli/log.w
 
 log.setup {
   enabled = true,
-  threshold = "WARN",
+  threshold = "INFO", -- temporarily INFO to see stargaze dry-run; back to "WARN" after
   sinks = { default_enabled = true },
 }
 
