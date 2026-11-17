@@ -1,8 +1,4 @@
-require "events" -- loads plugs.chord, which sets log.wz's threshold to "warn"
-
--- After events (chord overrides the threshold), before plugins that create loggers:
--- they snapshot log.wz's threshold at creation.
-require "plugs.log"
+require "events"
 
 require "plugs.beacon"
 require "plugs.stargaze"

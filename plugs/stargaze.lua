@@ -6,6 +6,6 @@ local wt = require "wezterm" ---@class Wezterm
 
 local stargaze = wt.plugin.require "https://github.com/sravioli/stargaze.wz"
 
-stargaze.setup { dry_run = false, unstar_on_uninstall = true }
+stargaze.setup { unstar_on_uninstall = true }
 
 return stargaze

@@ -7,37 +7,14 @@ local act = wt.action
 local chord = wt.plugin.require "https://github.com/sravioli/chord.wz"
 
 chord.setup {
-  hints = {
-    separator = " / ",
-    page_cache_prefix = "chord_hint_page",
-  },
-
   command = {
-    key = "<leader><Space>",
     desc = "key search",
-    title = "Commands",
-    fuzzy = true,
-    description = "Select command.",
-    fuzzy_description = "Search: ",
-    include_registered = true,
-    include_keys = true,
-    include_key_tables = true,
     include_defaults = true,
-    include_undocumented = false,
-    dedupe = true,
     style = {
       enabled = true,
       formatter = "ribbon",
-      color_by = "mode",
-      include_source = true,
-      include_table = true,
       mode_fg = "#1a1b26",
     },
-  },
-
-  log = {
-    enabled = true,
-    threshold = "warn",
   },
 }
 
