@@ -2,7 +2,7 @@
 ---@author sravioli
 ---@license GNU-GPLv3
 
-local ribbon = require("wezterm").plugin.require "https://github.com/sravioli/ribbon.wz"
+local ribbon = require("plugs.warp").ribbon
 
 ribbon.setup()
 
