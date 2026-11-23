@@ -1,7 +1,7 @@
 -- jetpack is the only plugin WezTerm fetches itself; it installs the rest and
 -- redirects every later `wezterm.plugin.require` to its pinned clones. `setup`
 -- runs git, which needs the config's own coroutine: not inside a `require`.
-local jetpack = require("wezterm").plugin.require "https://github.com/sravioli/jetpack.wz"
+local jetpack = require "plugs.jetpack"
 jetpack.setup {
   spec = {
     "sravioli/warp.wz",
