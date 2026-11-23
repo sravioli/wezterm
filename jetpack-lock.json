@@ -1,0 +1,13 @@
+{
+  "kanagawa-community/wezterm": { "commit": "ed52ca67be4358c08df5499fa6289a9fa109ac6c", "ref": "main" },
+  "sravioli/beacon.wz": { "commit": "2e90b7a69f8926e1d52e66f011cb71aa111a6305", "ref": "main" },
+  "sravioli/chord.wz": { "commit": "c7c4122c660b511102fda1f2ce1bc26e3ee62964", "ref": "main" },
+  "sravioli/harbor.wz": { "commit": "03e7f449eb6faf0f08fb2dcae59ed736c7359117", "ref": "main" },
+  "sravioli/lantern.wz": { "commit": "e2b790eca3ec6c69622f3df3a38c974be4f21bb5", "ref": "main" },
+  "sravioli/memo.wz": { "commit": "4c62d1178c860f7047c1f32a48420dad7b7f34f6", "ref": "main" },
+  "sravioli/mosaic.wz": { "commit": "5e6cdae3861d3613ebed05dd84a39542de0dd0b8", "ref": "main" },
+  "sravioli/sigil.wz": { "commit": "2555f3737c2821d70a21245e8eaf948d2acaa5b7", "ref": "main" },
+  "sravioli/stargaze.wz": { "commit": "f7db9ae2de99f021debd3fc6ad3765abc3ff7e73", "ref": "main" },
+  "sravioli/warden.wz": { "commit": "cfbb477780d1dc148e08e2c58e37279ca5676672", "ref": "main" },
+  "sravioli/warp.wz": { "commit": "1d5e7b586dc4a07e9d16ed3117804838b9a119a6", "ref": "main" }
+}
