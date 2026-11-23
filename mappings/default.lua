@@ -79,6 +79,9 @@ key.maps(Config, {
   { "<leader>b", require("plugs.harbor").action.previous(), "previous workspace" },
   { "<C-S-q>", require("plugs.harbor").action.quit(), "save workspaces and quit" },
 
+  -- ── Jetpack ─────────────────────────────────────────────────────────────
+  { "<leader>j", require("jetpack").action.open(), "jetpack picker" },
+
   -- ── F-key tab activation (F1-F24) ────────────────────────────────────────
   tunpack(fkey_mappings),
 })
